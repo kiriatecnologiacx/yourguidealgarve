@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  /* Navy palette — extracted from references (header / footer / top bar) */
+  --color-navy-50: #eef3fa;
+  --color-navy-100: #d6e0ee;
+  --color-navy-200: #a9bcd6;
+  --color-navy-300: #7592ba;
+  --color-navy-400: #426a9c;
+  --color-navy-500: #1f4778;
+  --color-navy-600: #143461;
+  --color-navy-700: #0e2a52;
+  --color-navy-800: #0a2540;
+  --color-navy-900: #061a30;
+  --color-navy-950: #03101f;
+
+  /* Yellow CTA palette */
+  --color-brand-yellow: #ffcc00;
+  --color-brand-yellow-hover: #f0b800;
+  --color-brand-yellow-soft: #fff4cc;
+
+  /* Surface tones */
+  --color-surface: #ffffff;
+  --color-surface-alt: #f6f8fb;
+  --color-border-subtle: #e4e8ee;
+  --color-text-strong: #0f1729;
+  --color-text-muted: #6b7385;
+
+  /* Trust / status */
+  --color-trust: #00b67a;
+  --color-success: #00875a;
+  --color-warning: #f59e0b;
+
+  --radius-card: 16px;
+}
+
+html,
+body {
+  background: var(--color-surface);
+  color: var(--color-text-strong);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  border-color: var(--color-border-subtle);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hero gradient overlay used over the cliff hero image */
+.hero-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 37, 64, 0.78) 0%,
+    rgba(10, 37, 64, 0.55) 40%,
+    rgba(10, 37, 64, 0.4) 100%
+  );
+}
+
+.detail-gallery-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 60%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+/* Trust pilot star icon */
+.tp-star {
+  color: #00b67a;
+}

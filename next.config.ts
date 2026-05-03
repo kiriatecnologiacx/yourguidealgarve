@@ -1,0 +1,15 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "wyligoajwjiveqrwiolz.supabase.co" },
+    ],
+  },
+  experimental: {
+    typedRoutes: false,
+  },
+};
+
+export default nextConfig;
