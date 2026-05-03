@@ -1,3 +1,5 @@
+"use client";
+
 import { Mail } from "lucide-react";
 
 export function Newsletter() {
