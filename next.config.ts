@@ -7,9 +7,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "wyligoajwjiveqrwiolz.supabase.co" },
     ],
   },
-  experimental: {
-    typedRoutes: false,
-  },
+  typedRoutes: false,
 };
 
 export default nextConfig;
