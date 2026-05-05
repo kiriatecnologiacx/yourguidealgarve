@@ -15,6 +15,7 @@ import { getTourBySlug, listTours } from "@/lib/data";
 import { TourGallery } from "@/components/site/tour-gallery";
 import { BookingWidget } from "@/components/site/booking-widget";
 import { TourCard } from "@/components/site/tour-card";
+import { ReviewsSection } from "@/components/site/reviews-section";
 import { formatRating } from "@/lib/utils";
 
 export const revalidate = 60;
@@ -190,6 +191,8 @@ export default async function TourDetailPage({
                 </div>
               </div>
             ) : null}
+
+            <ReviewsSection rating={tour.rating} reviewsCount={tour.reviews_count} />
           </div>
 
           <BookingWidget tour={tour} />

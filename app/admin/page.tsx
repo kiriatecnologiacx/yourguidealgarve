@@ -1,15 +1,16 @@
 import Link from "next/link";
-import { Compass, Users, Tags, Eye, Plus } from "lucide-react";
+import { Compass, Users, Tags, MapPin, Eye, Plus } from "lucide-react";
 import { createSupabaseServer } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const supabase = await createSupabaseServer();
-  const [tours, partners, categories] = await Promise.all([
+  const [tours, partners, categories, destinations] = await Promise.all([
     supabase.from("tours").select("id, is_published", { count: "exact" }),
     supabase.from("partners").select("id", { count: "exact" }),
     supabase.from("categories").select("id", { count: "exact" }),
+    supabase.from("destinations").select("id", { count: "exact" }),
   ]);
   const total = tours.count ?? 0;
   const published = (tours.data ?? []).filter((t) => t.is_published).length;
@@ -31,7 +32,7 @@ export default async function AdminDashboardPage() {
         </Link>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="mt-6 grid grid-cols-2 lg:grid-cols-5 gap-4">
         <Stat
           icon={<Compass className="w-5 h-5" />}
           label="Passeios cadastrados"
@@ -42,6 +43,11 @@ export default async function AdminDashboardPage() {
           icon={<Eye className="w-5 h-5" />}
           label="No ar"
           value={published}
+        />
+        <Stat
+          icon={<MapPin className="w-5 h-5" />}
+          label="Destinos"
+          value={destinations.count ?? 0}
         />
         <Stat
           icon={<Users className="w-5 h-5" />}
@@ -87,6 +93,7 @@ export default async function AdminDashboardPage() {
           <div className="mt-3 grid grid-cols-2 gap-3">
             <ActionLink href="/admin/passeios" label="Gerenciar passeios" />
             <ActionLink href="/admin/passeios/novo" label="Adicionar passeio" />
+            <ActionLink href="/admin/destinos" label="Destinos" />
             <ActionLink href="/admin/parceiros" label="Parceiros" />
             <ActionLink href="/admin/categorias" label="Categorias" />
           </div>

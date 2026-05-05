@@ -33,9 +33,32 @@ export function Newsletter() {
             Quero receber
           </button>
 
-          <span aria-hidden className="absolute -right-6 -bottom-6 opacity-25">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <circle cx="60" cy="60" r="58" stroke="#ffcc00" strokeWidth="2" />
+          <span
+            aria-hidden
+            className="hidden md:block absolute right-6 bottom-0 pointer-events-none"
+          >
+            <svg width="120" height="100" viewBox="0 0 120 100" fill="none">
+              {/* sea / ground line */}
+              <path d="M0 95 Q 30 88 60 92 T 120 92 L 120 100 L 0 100 Z" fill="#0e2a52" />
+              {/* lighthouse base */}
+              <rect x="58" y="60" width="14" height="35" fill="#ffffff" />
+              <rect x="56" y="55" width="18" height="6" fill="#ffcc00" />
+              {/* stripes */}
+              <rect x="58" y="65" width="14" height="4" fill="#ef4444" opacity="0.85" />
+              <rect x="58" y="76" width="14" height="4" fill="#ef4444" opacity="0.85" />
+              <rect x="58" y="87" width="14" height="4" fill="#ef4444" opacity="0.85" />
+              {/* lantern */}
+              <rect x="60" y="46" width="10" height="9" fill="#0a2540" stroke="#ffcc00" strokeWidth="1.5" />
+              <rect x="62" y="42" width="6" height="5" fill="#ffcc00" />
+              {/* roof */}
+              <path d="M58 42 L65 33 L72 42 Z" fill="#ffffff" />
+              {/* lantern beam */}
+              <path d="M65 50 L20 30 L18 38 Z" fill="#ffcc00" opacity="0.35" />
+              <path d="M65 50 L110 30 L112 38 Z" fill="#ffcc00" opacity="0.35" />
+              {/* stars */}
+              <circle cx="14" cy="18" r="1.2" fill="#ffffff" opacity="0.7" />
+              <circle cx="100" cy="14" r="1.2" fill="#ffffff" opacity="0.7" />
+              <circle cx="40" cy="10" r="0.8" fill="#ffffff" opacity="0.6" />
             </svg>
           </span>
         </div>

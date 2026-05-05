@@ -7,6 +7,7 @@ import {
   Compass,
   Users,
   Tags,
+  MapPin,
   LogOut,
   ExternalLink,
 } from "lucide-react";
@@ -16,6 +17,7 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/passeios", label: "Passeios", icon: Compass },
+  { href: "/admin/destinos", label: "Destinos", icon: MapPin },
   { href: "/admin/parceiros", label: "Parceiros", icon: Users },
   { href: "/admin/categorias", label: "Categorias", icon: Tags },
 ];
