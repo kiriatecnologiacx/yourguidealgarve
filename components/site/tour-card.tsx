@@ -1,14 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import type { Tour } from "@/lib/types";
 import { formatPriceBRL, formatRating } from "@/lib/utils";
+import { FavoriteButton } from "./favorite-button";
 
-export function TourCard({ tour, compact = false }: { tour: Tour; compact?: boolean }) {
+export function TourCard({
+  tour,
+  compact = false,
+  isFavorite = false,
+  isAuthed = false,
+}: {
+  tour: Tour;
+  compact?: boolean;
+  isFavorite?: boolean;
+  isAuthed?: boolean;
+}) {
   return (
     <Link
       href={`/atividades/${tour.slug}`}
-      className="group block bg-white rounded-2xl border border-border-subtle hover:shadow-lg transition-shadow overflow-hidden"
+      className="group block bg-white rounded-2xl border border-border-subtle hover:shadow-lg hover:border-transparent transition-all overflow-hidden"
     >
       <div className={`relative ${compact ? "h-[160px]" : "h-[200px]"}`}>
         <Image
@@ -23,12 +34,9 @@ export function TourCard({ tour, compact = false }: { tour: Tour; compact?: bool
             {tour.badge}
           </span>
         ) : null}
-        <button
-          aria-label="Favoritar"
-          className="absolute top-3 right-3 grid place-items-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-navy-700"
-        >
-          <Heart className="w-4 h-4" />
-        </button>
+        <div className="absolute top-3 right-3">
+          <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} />
+        </div>
       </div>
       <div className="p-4">
         <p className="text-[14.5px] font-semibold text-text-strong leading-tight line-clamp-2">

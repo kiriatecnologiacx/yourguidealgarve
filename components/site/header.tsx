@@ -1,35 +1,29 @@
 import Link from "next/link";
-import { Heart, ShoppingCart, Headphones, ChevronDown, Check } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import { Logo } from "./logo";
+import { LangSwitch } from "./lang-switch";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
+import { createSupabaseServer } from "@/lib/supabase/server";
 
-const NAV = [
-  { label: "Destinos", href: "/atividades?tab=destinos" },
-  { label: "Atividades", href: "/atividades" },
-  { label: "Experiências", href: "/atividades?tab=experiencias" },
-  { label: "Ingressos", href: "/atividades?tab=ingressos" },
-  { label: "Transfers", href: "/atividades?tab=transfers" },
-  { label: "Ofertas", href: "/atividades?ofertas=1" },
-];
+export async function SiteHeader() {
+  const locale = await getLocale();
+  const supabase = await createSupabaseServer();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-export function SiteHeader() {
+  const NAV = [
+    { label: t(locale, "nav.destinations"), href: "/atividades?tab=destinos" },
+    { label: t(locale, "nav.activities"),   href: "/atividades" },
+    { label: t(locale, "nav.experiences"),  href: "/atividades?tab=experiencias" },
+    { label: t(locale, "nav.tickets"),      href: "/atividades?tab=ingressos" },
+    { label: t(locale, "nav.transfers"),    href: "/atividades?tab=transfers" },
+    { label: t(locale, "nav.blog"),         href: "/blog" },
+  ];
+
   return (
     <header className="bg-navy-800 text-white">
-      <div className="border-b border-white/10 text-[12.5px]">
-        <div className="mx-auto max-w-[1240px] px-5 h-9 flex items-center justify-between">
-          <div className="flex items-center gap-1.5 opacity-90">
-            <Headphones className="w-3.5 h-3.5" />
-            <span>Suporte 24/7</span>
-          </div>
-          <div className="hidden md:flex items-center gap-1.5 opacity-90">
-            <Check className="w-3.5 h-3.5 text-brand-yellow" />
-            <span>Cancelamento gratuito na maioria das atividades</span>
-          </div>
-          <button className="flex items-center gap-1 opacity-90 hover:opacity-100">
-            BRL (R$) <ChevronDown className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </div>
-
       <div className="mx-auto max-w-[1240px] px-5 h-[68px] flex items-center gap-6">
         <Logo />
         <nav className="hidden lg:flex items-center gap-1 ml-2">
@@ -43,25 +37,37 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-1 sm:gap-2">
           <Link
             href="/favoritos"
             className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-[13.5px] text-white/85 hover:text-white rounded-md hover:bg-white/5"
           >
-            <Heart className="w-4 h-4" /> Favoritos
+            <Heart className="w-4 h-4" /> {t(locale, "header.favorites")}
           </Link>
           <Link
             href="/carrinho"
             className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-[13.5px] text-white/85 hover:text-white rounded-md hover:bg-white/5"
           >
-            <ShoppingCart className="w-4 h-4" /> Carrinho
+            <ShoppingCart className="w-4 h-4" /> {t(locale, "header.cart")}
           </Link>
-          <Link
-            href="/admin/login"
-            className="bg-brand-yellow text-navy-900 hover:bg-brand-yellow-hover px-5 py-2 rounded-md text-[14px] font-semibold transition-colors"
-          >
-            Entrar
-          </Link>
+
+          <LangSwitch current={locale} />
+
+          {user ? (
+            <Link
+              href="/conta"
+              className="bg-brand-yellow text-navy-900 hover:bg-brand-yellow-hover px-4 py-2 rounded-md text-[13.5px] font-semibold transition-colors"
+            >
+              {user.email?.split("@")[0]}
+            </Link>
+          ) : (
+            <Link
+              href="/entrar"
+              className="bg-brand-yellow text-navy-900 hover:bg-brand-yellow-hover px-5 py-2 rounded-md text-[14px] font-semibold transition-colors"
+            >
+              {t(locale, "header.signIn")}
+            </Link>
+          )}
         </div>
       </div>
     </header>

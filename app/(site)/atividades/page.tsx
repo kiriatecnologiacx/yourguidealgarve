@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { TourCard } from "@/components/site/tour-card";
 import { listCategories, listDestinations, listTours } from "@/lib/data";
+import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { Filter, Map } from "lucide-react";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function AtividadesPage({
   searchParams,
@@ -15,11 +16,14 @@ export default async function AtividadesPage({
   const destino = typeof sp.destino === "string" ? sp.destino : undefined;
   const categoria = typeof sp.categoria === "string" ? sp.categoria : undefined;
 
-  const [tours, categories, destinations] = await Promise.all([
+  const [tours, categories, destinations, user, favIds] = await Promise.all([
     listTours({ q, destination: destino, category: categoria }),
     listCategories(),
     listDestinations(false),
+    getCurrentUser(),
+    getFavoriteIds(),
   ]);
+  const isAuthed = !!user;
 
   const destinationName = destinations.find((d) => d.slug === destino)?.name;
   const categoryName = categories.find((c) => c.slug === categoria)?.name;
@@ -86,7 +90,12 @@ export default async function AtividadesPage({
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {tours.map((tour) => (
-                <TourCard key={tour.id} tour={tour} />
+                <TourCard
+                  key={tour.id}
+                  tour={tour}
+                  isAuthed={isAuthed}
+                  isFavorite={favIds.has(tour.id)}
+                />
               ))}
             </div>
           )}

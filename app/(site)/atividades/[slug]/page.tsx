@@ -7,18 +7,19 @@ import {
   ShieldCheck,
   Tag,
   MapPin,
-  Bookmark,
   Share2,
   Check,
 } from "lucide-react";
 import { getTourBySlug, listTours } from "@/lib/data";
+import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { TourGallery } from "@/components/site/tour-gallery";
 import { BookingWidget } from "@/components/site/booking-widget";
 import { TourCard } from "@/components/site/tour-card";
+import { FavoriteButton } from "@/components/site/favorite-button";
 import { ReviewsSection } from "@/components/site/reviews-section";
 import { formatRating } from "@/lib/utils";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 const TABS = [
   "Visão geral",
@@ -37,7 +38,13 @@ export default async function TourDetailPage({
   const tour = await getTourBySlug(slug);
   if (!tour) notFound();
 
-  const others = (await listTours({ limit: 6 })).filter((t) => t.id !== tour.id).slice(0, 5);
+  const [others, user, favIds] = await Promise.all([
+    listTours({ limit: 6 }).then((rows) => rows.filter((t) => t.id !== tour.id).slice(0, 5)),
+    getCurrentUser(),
+    getFavoriteIds(),
+  ]);
+  const isAuthed = !!user;
+  const isFavorite = favIds.has(tour.id);
 
   return (
     <>
@@ -125,9 +132,11 @@ export default async function TourDetailPage({
                 </button>
               ))}
               <span className="ml-auto flex items-center gap-3 text-[13px] text-text-muted">
-                <button className="flex items-center gap-1 hover:text-text-strong">
-                  <Bookmark className="w-4 h-4" /> Salvar
-                </button>
+                <FavoriteButton
+                  tourId={tour.id}
+                  initial={isFavorite}
+                  isAuthed={isAuthed}
+                />
                 <button className="flex items-center gap-1 hover:text-text-strong">
                   <Share2 className="w-4 h-4" /> Compartilhar
                 </button>
@@ -215,7 +224,13 @@ export default async function TourDetailPage({
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {others.map((t) => (
-                <TourCard key={t.id} tour={t} compact />
+                <TourCard
+                  key={t.id}
+                  tour={t}
+                  compact
+                  isAuthed={isAuthed}
+                  isFavorite={favIds.has(t.id)}
+                />
               ))}
             </div>
           </div>

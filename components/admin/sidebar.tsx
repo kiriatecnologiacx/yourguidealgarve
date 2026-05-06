@@ -8,6 +8,7 @@ import {
   Users,
   Tags,
   MapPin,
+  Newspaper,
   LogOut,
   ExternalLink,
 } from "lucide-react";
@@ -18,6 +19,7 @@ const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/passeios", label: "Passeios", icon: Compass },
   { href: "/admin/destinos", label: "Destinos", icon: MapPin },
+  { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/parceiros", label: "Parceiros", icon: Users },
   { href: "/admin/categorias", label: "Categorias", icon: Tags },
 ];

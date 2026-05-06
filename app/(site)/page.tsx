@@ -2,7 +2,7 @@ import { Hero } from "@/components/site/hero";
 import { FeatureStrip } from "@/components/site/feature-strip";
 import { CategoryRail } from "@/components/site/category-rail";
 import { DestinationRail } from "@/components/site/destination-rail";
-import { AppPromo } from "@/components/site/app-promo";
+import { BlogCTA } from "@/components/site/blog-cta";
 import { ReviewsStrip } from "@/components/site/reviews-strip";
 import { Newsletter } from "@/components/site/newsletter";
 import { listCategories, listDestinations } from "@/lib/data";
@@ -21,7 +21,7 @@ export default async function HomePage() {
       <FeatureStrip />
       <CategoryRail categories={categories} />
       <DestinationRail destinations={destinations} />
-      <AppPromo />
+      <BlogCTA />
       <ReviewsStrip />
       <Newsletter />
     </>

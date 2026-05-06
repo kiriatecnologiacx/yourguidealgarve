@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SearchBar } from "./search-bar";
+import { Typewriter } from "./typewriter";
 
 const POPULAR = [
   { label: "Benagil", href: "/atividades?destino=benagil" },
@@ -10,6 +11,13 @@ const POPULAR = [
   { label: "Portimão", href: "/atividades?destino=portimao" },
   { label: "Vilamoura", href: "/atividades?destino=vilamoura" },
   { label: "Tavira", href: "/atividades?destino=tavira" },
+];
+
+const TYPED_PHRASES = [
+  "Descubra o melhor do Algarve",
+  "Viva experiências inesquecíveis",
+  "Encontre o passeio perfeito",
+  "Conheça praias, cavernas e sabores",
 ];
 
 export function Hero() {
@@ -24,11 +32,11 @@ export function Hero() {
       />
       <div className="absolute inset-0 hero-overlay" aria-hidden />
 
-      <div className="relative mx-auto max-w-[1240px] px-5 pt-14 pb-12 md:pt-20 md:pb-16">
-        <p className="text-brand-yellow font-medium text-[15px] mb-2 italic">
-          Descubra o melhor do Algarve
+      <div className="relative mx-auto max-w-[1240px] px-5 pt-16 pb-12 md:pt-24 md:pb-20">
+        <p className="text-brand-yellow font-semibold text-[15px] md:text-[17px] mb-3 italic min-h-[24px]">
+          <Typewriter phrases={TYPED_PHRASES} />
         </p>
-        <h1 className="text-white font-extrabold text-4xl md:text-5xl lg:text-[54px] leading-[1.05] tracking-tight max-w-3xl">
+        <h1 className="font-display text-white font-extrabold text-4xl md:text-5xl lg:text-[58px] leading-[1.05] tracking-tight max-w-3xl">
           As melhores experiências, <br className="hidden md:block" />
           reservadas <span className="text-brand-yellow">por você.</span>
         </h1>

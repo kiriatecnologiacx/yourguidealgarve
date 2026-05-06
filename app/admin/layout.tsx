@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/sidebar";
 import { createSupabaseServer } from "@/lib/supabase/server";
 
@@ -10,6 +11,17 @@ export default async function AdminLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  if (user) {
+    const { data: admin } = await supabase
+      .from("admins")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (!admin) {
+      redirect("/conta?msg=admin-only");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-surface-alt flex">

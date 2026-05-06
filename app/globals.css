@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 
   /* Navy palette — extracted from references (header / footer / top bar) */
   --color-navy-50: #eef3fa;
@@ -21,6 +21,11 @@
   --color-brand-yellow: #ffcc00;
   --color-brand-yellow-hover: #f0b800;
   --color-brand-yellow-soft: #fff4cc;
+
+  /* Orange accent (sunset Algarve vibe — used as light touch) */
+  --color-brand-orange: #ff8a3d;
+  --color-brand-orange-hover: #f57220;
+  --color-brand-orange-soft: #ffe4d1;
 
   /* Surface tones */
   --color-surface: #ffffff;
@@ -78,4 +83,36 @@ body {
 /* Trust pilot star icon */
 .tp-star {
   color: #00b67a;
+}
+
+/* Display heading utility */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Caret for typewriter effect */
+.typewriter-caret::after {
+  content: "|";
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--color-brand-yellow);
+  animation: blink 0.9s steps(2) infinite;
+}
+@keyframes blink {
+  to { opacity: 0; }
+}
+
+/* Subtle pattern for navy section */
+.pattern-waves {
+  background-image:
+    radial-gradient(circle at 25% 30%, rgba(255, 204, 0, 0.06) 0, transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(255, 138, 61, 0.05) 0, transparent 50%),
+    repeating-linear-gradient(
+      135deg,
+      rgba(255,255,255,0.025) 0,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 14px
+    );
 }

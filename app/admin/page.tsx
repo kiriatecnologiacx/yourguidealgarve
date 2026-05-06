@@ -1,19 +1,22 @@
 import Link from "next/link";
-import { Compass, Users, Tags, MapPin, Eye, Plus } from "lucide-react";
+import { Compass, Users, Tags, MapPin, Newspaper, Plus } from "lucide-react";
 import { createSupabaseServer } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
   const supabase = await createSupabaseServer();
-  const [tours, partners, categories, destinations] = await Promise.all([
+  const [tours, partners, categories, destinations, posts] = await Promise.all([
     supabase.from("tours").select("id, is_published", { count: "exact" }),
     supabase.from("partners").select("id", { count: "exact" }),
     supabase.from("categories").select("id", { count: "exact" }),
     supabase.from("destinations").select("id", { count: "exact" }),
+    supabase.from("blog_posts").select("id, is_published", { count: "exact" }),
   ]);
   const total = tours.count ?? 0;
   const published = (tours.data ?? []).filter((t) => t.is_published).length;
+  const postsTotal = posts.count ?? 0;
+  const postsPub = (posts.data ?? []).filter((p) => p.is_published).length;
 
   return (
     <div className="px-6 lg:px-10 py-8">
@@ -35,14 +38,15 @@ export default async function AdminDashboardPage() {
       <div className="mt-6 grid grid-cols-2 lg:grid-cols-5 gap-4">
         <Stat
           icon={<Compass className="w-5 h-5" />}
-          label="Passeios cadastrados"
+          label="Passeios"
           value={total}
           hint={`${published} publicados`}
         />
         <Stat
-          icon={<Eye className="w-5 h-5" />}
-          label="No ar"
-          value={published}
+          icon={<Newspaper className="w-5 h-5" />}
+          label="Postagens do blog"
+          value={postsTotal}
+          hint={`${postsPub} publicadas`}
         />
         <Stat
           icon={<MapPin className="w-5 h-5" />}
@@ -91,11 +95,12 @@ export default async function AdminDashboardPage() {
         <div className="bg-white rounded-2xl border border-border-subtle p-6">
           <h2 className="text-[15px] font-bold text-text-strong">Atalhos</h2>
           <div className="mt-3 grid grid-cols-2 gap-3">
-            <ActionLink href="/admin/passeios" label="Gerenciar passeios" />
             <ActionLink href="/admin/passeios/novo" label="Adicionar passeio" />
+            <ActionLink href="/admin/blog/novo" label="Nova postagem" />
             <ActionLink href="/admin/destinos" label="Destinos" />
             <ActionLink href="/admin/parceiros" label="Parceiros" />
             <ActionLink href="/admin/categorias" label="Categorias" />
+            <ActionLink href="/admin/blog" label="Gerenciar blog" />
           </div>
         </div>
       </div>
