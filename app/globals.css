@@ -103,16 +103,21 @@ body {
   to { opacity: 0; }
 }
 
-/* Subtle pattern for navy section */
-.pattern-waves {
+/* Sunset / summer Algarve background — warm sand to soft sky */
+.bg-algarve-sunset {
+  background:
+    radial-gradient(ellipse 90% 60% at 80% 0%, rgba(255, 204, 0, 0.30) 0, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 10% 20%, rgba(255, 138, 61, 0.22) 0, transparent 60%),
+    radial-gradient(ellipse 90% 70% at 50% 110%, rgba(166, 200, 235, 0.55) 0, transparent 60%),
+    linear-gradient(180deg, #fff7e8 0%, #ffe9d2 35%, #ffe1c4 60%, #f5ecdb 100%);
+}
+
+/* Soft sun-ray pattern overlay */
+.pattern-rays {
   background-image:
-    radial-gradient(circle at 25% 30%, rgba(255, 204, 0, 0.06) 0, transparent 60%),
-    radial-gradient(circle at 80% 70%, rgba(255, 138, 61, 0.05) 0, transparent 50%),
-    repeating-linear-gradient(
-      135deg,
-      rgba(255,255,255,0.025) 0,
-      rgba(255,255,255,0.025) 1px,
-      transparent 1px,
-      transparent 14px
+    repeating-conic-gradient(
+      from 0deg at 80% 5%,
+      rgba(255, 204, 0, 0.10) 0deg 4deg,
+      transparent 4deg 14deg
     );
 }
