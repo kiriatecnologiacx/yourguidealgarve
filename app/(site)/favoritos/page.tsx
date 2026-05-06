@@ -20,9 +20,10 @@ export default async function FavoritosPage() {
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  const tours = ((data ?? [])
-    .map((row) => (row as { tour: Tour | null }).tour)
-    .filter(Boolean) as Tour[]).filter((t) => t.is_published);
+  const rows = (data ?? []) as unknown as { tour: Tour | Tour[] | null }[];
+  const tours = rows
+    .flatMap((r) => (Array.isArray(r.tour) ? r.tour : r.tour ? [r.tour] : []))
+    .filter((t) => t?.is_published);
 
   return (
     <section className="bg-surface-alt min-h-[60vh]">
