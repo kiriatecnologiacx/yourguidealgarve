@@ -14,6 +14,7 @@ import { getTourBySlug, listTours } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { TourGallery } from "@/components/site/tour-gallery";
 import { BookingWidget } from "@/components/site/booking-widget";
+import { BookingWidgetEmbed } from "@/components/site/booking-widget-embed";
 import { TourCard } from "@/components/site/tour-card";
 import { FavoriteButton } from "@/components/site/favorite-button";
 import { ReviewsSection } from "@/components/site/reviews-section";
@@ -204,7 +205,15 @@ export default async function TourDetailPage({
             <ReviewsSection rating={tour.rating} reviewsCount={tour.reviews_count} />
           </div>
 
-          <BookingWidget tour={tour} />
+          <aside className="lg:sticky lg:top-6 self-start">
+            {tour.booking_widget_html ? (
+              <div className="bg-white rounded-2xl border border-border-subtle p-3">
+                <BookingWidgetEmbed html={tour.booking_widget_html} />
+              </div>
+            ) : (
+              <BookingWidget tour={tour} />
+            )}
+          </aside>
         </div>
       </section>
 

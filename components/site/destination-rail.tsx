@@ -2,8 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Heart, MapPin } from "lucide-react";
 import type { Destination } from "@/lib/types";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 
-export function DestinationRail({ destinations }: { destinations: Destination[] }) {
+export async function DestinationRail({ destinations }: { destinations: Destination[] }) {
+  const locale = await getLocale();
   return (
     <section className="relative bg-navy-800 text-white overflow-hidden">
       <div className="absolute inset-0 pattern-waves" aria-hidden />
@@ -23,17 +26,17 @@ export function DestinationRail({ destinations }: { destinations: Destination[] 
               <MapPin className="w-3.5 h-3.5" /> Algarve
             </span>
             <h2 className="font-display mt-1 text-3xl md:text-4xl font-extrabold text-white">
-              Destinos em destaque
+              {t(locale, "section.destinations.title")}
             </h2>
             <p className="mt-1 text-[13.5px] text-white/70 max-w-md">
-              Explore as cidades e praias mais incríveis da costa algarvia.
+              {t(locale, "section.destinations.lead")}
             </p>
           </div>
           <Link
             href="/atividades"
             className="text-[13.5px] font-semibold text-brand-yellow hover:text-white flex items-center gap-1"
           >
-            Ver todos os destinos <ArrowRight className="w-4 h-4" />
+            {t(locale, "section.destinations.viewAll")} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 

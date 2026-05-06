@@ -2,9 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { listBlogPosts } from "@/lib/blog";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 
 export async function BlogCTA() {
-  const posts = await listBlogPosts(3);
+  const [posts, locale] = await Promise.all([listBlogPosts(3), getLocale()]);
   if (posts.length === 0) return null;
 
   return (
@@ -13,20 +15,20 @@ export async function BlogCTA() {
         <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
           <div>
             <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wider text-brand-orange">
-              <BookOpen className="w-3.5 h-3.5" /> Blog
+              <BookOpen className="w-3.5 h-3.5" /> {t(locale, "section.blog.eyebrow")}
             </span>
             <h2 className="font-display mt-1 text-3xl md:text-4xl font-extrabold text-text-strong">
-              Inspire-se para sua próxima viagem
+              {t(locale, "section.blog.title")}
             </h2>
             <p className="mt-1 text-[13.5px] text-text-muted max-w-md">
-              Roteiros, dicas e curiosidades sobre o Algarve direto da nossa equipe.
+              {t(locale, "section.blog.lead")}
             </p>
           </div>
           <Link
             href="/blog"
             className="bg-navy-800 hover:bg-navy-700 text-white font-semibold px-5 py-2.5 rounded-lg text-[13.5px] flex items-center gap-2"
           >
-            Ler o blog <ArrowRight className="w-4 h-4" />
+            {t(locale, "section.blog.cta")} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 

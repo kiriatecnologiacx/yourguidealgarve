@@ -14,7 +14,8 @@ export type Tour = {
   destination_id: string | null;
   category_id: string | null;
   partner_id: string | null;
-  affiliate_url: string;
+  affiliate_url: string | null;
+  booking_widget_html: string | null;
   meeting_point: string | null;
   included: string[];
   highlights: string[];

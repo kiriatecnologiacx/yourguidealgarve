@@ -1,12 +1,55 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Heart, LogOut, ShieldCheck } from "lucide-react";
+import { Calendar, Heart, LogOut, ShieldCheck } from "lucide-react";
 import { createSupabaseServer } from "@/lib/supabase/server";
+import { getLocale } from "@/lib/locale-server";
+import type { Locale } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
+const COPY: Record<Locale, Record<string, string>> = {
+  "en": {
+    "hello":          "Hello",
+    "fav.title":      "Favorites",
+    "fav.sub":        "Tours you saved for later",
+    "book.title":     "My bookings",
+    "book.sub":       "Bookings happen on the partner site — check your email confirmation",
+    "admin.title":    "Admin panel",
+    "admin.sub":      "Manage tours, blog and partners",
+    "logout.title":   "Sign out",
+    "logout.sub":     "End session",
+  },
+  "pt-BR": {
+    "hello":          "Olá",
+    "fav.title":      "Meus favoritos",
+    "fav.sub":        "Passeios salvos para mais tarde",
+    "book.title":     "Minhas reservas",
+    "book.sub":       "As reservas são feitas no site do parceiro — confira o e-mail de confirmação",
+    "admin.title":    "Painel administrativo",
+    "admin.sub":      "Gerenciar passeios, blog e parceiros",
+    "logout.title":   "Sair",
+    "logout.sub":     "Encerrar sessão",
+  },
+  "pt-PT": {
+    "hello":          "Olá",
+    "fav.title":      "Os meus favoritos",
+    "fav.sub":        "Passeios guardados para depois",
+    "book.title":     "As minhas reservas",
+    "book.sub":       "As reservas são feitas no site do parceiro — verifique o seu e-mail de confirmação",
+    "admin.title":    "Painel administrativo",
+    "admin.sub":      "Gerir passeios, blog e parceiros",
+    "logout.title":   "Sair",
+    "logout.sub":     "Encerrar sessão",
+  },
+};
+
+function tt(locale: Locale, key: string) {
+  return COPY[locale]?.[key] ?? COPY["en"][key] ?? key;
+}
+
 export default async function ContaPage() {
   const supabase = await createSupabaseServer();
+  const locale = await getLocale();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -22,7 +65,7 @@ export default async function ContaPage() {
     <section className="bg-surface-alt min-h-[60vh]">
       <div className="mx-auto max-w-[800px] px-5 py-10">
         <h1 className="font-display text-3xl font-extrabold text-text-strong">
-          Olá, {user.user_metadata?.full_name || user.email?.split("@")[0]}
+          {tt(locale, "hello")}, {user.user_metadata?.full_name || user.email?.split("@")[0]}
         </h1>
         <p className="text-[13.5px] text-text-muted">{user.email}</p>
 
@@ -35,10 +78,20 @@ export default async function ContaPage() {
               <Heart className="w-5 h-5" />
             </span>
             <div>
-              <p className="font-semibold text-text-strong">Meus favoritos</p>
-              <p className="text-[12.5px] text-text-muted">Passeios salvos para mais tarde</p>
+              <p className="font-semibold text-text-strong">{tt(locale, "fav.title")}</p>
+              <p className="text-[12.5px] text-text-muted">{tt(locale, "fav.sub")}</p>
             </div>
           </Link>
+
+          <div className="bg-white border border-border-subtle rounded-2xl p-5 flex items-center gap-3 opacity-95">
+            <span className="grid place-items-center w-11 h-11 rounded-full bg-brand-yellow-soft text-navy-700">
+              <Calendar className="w-5 h-5" />
+            </span>
+            <div>
+              <p className="font-semibold text-text-strong">{tt(locale, "book.title")}</p>
+              <p className="text-[12.5px] text-text-muted">{tt(locale, "book.sub")}</p>
+            </div>
+          </div>
 
           {admin ? (
             <Link
@@ -49,8 +102,8 @@ export default async function ContaPage() {
                 <ShieldCheck className="w-5 h-5" />
               </span>
               <div>
-                <p className="font-semibold text-text-strong">Painel administrativo</p>
-                <p className="text-[12.5px] text-text-muted">Gerenciar passeios, blog, parceiros</p>
+                <p className="font-semibold text-text-strong">{tt(locale, "admin.title")}</p>
+                <p className="text-[12.5px] text-text-muted">{tt(locale, "admin.sub")}</p>
               </div>
             </Link>
           ) : null}
@@ -65,8 +118,8 @@ export default async function ContaPage() {
                 <LogOut className="w-5 h-5" />
               </span>
               <div>
-                <p className="font-semibold text-text-strong">Sair</p>
-                <p className="text-[12.5px] text-text-muted">Encerrar sessão</p>
+                <p className="font-semibold text-text-strong">{tt(locale, "logout.title")}</p>
+                <p className="text-[12.5px] text-text-muted">{tt(locale, "logout.sub")}</p>
               </div>
             </button>
           </form>

@@ -209,16 +209,31 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
         </Field>
       </Section>
 
-      <Section title="Afiliado e publicação">
-        <Field label="URL do link de afiliado" required>
+      <Section title="Reserva (widget do parceiro) e publicação">
+        <Field label="HTML do widget de reservas (Rezdy / FareHarbor / Pluralo)">
+          <textarea
+            name="booking_widget_html"
+            defaultValue={tour?.booking_widget_html ?? ""}
+            rows={6}
+            className={fieldClass + " font-mono text-[12.5px] leading-snug"}
+            placeholder={`Cole aqui o snippet do parceiro, ex.:\n<div data-fareharbor-widget="..."></div>\n<script src="https://fareharbor.com/embeds/api/v1/?...">\\</script>`}
+          />
+        </Field>
+        <p className="text-[11.5px] text-text-muted -mt-2">
+          O widget é embutido no lado direito da página do passeio (sandbox seguro). É o jeito principal de receber reservas.
+        </p>
+
+        <Field label="Link de afiliado (fallback, opcional)">
           <input
             name="affiliate_url"
             defaultValue={tour?.affiliate_url ?? ""}
-            required
             className={fieldClass}
             placeholder="https://parceiro.com/?ref=youguidealgarve"
           />
         </Field>
+        <p className="text-[11.5px] text-text-muted -mt-2">
+          Usado caso o widget não seja preenchido. Pelo menos um dos dois é obrigatório.
+        </p>
 
         <div className="flex flex-wrap gap-5 pt-2">
           <Toggle

@@ -2,20 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Category } from "@/lib/types";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 
-export function CategoryRail({ categories }: { categories: Category[] }) {
+export async function CategoryRail({ categories }: { categories: Category[] }) {
+  const locale = await getLocale();
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1240px] px-5 py-10">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-2xl font-extrabold text-text-strong">
-            Explore por categoria
+          <h2 className="font-display text-2xl md:text-3xl font-extrabold text-text-strong">
+            {t(locale, "section.categories.title")}
           </h2>
           <Link
             href="/atividades"
             className="text-[13.5px] font-semibold text-navy-700 hover:underline flex items-center gap-1"
           >
-            Ver todas as categorias <ArrowRight className="w-4 h-4" />
+            {t(locale, "section.categories.viewAll")} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 

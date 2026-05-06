@@ -97,14 +97,23 @@ export function BookingWidget({ tour }: { tour: Tour }) {
         </span>
       </div>
 
-      <a
-        href={tour.affiliate_url}
-        target="_blank"
-        rel="noopener noreferrer sponsored"
-        className="mt-3 block text-center bg-brand-yellow hover:bg-brand-yellow-hover text-navy-900 font-bold px-4 py-3 rounded-xl text-[14.5px]"
-      >
-        Reservar agora
-      </a>
+      {tour.affiliate_url ? (
+        <a
+          href={tour.affiliate_url}
+          target="_blank"
+          rel="noopener noreferrer sponsored"
+          className="mt-3 block text-center bg-brand-yellow hover:bg-brand-yellow-hover text-navy-900 font-bold px-4 py-3 rounded-xl text-[14.5px]"
+        >
+          Reservar agora
+        </a>
+      ) : (
+        <button
+          type="button"
+          className="mt-3 block w-full text-center bg-brand-yellow hover:bg-brand-yellow-hover text-navy-900 font-bold px-4 py-3 rounded-xl text-[14.5px]"
+        >
+          Reservar agora
+        </button>
+      )}
       <button className="mt-2 w-full bg-white border border-navy-700 text-navy-800 font-semibold px-4 py-3 rounded-xl text-[14px] hover:bg-surface-alt">
         Adicionar ao carrinho
       </button>

@@ -1,4 +1,6 @@
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 
 const REVIEWS = [
   {
@@ -18,16 +20,17 @@ const REVIEWS = [
   },
 ];
 
-export function ReviewsStrip() {
+export async function ReviewsStrip() {
+  const locale = await getLocale();
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1240px] px-5 py-10 border-t border-border-subtle">
         <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
           <div className="md:w-[260px] shrink-0">
             <p className="text-[15px] font-bold text-text-strong">
-              Avaliado por quem já viveu
+              {t(locale, "section.reviews.heading")}
             </p>
-            <p className="mt-1 text-[13px] text-text-muted">Excelente</p>
+            <p className="mt-1 text-[13px] text-text-muted">{t(locale, "section.reviews.excellent")}</p>
             <div className="mt-2 flex items-center gap-2">
               <span className="flex">
                 {Array.from({ length: 5 }).map((_, i) => (

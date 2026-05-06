@@ -6,13 +6,15 @@ import { BlogCTA } from "@/components/site/blog-cta";
 import { ReviewsStrip } from "@/components/site/reviews-strip";
 import { Newsletter } from "@/components/site/newsletter";
 import { listCategories, listDestinations } from "@/lib/data";
+import { getLocale } from "@/lib/locale-server";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [categories, destinations] = await Promise.all([
+  const [categories, destinations, locale] = await Promise.all([
     listCategories(),
     listDestinations(true),
+    getLocale(),
   ]);
 
   return (
@@ -23,7 +25,7 @@ export default async function HomePage() {
       <DestinationRail destinations={destinations} />
       <BlogCTA />
       <ReviewsStrip />
-      <Newsletter />
+      <Newsletter locale={locale} />
     </>
   );
 }

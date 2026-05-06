@@ -61,7 +61,8 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
       partner_id: formData.get("partner_id")
         ? String(formData.get("partner_id"))
         : null,
-      affiliate_url: String(formData.get("affiliate_url") ?? "").trim(),
+      affiliate_url: String(formData.get("affiliate_url") ?? "").trim() || null,
+      booking_widget_html: String(formData.get("booking_widget_html") ?? "").trim() || null,
       meeting_point: String(formData.get("meeting_point") ?? "") || null,
       included: parseList(formData.get("included")),
       highlights: parseList(formData.get("highlights")),
@@ -72,7 +73,12 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
     };
 
     if (!payload.cover_image) return { error: "Imagem de capa obrigatória (URL)" };
-    if (!payload.affiliate_url) return { error: "Link de afiliado obrigatório" };
+    if (!payload.booking_widget_html && !payload.affiliate_url) {
+      return {
+        error:
+          "Informe o HTML do widget de reservas (Rezdy/FareHarbor/Pluralo) ou um link de afiliado de fallback.",
+      };
+    }
 
     if (id) {
       const { error } = await supabase.from("tours").update(payload).eq("id", id);

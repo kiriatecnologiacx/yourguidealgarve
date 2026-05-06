@@ -17,9 +17,9 @@ const display = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "YouGuideAlgarve — As melhores experiências no Algarve",
+  title: "YouGuideAlgarve — Tours and experiences in the Algarve",
   description:
-    "Atividades, tours, ingressos e experiências inesquecíveis em todo o Algarve. Reservas com cancelamento gratuito.",
+    "Tours, tickets and unforgettable experiences across the Algarve coast. Book with free cancellation.",
   icons: { icon: "/favicon.svg" },
 };
 
@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={`${sans.variable} ${display.variable}`}>
+    <html lang="en" className={`${sans.variable} ${display.variable}`}>
       <body className="font-sans">{children}</body>
     </html>
   );
