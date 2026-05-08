@@ -10,12 +10,12 @@ export async function SiteFooter() {
   return (
     <footer className="bg-navy-800 text-white/85">
       <div className="mx-auto max-w-[1240px] px-5 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_auto] gap-8 md:gap-10 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_auto] gap-8 md:gap-10 items-start">
           <div>
             <Logo />
             <p className="mt-3 text-[13px] leading-relaxed text-white/65 max-w-md">
-              Descubra o melhor do Algarve com experiências selecionadas
-              especialmente para você.
+              Discover the best of the Algarve with experiences carefully picked
+              just for you.
             </p>
             <div className="mt-4 flex items-center gap-3">
               <SocialIcon icon={<Instagram className="w-4 h-4" />} />
@@ -42,6 +42,24 @@ export async function SiteFooter() {
             </ul>
           </div>
 
+          <div>
+            <h4 className="text-[13px] font-semibold text-white mb-3">
+              {t(locale, "footer.legal")}
+            </h4>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/privacidade" className="text-[13px] text-white/70 hover:text-white">
+                  {t(locale, "footer.privacy")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/termos" className="text-[13px] text-white/70 hover:text-white">
+                  {t(locale, "footer.terms")}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           <div className="self-start">
             <LangSwitch current={locale} />
           </div>
@@ -50,7 +68,7 @@ export async function SiteFooter() {
 
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-[1240px] px-5 py-4 flex flex-wrap items-center justify-between gap-2 text-[12px] text-white/60">
-          <span>© 2026 Your Guide Algarve. Todos os direitos reservados.</span>
+          <span>© 2026 Your Guide Algarve. All rights reserved.</span>
           <span>
             {t(locale, "footer.copy")} ·{" "}
             <a
