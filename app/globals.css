@@ -64,12 +64,23 @@ body {
 
 /* Hero gradient overlay used over the cliff hero image */
 .hero-overlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 37, 64, 0.78) 0%,
-    rgba(10, 37, 64, 0.55) 40%,
-    rgba(10, 37, 64, 0.4) 100%
-  );
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(10, 37, 64, 0.78) 0%,
+      rgba(10, 37, 64, 0.45) 40%,
+      rgba(10, 37, 64, 0.55) 100%
+    ),
+    linear-gradient(105deg, rgba(255, 138, 61, 0.18) 0%, transparent 55%);
+}
+
+/* Slow Ken Burns zoom for hero slides */
+@keyframes hero-zoom {
+  0%   { transform: scale(1.04); }
+  100% { transform: scale(1.12); }
+}
+.animate-hero-zoom {
+  animation: hero-zoom 14s ease-out infinite alternate;
 }
 
 .detail-gallery-overlay {
@@ -112,12 +123,18 @@ body {
     linear-gradient(180deg, #fff7e8 0%, #ffe9d2 35%, #ffe1c4 60%, #f5ecdb 100%);
 }
 
-/* Soft sun-ray pattern overlay */
-.pattern-rays {
-  background-image:
-    repeating-conic-gradient(
-      from 0deg at 80% 5%,
-      rgba(255, 204, 0, 0.10) 0deg 4deg,
-      transparent 4deg 14deg
-    );
+/* Warm wash applied over a real photo (destinations section) */
+.warm-wash {
+  background:
+    radial-gradient(ellipse 90% 60% at 30% 5%, rgba(255, 204, 0, 0.30) 0, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 90% 80%, rgba(255, 138, 61, 0.30) 0, transparent 60%),
+    linear-gradient(180deg, rgba(255, 245, 220, 0.30) 0%, rgba(10, 37, 64, 0.55) 100%);
+}
+
+/* SVG grain (subtle noise texture for postcard / zine feel) */
+.grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+  opacity: 0.55;
+  mix-blend-mode: overlay;
 }

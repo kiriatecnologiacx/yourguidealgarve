@@ -7,5 +7,13 @@ export const dynamic = "force-dynamic";
 export default async function SobrePage() {
   const locale = await getLocale();
   const page = getLegalPage("about", locale);
-  return <LegalPageView page={page} />;
+  return (
+    <LegalPageView
+      page={page}
+      heroImage={{
+        src: "/photos/hero-1.jpg",
+        alt: "Algarve coastline — the place we call home",
+      }}
+    />
+  );
 }

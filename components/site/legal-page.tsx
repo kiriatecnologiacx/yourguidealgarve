@@ -1,11 +1,40 @@
+import Image from "next/image";
 import type { LegalPage } from "@/lib/legal-content";
 
-export function LegalPageView({ page, hero }: { page: LegalPage; hero?: React.ReactNode }) {
+export function LegalPageView({
+  page,
+  hero,
+  heroImage,
+}: {
+  page: LegalPage;
+  hero?: React.ReactNode;
+  heroImage?: { src: string; alt: string };
+}) {
   return (
     <article className="bg-surface-alt min-h-[60vh]">
-      <div className="bg-navy-800 text-white">
-        <div className="mx-auto max-w-[820px] px-5 py-12">
-          <h1 className="font-display text-3xl md:text-5xl font-extrabold leading-tight">
+      <div className="relative bg-navy-800 text-white overflow-hidden">
+        {heroImage ? (
+          <>
+            <Image
+              src={heroImage.src}
+              alt={heroImage.alt}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center -z-10"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(10,37,64,0.55) 0%, rgba(10,37,64,0.85) 100%), linear-gradient(105deg, rgba(255,138,61,0.15) 0%, transparent 55%)",
+              }}
+            />
+          </>
+        ) : null}
+        <div className={`relative mx-auto max-w-[820px] px-5 ${heroImage ? "py-20 md:py-28" : "py-12"}`}>
+          <h1 className="font-display text-3xl md:text-5xl font-extrabold leading-tight drop-shadow-[0_4px_14px_rgba(0,0,0,0.35)]">
             {page.title}
           </h1>
           {page.updated ? (

@@ -23,19 +23,28 @@ export default async function SignupPage({
         </div>
         <div className="relative rounded-2xl overflow-hidden hidden md:block">
           <Image
-            src="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1400&q=80"
-            alt="Algarve"
+            src="/photos/auth-side.jpg"
+            alt="Algarve cliff path"
             fill
-            className="object-cover"
+            className="object-cover object-center"
             sizes="50vw"
+            priority
           />
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(135deg, rgba(10,37,64,0.65) 0%, rgba(255,204,0,0.35) 100%)",
+                "linear-gradient(180deg, rgba(10,37,64,0.25) 0%, rgba(10,37,64,0.85) 100%), linear-gradient(135deg, rgba(255,204,0,0.30) 0%, transparent 60%)",
             }}
           />
+          <div className="absolute inset-0 p-8 flex flex-col justify-end text-white">
+            <h2 className="font-display text-2xl font-extrabold leading-tight max-w-xs drop-shadow-[0_4px_14px_rgba(0,0,0,0.4)]">
+              Start your Algarve story.
+            </h2>
+            <p className="text-[13.5px] text-white/90 mt-2 max-w-xs drop-shadow">
+              Sign up to save tours, get tips and access exclusive offers.
+            </p>
+          </div>
         </div>
       </div>
     </section>

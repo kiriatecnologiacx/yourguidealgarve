@@ -8,3 +8,6 @@ out
 *.log
 .vercel
 references
+WhatsApp Image *.jpeg
+WhatsApp Image *.png
+WhatsApp_Image_*
