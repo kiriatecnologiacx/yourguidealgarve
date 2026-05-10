@@ -23,7 +23,8 @@ export function BookingWidget({ tour }: { tour: Tour }) {
   const [kids, setKids] = useState(0);
   const [babies, setBabies] = useState(0);
 
-  const total = adults * tour.price_brl + kids * Math.round(tour.price_brl * 0.6);
+  const basePrice = tour.price_brl ?? tour.price_from_brl ?? 0;
+  const total = adults * basePrice + kids * Math.round(basePrice * 0.6);
 
   return (
     <aside className="bg-white rounded-2xl border border-border-subtle p-5 lg:sticky lg:top-6 self-start">
