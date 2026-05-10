@@ -9,6 +9,7 @@ import {
   Tags,
   MapPin,
   Newspaper,
+  BookOpen,
   LogOut,
   ExternalLink,
 } from "lucide-react";
@@ -22,6 +23,7 @@ const NAV = [
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/parceiros", label: "Parceiros", icon: Users },
   { href: "/admin/categorias", label: "Categorias", icon: Tags },
+  { href: "/admin/ajuda", label: "Ajuda — Widgets", icon: BookOpen },
 ];
 
 export function AdminSidebar({ email }: { email: string | null }) {

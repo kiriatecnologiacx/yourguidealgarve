@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
-import { Loader2, Save } from "lucide-react";
+import { ChevronDown, Loader2, Save, Sparkles } from "lucide-react";
 import { upsertTour, type TourFormState } from "@/app/admin/passeios/actions";
 import type { Category, Destination, Partner, Tour } from "@/lib/types";
 
@@ -17,12 +17,20 @@ type Props = {
 
 export function TourForm({ tour, categories, destinations, partners }: Props) {
   const [state, action, pending] = useActionState(upsertTour, initial);
+  const [showAdvanced, setShowAdvanced] = useState(
+    !!(tour?.description || tour?.gallery?.length || tour?.highlights?.length || tour?.meeting_point),
+  );
 
   return (
     <form action={action} className="space-y-6">
       {tour ? <input type="hidden" name="id" value={tour.id} /> : null}
 
-      <Section title="Informações básicas">
+      <Section title="Informações principais">
+        <p className="text-[12.5px] text-text-muted -mt-2 mb-2">
+          O essencial pra criar o passeio. Se você usa widget Rezdy/FareHarbor/Pluralo,
+          o restante do conteúdo (descrição, fotos, calendário) vem do próprio widget —
+          basta preencher os campos abaixo.
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Field label="Título" required>
             <input
@@ -30,7 +38,7 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
               defaultValue={tour?.title ?? ""}
               required
               className={fieldClass}
-              placeholder="Passeio de barco às Grutas de Benagil"
+              placeholder="Buggy Adventure 1.5H - Off-Road Tour from Albufeira"
             />
           </Field>
           <Field label="Slug (URL)">
@@ -38,7 +46,24 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
               name="slug"
               defaultValue={tour?.slug ?? ""}
               className={fieldClass}
-              placeholder="passeio-grutas-benagil"
+              placeholder="buggy-adventure-1-5h-albufeira"
+            />
+          </Field>
+          <Field label="Imagem de capa (URL)" required>
+            <input
+              name="cover_image"
+              defaultValue={tour?.cover_image ?? ""}
+              required
+              className={fieldClass}
+              placeholder="https://..."
+            />
+          </Field>
+          <Field label="Selo (badge)">
+            <input
+              name="badge"
+              defaultValue={tour?.badge ?? ""}
+              className={fieldClass}
+              placeholder="Best seller, New, Top rated..."
             />
           </Field>
           <Field label="Categoria">
@@ -69,160 +94,36 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
               ))}
             </select>
           </Field>
-          <Field label="Parceiro">
-            <select
-              name="partner_id"
-              defaultValue={tour?.partner_id ?? ""}
-              className={fieldClass}
-            >
-              <option value="">— selecione —</option>
-              {partners.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field label="Duração">
-            <input
-              name="duration"
-              defaultValue={tour?.duration ?? ""}
-              className={fieldClass}
-              placeholder="2 horas"
-            />
-          </Field>
-          <Field label="Descrição curta">
-            <input
-              name="short_description"
-              defaultValue={tour?.short_description ?? ""}
-              className={fieldClass}
-              placeholder="Resumo de uma frase"
-            />
-          </Field>
-          <Field label="Selo (badge)">
-            <input
-              name="badge"
-              defaultValue={tour?.badge ?? ""}
-              className={fieldClass}
-              placeholder="Mais reservado, Novo, etc"
-            />
-          </Field>
-        </div>
-
-        <Field label="Descrição completa">
-          <textarea
-            name="description"
-            defaultValue={tour?.description ?? ""}
-            rows={5}
-            className={fieldClass}
-          />
-        </Field>
-      </Section>
-
-      <Section title="Mídia">
-        <Field label="Imagem de capa (URL)" required>
-          <input
-            name="cover_image"
-            defaultValue={tour?.cover_image ?? ""}
-            required
-            className={fieldClass}
-            placeholder="https://..."
-          />
-        </Field>
-        <Field label="Galeria (URLs separadas por vírgula ou linha)">
-          <textarea
-            name="gallery"
-            defaultValue={tour?.gallery?.join("\n") ?? ""}
-            rows={4}
-            className={fieldClass}
-          />
-        </Field>
-      </Section>
-
-      <Section title="Preço e avaliações">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Field label="Preço (BRL)" required>
-            <input
-              name="price_brl"
-              type="number"
-              step="1"
-              defaultValue={tour?.price_brl ?? ""}
-              required
-              className={fieldClass}
-            />
-          </Field>
-          <Field label="Preço a partir de (BRL)">
-            <input
-              name="price_from_brl"
-              type="number"
-              step="1"
-              defaultValue={tour?.price_from_brl ?? ""}
-              className={fieldClass}
-            />
-          </Field>
-          <Field label="Avaliação (0-5)">
-            <input
-              name="rating"
-              type="number"
-              step="0.1"
-              min="0"
-              max="5"
-              defaultValue={tour?.rating ?? ""}
-              className={fieldClass}
-            />
-          </Field>
-          <Field label="Nº de avaliações">
-            <input
-              name="reviews_count"
-              type="number"
-              defaultValue={tour?.reviews_count ?? 0}
-              className={fieldClass}
-            />
-          </Field>
         </div>
       </Section>
 
-      <Section title="Detalhes da experiência">
-        <Field label="Ponto de encontro">
-          <input
-            name="meeting_point"
-            defaultValue={tour?.meeting_point ?? ""}
-            className={fieldClass}
-            placeholder="Marina de Lagos, 8600-315 Lagos, Portugal"
-          />
-        </Field>
-        <Field label="Destaques (uma por linha)">
+      <Section title="Widget de reserva do parceiro" icon={<Sparkles className="w-4 h-4 text-brand-orange" />}>
+        <p className="text-[12.5px] text-text-muted -mt-2">
+          Cole aqui o widget que você gerou no painel do parceiro (Rezdy, FareHarbor, Pluralo, etc).
+          Você pode colar só a URL do iframe (recomendado) OU o snippet HTML completo —
+          se vier o snippet, a gente extrai a URL automaticamente.{" "}
+          <Link href="/admin/ajuda" className="text-navy-700 underline hover:text-navy-900">
+            Como pegar o widget →
+          </Link>
+        </p>
+        <Field label="URL do widget (Rezdy/FareHarbor/Pluralo) — recomendado">
           <textarea
-            name="highlights"
-            defaultValue={tour?.highlights?.join("\n") ?? ""}
-            rows={4}
-            className={fieldClass}
+            name="booking_widget_url"
+            defaultValue={tour?.booking_widget_url ?? ""}
+            rows={3}
+            className={fieldClass + " font-mono text-[12.5px]"}
+            placeholder={`Ex.: https://yourguidealgarve.rezdy.com/45975J/buggy-adventure-1-5h-off-road-tour-from-albufeira?iframe=true\n\n(Você também pode colar o snippet completo <iframe …> que a gente extrai a URL.)`}
           />
         </Field>
-        <Field label="O que está incluído (um por linha)">
-          <textarea
-            name="included"
-            defaultValue={tour?.included?.join("\n") ?? ""}
-            rows={4}
-            className={fieldClass}
-          />
-        </Field>
-      </Section>
-
-      <Section title="Reserva (widget do parceiro) e publicação">
-        <Field label="HTML do widget de reservas (Rezdy / FareHarbor / Pluralo)">
+        <Field label="HTML completo do snippet (avançado, opcional)">
           <textarea
             name="booking_widget_html"
             defaultValue={tour?.booking_widget_html ?? ""}
-            rows={6}
-            className={fieldClass + " font-mono text-[12.5px] leading-snug"}
-            placeholder={`Cole aqui o snippet do parceiro, ex.:\n<div data-fareharbor-widget="..."></div>\n<script src="https://fareharbor.com/embeds/api/v1/?...">\\</script>`}
+            rows={4}
+            className={fieldClass + " font-mono text-[12.5px]"}
+            placeholder={"Use somente se a URL não bastar — por exemplo widgets que dependem do <script defer> do parceiro."}
           />
         </Field>
-        <p className="text-[11.5px] text-text-muted -mt-2">
-          O widget é embutido no lado direito da página do passeio (sandbox seguro). É o jeito principal de receber reservas.
-        </p>
-
         <Field label="Link de afiliado (fallback, opcional)">
           <input
             name="affiliate_url"
@@ -231,11 +132,14 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
             placeholder="https://parceiro.com/?ref=youguidealgarve"
           />
         </Field>
-        <p className="text-[11.5px] text-text-muted -mt-2">
-          Usado caso o widget não seja preenchido. Pelo menos um dos dois é obrigatório.
+        <p className="text-[11.5px] text-text-muted">
+          Pelo menos um dos três (URL, HTML ou link de afiliado) é obrigatório.
+          A página do passeio mostra o widget grande, ocupando o conteúdo principal.
         </p>
+      </Section>
 
-        <div className="flex flex-wrap gap-5 pt-2">
+      <Section title="Publicação">
+        <div className="flex flex-wrap gap-5">
           <Toggle
             name="free_cancellation"
             label="Cancelamento gratuito"
@@ -253,6 +157,147 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
           />
         </div>
       </Section>
+
+      <button
+        type="button"
+        onClick={() => setShowAdvanced((v) => !v)}
+        className="w-full text-left flex items-center justify-between bg-white border border-border-subtle rounded-2xl px-5 py-4 hover:bg-surface-alt text-[13.5px] font-semibold text-text-strong"
+      >
+        <span>
+          Conteúdo extra (preço, descrição, fotos, destaques) —{" "}
+          <span className="text-text-muted font-normal">
+            opcional. Só preencha se o widget não cobrir, ou se quiser
+            complementar.
+          </span>
+        </span>
+        <ChevronDown
+          className={`w-4 h-4 transition-transform ${
+            showAdvanced ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {showAdvanced ? (
+        <>
+          <Section title="Preço e avaliações (opcional)">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Field label="Preço (BRL)">
+                <input
+                  name="price_brl"
+                  type="number"
+                  step="1"
+                  defaultValue={tour?.price_brl ?? ""}
+                  className={fieldClass}
+                />
+              </Field>
+              <Field label="Preço a partir de (BRL)">
+                <input
+                  name="price_from_brl"
+                  type="number"
+                  step="1"
+                  defaultValue={tour?.price_from_brl ?? ""}
+                  className={fieldClass}
+                />
+              </Field>
+              <Field label="Avaliação (0-5)">
+                <input
+                  name="rating"
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="5"
+                  defaultValue={tour?.rating ?? ""}
+                  className={fieldClass}
+                />
+              </Field>
+              <Field label="Nº de avaliações">
+                <input
+                  name="reviews_count"
+                  type="number"
+                  defaultValue={tour?.reviews_count ?? 0}
+                  className={fieldClass}
+                />
+              </Field>
+            </div>
+          </Section>
+
+          <Section title="Texto e mídia (opcional)">
+            <Field label="Duração">
+              <input
+                name="duration"
+                defaultValue={tour?.duration ?? ""}
+                className={fieldClass}
+                placeholder="90 min, 2 horas..."
+              />
+            </Field>
+            <Field label="Descrição curta">
+              <input
+                name="short_description"
+                defaultValue={tour?.short_description ?? ""}
+                className={fieldClass}
+                placeholder="Resumo de uma frase"
+              />
+            </Field>
+            <Field label="Descrição completa">
+              <textarea
+                name="description"
+                defaultValue={tour?.description ?? ""}
+                rows={5}
+                className={fieldClass}
+              />
+            </Field>
+            <Field label="Galeria (URLs separadas por vírgula ou linha)">
+              <textarea
+                name="gallery"
+                defaultValue={tour?.gallery?.join("\n") ?? ""}
+                rows={4}
+                className={fieldClass}
+              />
+            </Field>
+            <Field label="Parceiro">
+              <select
+                name="partner_id"
+                defaultValue={tour?.partner_id ?? ""}
+                className={fieldClass}
+              >
+                <option value="">— selecione —</option>
+                {partners.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          </Section>
+
+          <Section title="Experiência (opcional)">
+            <Field label="Ponto de encontro">
+              <input
+                name="meeting_point"
+                defaultValue={tour?.meeting_point ?? ""}
+                className={fieldClass}
+                placeholder="Marina de Lagos, 8600-315 Lagos"
+              />
+            </Field>
+            <Field label="Destaques (uma por linha)">
+              <textarea
+                name="highlights"
+                defaultValue={tour?.highlights?.join("\n") ?? ""}
+                rows={4}
+                className={fieldClass}
+              />
+            </Field>
+            <Field label="O que está incluído (um por linha)">
+              <textarea
+                name="included"
+                defaultValue={tour?.included?.join("\n") ?? ""}
+                rows={4}
+                className={fieldClass}
+              />
+            </Field>
+          </Section>
+        </>
+      ) : null}
 
       {state.error ? (
         <p className="text-[13px] text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-lg">
@@ -283,10 +328,21 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
 const fieldClass =
   "w-full rounded-lg border border-border-subtle px-3 py-2.5 text-[14px] outline-none focus:border-navy-700 focus:ring-1 focus:ring-navy-700 bg-white";
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  icon,
+  children,
+}: {
+  title: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <section className="bg-white border border-border-subtle rounded-2xl p-5 space-y-4">
-      <h2 className="text-[15px] font-bold text-text-strong">{title}</h2>
+      <h2 className="text-[15px] font-bold text-text-strong flex items-center gap-2">
+        {icon}
+        {title}
+      </h2>
       {children}
     </section>
   );

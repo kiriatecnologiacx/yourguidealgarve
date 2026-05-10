@@ -76,6 +76,11 @@ export default async function AdminDashboardPage() {
           </p>
           <ul className="mt-4 space-y-2 text-[13.5px]">
             <Step
+              href="/admin/ajuda"
+              label="Ler o guia: como pegar widgets de Rezdy/FareHarbor/Pluralo"
+              done={false}
+            />
+            <Step
               href="/admin/parceiros"
               label="Cadastrar parceiros"
               done={(partners.count ?? 0) > 0}
@@ -87,7 +92,7 @@ export default async function AdminDashboardPage() {
             />
             <Step
               href="/admin/passeios"
-              label="Adicionar passeios e links de afiliado"
+              label="Adicionar passeios com widget de reserva"
               done={total > 0}
             />
           </ul>
@@ -96,11 +101,11 @@ export default async function AdminDashboardPage() {
           <h2 className="text-[15px] font-bold text-text-strong">Atalhos</h2>
           <div className="mt-3 grid grid-cols-2 gap-3">
             <ActionLink href="/admin/passeios/novo" label="Adicionar passeio" />
+            <ActionLink href="/admin/ajuda" label="Guia de widgets" />
             <ActionLink href="/admin/blog/novo" label="Nova postagem" />
             <ActionLink href="/admin/destinos" label="Destinos" />
             <ActionLink href="/admin/parceiros" label="Parceiros" />
             <ActionLink href="/admin/categorias" label="Categorias" />
-            <ActionLink href="/admin/blog" label="Gerenciar blog" />
           </div>
         </div>
       </div>

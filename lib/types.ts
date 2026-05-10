@@ -6,7 +6,7 @@ export type Tour = {
   description: string | null;
   cover_image: string;
   gallery: string[];
-  price_brl: number;
+  price_brl: number | null;
   price_from_brl: number | null;
   duration: string | null;
   rating: number | null;
@@ -15,6 +15,7 @@ export type Tour = {
   category_id: string | null;
   partner_id: string | null;
   affiliate_url: string | null;
+  booking_widget_url: string | null;
   booking_widget_html: string | null;
   meeting_point: string | null;
   included: string[];
