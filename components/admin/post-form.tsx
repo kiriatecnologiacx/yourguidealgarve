@@ -39,7 +39,7 @@ export function PostForm({ post }: { post?: BlogPost | null }) {
           <Field label="Autor">
             <input
               name="author"
-              defaultValue={post?.author ?? "YouGuideAlgarve"}
+              defaultValue={post?.author ?? "Your Guide Algarve"}
               className={fieldClass}
             />
           </Field>

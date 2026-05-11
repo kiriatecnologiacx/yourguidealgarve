@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ExternalLink, Copy, BookOpen, Sparkles, CircleAlert } from "lucide-react";
 
-export const metadata = { title: "Ajuda — YouGuideAlgarve admin" };
+export const metadata = { title: "Ajuda — Your Guide Algarve admin" };
 
 export default function AdminHelpPage() {
   return (

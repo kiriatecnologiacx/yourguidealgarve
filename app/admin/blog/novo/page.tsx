@@ -15,7 +15,7 @@ export default function AdminNewPostPage() {
       </Link>
       <h1 className="mt-2 text-2xl font-extrabold text-text-strong">Nova postagem</h1>
       <p className="text-[13.5px] text-text-muted">
-        Crie um artigo para o blog do YouGuideAlgarve.
+        Crie um artigo para o blog do Your Guide Algarve.
       </p>
 
       <div className="mt-6">

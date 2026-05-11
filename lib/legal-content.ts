@@ -889,7 +889,7 @@ const PARTNERS: Record<Locale, LegalPage> = {
   en: {
     title: "Become a partner",
     intro: [
-      "Run a tour, experience or activity in the Algarve? We'd love to feature you on YouGuideAlgarve.",
+      "Run a tour, experience or activity in the Algarve? We'd love to feature you on Your Guide Algarve.",
       "We promote partner experiences to English-speaking travelers planning their trip, and connect them directly to your booking system — so you keep your operations exactly the way they work today.",
     ],
     sections: [
@@ -913,7 +913,7 @@ const PARTNERS: Record<Locale, LegalPage> = {
   "pt-PT": {
     title: "Torna-te parceiro",
     intro: [
-      "Operas passeios, experiências ou atividades no Algarve? Adoraríamos divulgar-te no YouGuideAlgarve.",
+      "Operas passeios, experiências ou atividades no Algarve? Adoraríamos divulgar-te no Your Guide Algarve.",
       "Apresentamos experiências dos nossos parceiros a viajantes de língua inglesa que estão a planear a viagem, e ligamo-los diretamente ao teu sistema de reservas — para manteres a tua operação tal como a tens hoje.",
     ],
     sections: [
@@ -937,7 +937,7 @@ const PARTNERS: Record<Locale, LegalPage> = {
   "pt-BR": {
     title: "Seja um parceiro",
     intro: [
-      "Você opera passeios, experiências ou atividades no Algarve? Vamos adorar te ter no YouGuideAlgarve.",
+      "Você opera passeios, experiências ou atividades no Algarve? Vamos adorar te ter no Your Guide Algarve.",
       "Apresentamos experiências dos nossos parceiros a viajantes de língua inglesa que estão planejando a viagem, e os conectamos direto ao seu sistema de reservas — você mantém a sua operação exatamente como já funciona hoje.",
     ],
     sections: [

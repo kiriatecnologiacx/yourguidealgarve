@@ -17,7 +17,7 @@ const display = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "YouGuideAlgarve — Tours and experiences in the Algarve",
+  title: "Your Guide Algarve — Tours and experiences in the Algarve",
   description:
     "Tours, tickets and unforgettable experiences across the Algarve coast. Book with free cancellation.",
   icons: { icon: "/favicon.svg" },

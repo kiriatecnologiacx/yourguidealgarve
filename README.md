@@ -1,4 +1,4 @@
-# YouGuideAlgarve
+# Your Guide Algarve
 
 Marketplace de passeios e experiências no Algarve. Os visitantes navegam por atividades de parceiros e clicam para reservar via links de afiliado.
 

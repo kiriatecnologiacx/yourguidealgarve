@@ -14,7 +14,7 @@ export function Logo({ variant = "light", className, showText = true }: LogoProp
     <Link
       href="/"
       className={cn("flex items-center gap-2 shrink-0", className)}
-      aria-label="YouGuideAlgarve"
+      aria-label="Your Guide Algarve"
     >
       <Image
         src="/logo.png"

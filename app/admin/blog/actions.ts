@@ -30,7 +30,7 @@ export async function upsertPost(_prev: BlogFormState, formData: FormData): Prom
       excerpt: String(formData.get("excerpt") ?? "") || null,
       content,
       cover_image: String(formData.get("cover_image") ?? "").trim(),
-      author: String(formData.get("author") ?? "") || "YouGuideAlgarve",
+      author: String(formData.get("author") ?? "") || "Your Guide Algarve",
       is_published: isPublished,
       published_at: isPublished ? new Date().toISOString() : null,
     };

@@ -20,7 +20,7 @@ export default async function AdminLoginPage({
             </h2>
             <p className="mt-2 text-white/85 max-w-sm">
               Gerencie passeios, parceiros e links de afiliado do
-              YouGuideAlgarve.
+              Your Guide Algarve.
             </p>
           </div>
           <p className="text-[12px] text-white/60">© 2026 Your Guide Algarve</p>
