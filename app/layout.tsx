@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Bricolage_Grotesque } from "next/font/google";
+import { getSiteUrl } from "@/lib/utils";
 import "./globals.css";
 
 const sans = Plus_Jakarta_Sans({
@@ -17,6 +18,7 @@ const display = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: "Your Guide Algarve — Tours and experiences in the Algarve",
   description:
     "Tours, tickets and unforgettable experiences across the Algarve coast. Book with free cancellation.",

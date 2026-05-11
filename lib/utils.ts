@@ -30,3 +30,13 @@ export function formatRating(value: number | null | undefined, fractionDigits = 
   if (value == null) return "—";
   return value.toFixed(fractionDigits).replace(".", ",");
 }
+
+export function getSiteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
+  if (explicit) return explicit.startsWith("http") ? explicit : `https://${explicit}`;
+  const prodHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (prodHost) return `https://${prodHost}`;
+  const vercelHost = process.env.VERCEL_URL;
+  if (vercelHost) return `https://${vercelHost}`;
+  return "http://localhost:3000";
+}
