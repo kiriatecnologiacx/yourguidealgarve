@@ -49,13 +49,12 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
               placeholder="buggy-adventure-1-5h-albufeira"
             />
           </Field>
-          <Field label="Imagem de capa (URL)" required>
+          <Field label="Imagem de capa (URL)">
             <input
               name="cover_image"
               defaultValue={tour?.cover_image ?? ""}
-              required
               className={fieldClass}
-              placeholder="https://..."
+              placeholder="https://... (opcional — usaremos a primeira da galeria se vazio)"
             />
           </Field>
           <Field label="Selo (badge)">

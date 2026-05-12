@@ -4,7 +4,7 @@ export type Tour = {
   title: string;
   short_description: string | null;
   description: string | null;
-  cover_image: string;
+  cover_image: string | null;
   gallery: string[];
   price_brl: number | null;
   price_from_brl: number | null;

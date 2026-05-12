@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Star } from "lucide-react";
 import type { Tour } from "@/lib/types";
 import { formatPriceBRL, formatRating } from "@/lib/utils";
 import { FavoriteButton } from "./favorite-button";
+import { TourImage } from "./tour-image";
 
 export function TourCard({
   tour,
@@ -22,12 +22,11 @@ export function TourCard({
       className="group block bg-white rounded-2xl border border-border-subtle hover:shadow-lg hover:border-transparent transition-all overflow-hidden"
     >
       <div className={`relative ${compact ? "h-[160px]" : "h-[200px]"}`}>
-        <Image
-          src={tour.cover_image}
+        <TourImage
+          src={tour.cover_image ?? tour.gallery?.[0] ?? null}
           alt={tour.title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 768px) 50vw, 320px"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {tour.badge ? (
           <span className="absolute top-3 left-3 bg-brand-yellow text-navy-900 text-[11px] font-bold uppercase tracking-wide px-2 py-1 rounded">

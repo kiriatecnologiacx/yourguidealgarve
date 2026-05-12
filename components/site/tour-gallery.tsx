@@ -6,18 +6,22 @@ export function TourGallery({
   gallery,
   title,
 }: {
-  cover: string;
+  cover: string | null;
   gallery: string[];
   title: string;
 }) {
-  const thumbs = gallery.slice(0, 4);
-  const total = gallery.length;
+  const effectiveCover = cover ?? gallery[0] ?? null;
+  const remaining = cover ? gallery : gallery.slice(1);
+  const thumbs = remaining.slice(0, 4);
+  const total = remaining.length;
+
+  if (!effectiveCover) return null;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-2 rounded-2xl overflow-hidden">
       <div className="relative h-[360px] md:h-[460px]">
         <Image
-          src={cover}
+          src={effectiveCover}
           alt={title}
           fill
           priority

@@ -49,7 +49,8 @@ export default async function TourDetailPage({
 
   // Whether we have enough custom content (gallery / description / highlights)
   // to show our editorial sections in addition to the partner widget.
-  const hasGallery = tour.gallery && tour.gallery.length > 0;
+  const hasGallery =
+    !!tour.cover_image || (tour.gallery && tour.gallery.length > 0);
   const hasDescription = !!(tour.description || tour.short_description);
   const hasHighlights = tour.highlights && tour.highlights.length > 0;
   const hasIncluded = tour.included && tour.included.length > 0;

@@ -62,7 +62,6 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
     const affiliateUrl = String(formData.get("affiliate_url") ?? "").trim();
     const coverImage = String(formData.get("cover_image") ?? "").trim();
 
-    if (!coverImage) return { error: "Imagem de capa obrigatória (para os cards no site)" };
     if (!widgetUrl && !widgetHtml && !affiliateUrl) {
       return {
         error:
@@ -75,7 +74,7 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
       slug,
       short_description: String(formData.get("short_description") ?? "") || null,
       description: String(formData.get("description") ?? "") || null,
-      cover_image: coverImage,
+      cover_image: coverImage || null,
       gallery: parseGallery(formData.get("gallery")),
       price_brl: numberOrNull(formData.get("price_brl")),
       price_from_brl: numberOrNull(formData.get("price_from_brl")),
