@@ -14,8 +14,7 @@ import { getTourBySlug, listTours } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { TourGallery } from "@/components/site/tour-gallery";
 import { BookingWidget } from "@/components/site/booking-widget";
-import { BookingWidgetEmbed } from "@/components/site/booking-widget-embed";
-import { PartnerWidgetFrame } from "@/components/site/partner-widget-frame";
+import { PartnerBookingButton } from "@/components/site/partner-booking-button";
 import { TourCard } from "@/components/site/tour-card";
 import { FavoriteButton } from "@/components/site/favorite-button";
 import { ReviewsSection } from "@/components/site/reviews-section";
@@ -40,12 +39,14 @@ export default async function TourDetailPage({
   const isAuthed = !!user;
   const isFavorite = favIds.has(tour.id);
 
-  // Decide which booking surface to render.
-  const widgetMode: "url" | "html" | "fallback" = tour.booking_widget_url
-    ? "url"
-    : tour.booking_widget_html
-      ? "html"
-      : "fallback";
+  // Extract a partner widget URL: either set directly, or parsed from a pasted
+  // <iframe src="..."> snippet. Returns null if neither is available.
+  const widgetUrl: string | null =
+    tour.booking_widget_url ??
+    (tour.booking_widget_html
+      ? (tour.booking_widget_html.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i)?.[1] ?? null)
+      : null);
+  const hasPartnerWidget = !!widgetUrl;
 
   // Whether we have enough custom content (gallery / description / highlights)
   // to show our editorial sections in addition to the partner widget.
@@ -141,46 +142,38 @@ export default async function TourDetailPage({
         </div>
       </section>
 
-      {/* ─────────── Booking widget ─────────── */}
-      {widgetMode === "url" ? (
-        <section className="bg-surface-alt">
-          <div className="mx-auto max-w-[1240px] px-5 py-6">
-            <div className="bg-white rounded-2xl border border-border-subtle overflow-hidden">
-              <PartnerWidgetFrame
-                src={tour.booking_widget_url!}
-                title={`Booking — ${tour.title}`}
-              />
-            </div>
-          </div>
-        </section>
-      ) : widgetMode === "html" ? (
-        <section className="bg-surface-alt">
-          <div className="mx-auto max-w-[1240px] px-5 py-6">
-            <div className="bg-white rounded-2xl border border-border-subtle p-3">
-              <BookingWidgetEmbed html={tour.booking_widget_html!} />
-            </div>
-          </div>
-        </section>
-      ) : null}
+      {/* ─────────── Body: editorial + sticky booking card ─────────── */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-[1240px] px-5 py-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
+          <div>
+            {hasDescription ? (
+              <div>
+                <h2 className="font-display text-[20px] font-bold text-text-strong">
+                  About this experience
+                </h2>
+                <p className="mt-2 text-[14px] text-text-strong/85 leading-relaxed whitespace-pre-line">
+                  {tour.description ?? tour.short_description}
+                </p>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-border-subtle bg-surface-alt p-6">
+                <p className="text-[14px] text-text-strong font-semibold">
+                  Ready to explore the Algarve?
+                </p>
+                <p className="text-[13px] text-text-muted mt-1">
+                  Click "Check availability & book" to see live dates, prices
+                  and details from our trusted local partner — and secure your
+                  spot in a few clicks.
+                </p>
+              </div>
+            )}
 
-      {/* ─────────── Editorial sections (only when content exists) ─────────── */}
-      {hasDescription || hasHighlights || hasIncluded || hasMeetingPoint ? (
-        <section className="bg-white">
-          <div className="mx-auto max-w-[1240px] px-5 py-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
-            <div>
-              {hasDescription ? (
-                <div>
-                  <h2 className="font-display text-[20px] font-bold text-text-strong">
-                    About this experience
-                  </h2>
-                  <p className="mt-2 text-[14px] text-text-strong/85 leading-relaxed">
-                    {tour.description ?? tour.short_description}
-                  </p>
-                </div>
-              ) : null}
-
-              {hasHighlights ? (
-                <ul className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
+            {hasHighlights ? (
+              <div className="mt-8">
+                <h2 className="font-display text-[20px] font-bold text-text-strong">
+                  Highlights
+                </h2>
+                <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
                   {tour.highlights.map((h) => (
                     <li key={h} className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-success mt-0.5 shrink-0" />
@@ -188,50 +181,81 @@ export default async function TourDetailPage({
                     </li>
                   ))}
                 </ul>
-              ) : null}
+              </div>
+            ) : null}
 
-              {hasIncluded ? (
-                <div className="mt-8">
-                  <h2 className="font-display text-[20px] font-bold text-text-strong">
-                    What's included
-                  </h2>
-                  <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
-                    {tour.included.map((item) => (
-                      <li key={item} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-success mt-0.5 shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
+            {hasIncluded ? (
+              <div className="mt-8">
+                <h2 className="font-display text-[20px] font-bold text-text-strong">
+                  What's included
+                </h2>
+                <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
+                  {tour.included.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-success mt-0.5 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
-              {hasMeetingPoint ? (
-                <div className="mt-8">
-                  <h2 className="font-display text-[20px] font-bold text-text-strong">
-                    Meeting point
-                  </h2>
-                  <p className="mt-3 text-[13.5px] text-text-strong/90 flex items-start gap-2">
-                    <MapPin className="w-4 h-4 text-navy-700 mt-0.5 shrink-0" />
-                    {tour.meeting_point}
+            {hasMeetingPoint ? (
+              <div className="mt-8">
+                <h2 className="font-display text-[20px] font-bold text-text-strong">
+                  Meeting point
+                </h2>
+                <p className="mt-3 text-[13.5px] text-text-strong/90 flex items-start gap-2">
+                  <MapPin className="w-4 h-4 text-navy-700 mt-0.5 shrink-0" />
+                  {tour.meeting_point}
+                </p>
+              </div>
+            ) : null}
+
+            <ReviewsSection
+              rating={tour.rating}
+              reviewsCount={tour.reviews_count}
+            />
+          </div>
+
+          {/* Sticky booking card */}
+          <aside className="lg:sticky lg:top-6 self-start">
+            {hasPartnerWidget ? (
+              <div className="bg-white rounded-2xl border border-border-subtle p-5 shadow-sm space-y-4">
+                <div>
+                  <p className="text-[12.5px] uppercase tracking-wide text-text-muted font-semibold">
+                    Book this experience
+                  </p>
+                  <p className="mt-1 text-[14px] text-text-strong">
+                    Live availability, secure checkout — handled by our local
+                    partner.
                   </p>
                 </div>
-              ) : null}
-
-              <ReviewsSection
-                rating={tour.rating}
-                reviewsCount={tour.reviews_count}
-              />
-            </div>
-
-            {widgetMode === "fallback" ? (
-              <aside className="lg:sticky lg:top-6 self-start">
-                <BookingWidget tour={tour} />
-              </aside>
-            ) : null}
-          </div>
-        </section>
-      ) : null}
+                <PartnerBookingButton
+                  src={widgetUrl!}
+                  label="Check availability & book"
+                />
+                <ul className="text-[12.5px] text-text-muted space-y-1.5">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-success" /> Free
+                    cancellation up to 24h
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-success" /> Reserve now,
+                    pay later
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-success" /> Instant
+                    confirmation
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <BookingWidget tour={tour} />
+            )}
+          </aside>
+        </div>
+      </section>
 
       {others.length > 0 ? (
         <section className="bg-surface-alt">
