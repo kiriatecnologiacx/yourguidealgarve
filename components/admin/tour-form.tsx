@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronDown, Loader2, Save, Sparkles } from "lucide-react";
 import { upsertTour, type TourFormState } from "@/app/admin/passeios/actions";
 import type { Category, Destination, Partner, Tour } from "@/lib/types";
+import { ImageManager } from "./image-manager";
 
 const initial: TourFormState = {};
 
@@ -49,14 +50,6 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
               placeholder="buggy-adventure-1-5h-albufeira"
             />
           </Field>
-          <Field label="Imagem de capa (URL)">
-            <input
-              name="cover_image"
-              defaultValue={tour?.cover_image ?? ""}
-              className={fieldClass}
-              placeholder="https://... (opcional — usaremos a primeira da galeria se vazio)"
-            />
-          </Field>
           <Field label="Selo (badge)">
             <input
               name="badge"
@@ -94,6 +87,18 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
             </select>
           </Field>
         </div>
+      </Section>
+
+      <Section title="Imagens">
+        <p className="text-[12.5px] text-text-muted -mt-2">
+          Opcional. Adicione fotos para aparecer nos cards e na página do
+          passeio. Você pode arrastar várias imagens do seu computador, ou
+          colar URLs externas. A primeira é a capa — pode reordenar.
+        </p>
+        <ImageManager
+          initialCover={tour?.cover_image}
+          initialGallery={tour?.gallery}
+        />
       </Section>
 
       <Section title="Widget de reserva do parceiro" icon={<Sparkles className="w-4 h-4 text-brand-orange" />}>
@@ -242,14 +247,6 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
                 name="description"
                 defaultValue={tour?.description ?? ""}
                 rows={5}
-                className={fieldClass}
-              />
-            </Field>
-            <Field label="Galeria (URLs separadas por vírgula ou linha)">
-              <textarea
-                name="gallery"
-                defaultValue={tour?.gallery?.join("\n") ?? ""}
-                rows={4}
                 className={fieldClass}
               />
             </Field>
