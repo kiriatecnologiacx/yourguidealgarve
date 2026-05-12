@@ -40,7 +40,8 @@ export function PartnerWidgetFrame({
       title={title}
       src={src}
       style={{ width: "100%", height, border: 0, background: "transparent" }}
-      sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals allow-storage-access-by-user-activation"
+      allow="payment *; clipboard-write"
+      referrerPolicy="origin"
       loading="lazy"
     />
   );
