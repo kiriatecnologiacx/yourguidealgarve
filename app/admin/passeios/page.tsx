@@ -4,6 +4,7 @@ import { Plus, Edit, ExternalLink } from "lucide-react";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { formatPriceBRL, formatRating } from "@/lib/utils";
 import { TourRowActions } from "@/components/admin/tour-row-actions";
+import { RezdyImportButton } from "@/components/admin/rezdy-import-button";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +29,15 @@ export default async function AdminPasseiosPage() {
             {tours.length === 1 ? "" : "s"}
           </p>
         </div>
-        <Link
-          href="/admin/passeios/novo"
-          className="bg-brand-yellow hover:bg-brand-yellow-hover text-navy-900 font-semibold px-4 py-2.5 rounded-lg text-[13.5px] flex items-center gap-2"
-        >
-          <Plus className="w-4 h-4" /> Novo passeio
-        </Link>
+        <div className="flex items-center gap-2 flex-wrap">
+          <RezdyImportButton />
+          <Link
+            href="/admin/passeios/novo"
+            className="bg-brand-yellow hover:bg-brand-yellow-hover text-navy-900 font-semibold px-4 py-2.5 rounded-lg text-[13.5px] flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" /> Novo passeio
+          </Link>
+        </div>
       </div>
 
       <div className="mt-6 bg-white border border-border-subtle rounded-2xl overflow-hidden">
