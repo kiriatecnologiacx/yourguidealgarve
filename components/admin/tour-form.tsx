@@ -103,9 +103,10 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
 
       <Section title="Widget de reserva do parceiro" icon={<Sparkles className="w-4 h-4 text-brand-orange" />}>
         <p className="text-[12.5px] text-text-muted -mt-2">
-          Cole aqui o widget que você gerou no painel do parceiro (Rezdy, FareHarbor, Pluralo, etc).
-          Você pode colar só a URL do iframe (recomendado) OU o snippet HTML completo —
-          se vier o snippet, a gente extrai a URL automaticamente.{" "}
+          Cole o widget que você gerou no painel do parceiro (Rezdy, FareHarbor, Pluralo).
+          Recomendado: <strong>Product Calendar / calendarWidget</strong> — fica embutido na lateral do
+          passeio (data, hora, "Book now"). O checkout abre em popup, sem sair do site.
+          Pode colar só a URL ou o snippet HTML completo — a gente extrai a URL.{" "}
           <Link href="/admin/ajuda" className="text-navy-700 underline hover:text-navy-900">
             Como pegar o widget →
           </Link>
@@ -116,7 +117,7 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
             defaultValue={tour?.booking_widget_url ?? ""}
             rows={3}
             className={fieldClass + " font-mono text-[12.5px]"}
-            placeholder={`Ex.: https://yourguidealgarve.rezdy.com/45975J/buggy-adventure-1-5h-off-road-tour-from-albufeira?iframe=true\n\n(Você também pode colar o snippet completo <iframe …> que a gente extrai a URL.)`}
+            placeholder={`Ex. (calendarWidget — recomendado): https://yourguidealgarve.rezdy.com/calendarWidget/459753?iframe=true\nEx. (Product Details, abre em popup): https://yourguidealgarve.rezdy.com/45975J/...?iframe=true\n\nVocê também pode colar o snippet <iframe ...> completo que a gente extrai a URL.`}
           />
         </Field>
         <Field label="HTML completo do snippet (avançado, opcional)">

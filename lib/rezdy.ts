@@ -136,11 +136,16 @@ export async function listAllRezdyProducts(
 }
 
 /**
- * Best widget URL for embedding in our PartnerBookingButton. Derived from
- * `supplierAlias` (the unique Rezdy subdomain) and `productCode`.
+ * Best widget URL for embedding in our booking sidebar. Prefers the
+ * Rezdy `calendarWidget` form (narrow inline calendar that opens a modal
+ * for checkout) — that's the one the supplier wants on each tour page.
  *
  * Example output:
- *   https://yourguidealgarve.rezdy.com/505170/<slug>?iframe=true
+ *   https://yourguidealgarve.rezdy.com/calendarWidget/459753?iframe=true
+ *
+ * `calendarWidget` expects a numeric product id. The Rezdy API doesn't
+ * always expose that number, but the alphanumeric `productCode` (used in
+ * the product URL) also works when passed to `calendarWidget`.
  */
 export function buildRezdyWidgetUrl(
   product: RezdyProduct,
@@ -148,19 +153,5 @@ export function buildRezdyWidgetUrl(
 ): string | null {
   const alias = product.supplierAlias || fallbackSubdomain;
   if (!alias || !product.productCode) return null;
-  // productCode in Rezdy widgets is sometimes the numeric "internalCode" used
-  // in the Widgets panel; we use whichever the operator pasted into a sample
-  // earlier. The productCode from the API works as a stable identifier — but
-  // the URL form used by Rezdy widgets is /{productCode}/{slug}.
-  const slug = product.name
-    ? product.name
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[̀-ͯ]/g, "")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "")
-    : "tour";
-  // Note: alias may be the supplier's `apispec...` slug. The customer-facing
-  // booking subdomain on Rezdy is `{alias}.rezdy.com`.
-  return `https://${alias}.rezdy.com/${product.productCode}/${slug}?iframe=true`;
+  return `https://${alias}.rezdy.com/calendarWidget/${product.productCode}?iframe=true`;
 }

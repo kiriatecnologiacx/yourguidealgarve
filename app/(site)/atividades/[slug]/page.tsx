@@ -15,6 +15,7 @@ import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { TourGallery } from "@/components/site/tour-gallery";
 import { BookingWidget } from "@/components/site/booking-widget";
 import { PartnerBookingButton } from "@/components/site/partner-booking-button";
+import { PartnerCalendarWidget } from "@/components/site/partner-calendar-widget";
 import { TourCard } from "@/components/site/tour-card";
 import { FavoriteButton } from "@/components/site/favorite-button";
 import { ReviewsSection } from "@/components/site/reviews-section";
@@ -47,6 +48,9 @@ export default async function TourDetailPage({
       ? (tour.booking_widget_html.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i)?.[1] ?? null)
       : null);
   const hasPartnerWidget = !!widgetUrl;
+  // Rezdy calendarWidget URLs render inline (narrow date/time picker). Full
+  // product URLs (with productCode in the path) need the modal-button mode.
+  const isCalendarWidget = !!widgetUrl && /\/calendarWidget\//i.test(widgetUrl);
 
   // Whether we have enough custom content (gallery / description / highlights)
   // to show our editorial sections in addition to the partner widget.
@@ -221,21 +225,27 @@ export default async function TourDetailPage({
           {/* Sticky booking card */}
           <aside className="lg:sticky lg:top-6 self-start">
             {hasPartnerWidget ? (
-              <div className="bg-white rounded-2xl border border-border-subtle p-5 shadow-sm space-y-4">
+              <div className="bg-white rounded-2xl border border-border-subtle p-4 shadow-sm space-y-3">
                 <div>
                   <p className="text-[12.5px] uppercase tracking-wide text-text-muted font-semibold">
                     Book this experience
                   </p>
-                  <p className="mt-1 text-[14px] text-text-strong">
-                    Live availability, secure checkout — handled by our local
-                    partner.
+                  <p className="mt-1 text-[13.5px] text-text-strong">
+                    Live availability — instant confirmation.
                   </p>
                 </div>
-                <PartnerBookingButton
-                  src={widgetUrl!}
-                  label="Check availability & book"
-                />
-                <ul className="text-[12.5px] text-text-muted space-y-1.5">
+                {isCalendarWidget ? (
+                  <PartnerCalendarWidget
+                    src={widgetUrl!}
+                    title={`Booking — ${tour.title}`}
+                  />
+                ) : (
+                  <PartnerBookingButton
+                    src={widgetUrl!}
+                    label="Check availability & book"
+                  />
+                )}
+                <ul className="text-[12px] text-text-muted space-y-1.5 pt-1">
                   <li className="flex items-center gap-2">
                     <Check className="w-3.5 h-3.5 text-success" /> Free
                     cancellation up to 24h
@@ -245,8 +255,8 @@ export default async function TourDetailPage({
                     pay later
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-success" /> Instant
-                    confirmation
+                    <Check className="w-3.5 h-3.5 text-success" /> Secure
+                    partner checkout
                   </li>
                 </ul>
               </div>
