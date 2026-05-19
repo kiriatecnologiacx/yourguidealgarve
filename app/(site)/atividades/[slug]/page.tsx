@@ -10,7 +10,7 @@ import {
   Share2,
   Check,
 } from "lucide-react";
-import { getTourBySlug, listTours } from "@/lib/data";
+import { getTourBySlug, listTours, getReviewsByTourId } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { TourGallery } from "@/components/site/tour-gallery";
 import { BookingWidget } from "@/components/site/booking-widget";
@@ -32,10 +32,11 @@ export default async function TourDetailPage({
   const tour = await getTourBySlug(slug);
   if (!tour) notFound();
 
-  const [others, user, favIds] = await Promise.all([
+  const [others, user, favIds, reviews] = await Promise.all([
     listTours({ limit: 6 }).then((rows) => rows.filter((t) => t.id !== tour.id).slice(0, 5)),
     getCurrentUser(),
     getFavoriteIds(),
+    getReviewsByTourId(tour.id),
   ]);
   const isAuthed = !!user;
   const isFavorite = favIds.has(tour.id);
@@ -217,8 +218,8 @@ export default async function TourDetailPage({
             ) : null}
 
             <ReviewsSection
-              rating={tour.rating}
-              reviewsCount={tour.reviews_count}
+              tourId={tour.id}
+              reviews={reviews}
             />
           </div>
 

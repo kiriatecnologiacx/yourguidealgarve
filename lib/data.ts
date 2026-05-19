@@ -1,5 +1,5 @@
 import { createSupabaseServer } from "@/lib/supabase/server";
-import type { Category, Destination, Tour, TourWithRelations } from "@/lib/types";
+import type { Category, Destination, Review, Tour, TourWithRelations } from "@/lib/types";
 
 export async function getFeaturedTours(limit = 8): Promise<Tour[]> {
   const supabase = await createSupabaseServer();
@@ -68,4 +68,15 @@ export async function listDestinations(featuredOnly = true): Promise<Destination
   if (featuredOnly) query = query.eq("is_featured", true);
   const { data } = await query;
   return (data ?? []) as Destination[];
+}
+
+export async function getReviewsByTourId(tourId: string): Promise<Review[]> {
+  const supabase = await createSupabaseServer();
+  const { data } = await supabase
+    .from("reviews")
+    .select("*")
+    .eq("tour_id", tourId)
+    .eq("approved", true)
+    .order("created_at", { ascending: false });
+  return (data ?? []) as Review[];
 }

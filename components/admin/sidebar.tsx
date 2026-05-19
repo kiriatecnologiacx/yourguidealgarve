@@ -12,6 +12,7 @@ import {
   BookOpen,
   LogOut,
   ExternalLink,
+  Star,
 } from "lucide-react";
 import { Logo } from "@/components/site/logo";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,7 @@ const NAV = [
   { href: "/admin/passeios", label: "Passeios", icon: Compass },
   { href: "/admin/destinos", label: "Destinos", icon: MapPin },
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
+  { href: "/admin/avaliacoes", label: "Avaliações", icon: Star },
   { href: "/admin/parceiros", label: "Parceiros", icon: Users },
   { href: "/admin/categorias", label: "Categorias", icon: Tags },
   { href: "/admin/ajuda", label: "Ajuda — Widgets", icon: BookOpen },

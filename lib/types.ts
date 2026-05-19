@@ -65,3 +65,13 @@ export type TourWithRelations = Tour & {
   category: Category | null;
   partner: Partner | null;
 };
+
+export type Review = {
+  id: string;
+  tour_id: string;
+  author_name: string;
+  rating: number;
+  body: string;
+  created_at: string;
+  approved: boolean;
+};
