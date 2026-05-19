@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import Link from "next/link";
-import { ChevronDown, Loader2, Save, Sparkles } from "lucide-react";
+import { ChevronDown, ExternalLink, Loader2, Save, Sparkles } from "lucide-react";
 import { upsertTour, type TourFormState } from "@/app/admin/passeios/actions";
 import type { Category, Destination, Partner, Tour } from "@/lib/types";
 import { ImageManager } from "./image-manager";
@@ -101,45 +101,44 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
         />
       </Section>
 
-      <Section title="Widget de reserva do parceiro" icon={<Sparkles className="w-4 h-4 text-brand-orange" />}>
+      <Section title="Widget de reserva" icon={<Sparkles className="w-4 h-4 text-brand-orange" />}>
         <p className="text-[12.5px] text-text-muted -mt-2">
-          Cole o widget que você gerou no painel do parceiro (Rezdy, FareHarbor, Pluralo).
-          Recomendado: <strong>Product Calendar / calendarWidget</strong> — fica embutido na lateral do
-          passeio (data, hora, "Book now"). O checkout abre em popup, sem sair do site.
-          Pode colar só a URL ou o snippet HTML completo — a gente extrai a URL.{" "}
+          <strong>Opcional.</strong> Cole o widget gerado no painel do parceiro — funciona com
+          Rezdy, FareHarbor, Viator, Airbnb Experiences, Bokun, Trekksoft ou qualquer plataforma que
+          gere um <code className="bg-surface-alt px-1 rounded text-[11.5px]">&lt;iframe&gt;</code>.
+          Pode colar só a URL ou o snippet HTML completo.{" "}
           <Link href="/admin/ajuda" className="text-navy-700 underline hover:text-navy-900">
             Como pegar o widget →
           </Link>
         </p>
-        <Field label="URL do widget (Rezdy/FareHarbor/Pluralo) — recomendado">
+        <Field label="URL ou snippet do widget (Rezdy, FareHarbor, Viator…)">
           <textarea
             name="booking_widget_url"
             defaultValue={tour?.booking_widget_url ?? ""}
             rows={3}
             className={fieldClass + " font-mono text-[12.5px]"}
-            placeholder={`Ex. (calendarWidget — recomendado): https://yourguidealgarve.rezdy.com/calendarWidget/459753?iframe=true\nEx. (Product Details, abre em popup): https://yourguidealgarve.rezdy.com/45975J/...?iframe=true\n\nVocê também pode colar o snippet <iframe ...> completo que a gente extrai a URL.`}
+            placeholder={`Rezdy calendarWidget (recomendado):\nhttps://yourguidealgarve.rezdy.com/calendarWidget/459753?iframe=true\n\nOu cole o <iframe ...> completo — a gente extrai a URL automaticamente.`}
           />
         </Field>
-        <Field label="HTML completo do snippet (avançado, opcional)">
+        <Field label="Snippet HTML completo (avançado, opcional)">
           <textarea
             name="booking_widget_html"
             defaultValue={tour?.booking_widget_html ?? ""}
-            rows={4}
+            rows={3}
             className={fieldClass + " font-mono text-[12.5px]"}
-            placeholder={"Use somente se a URL não bastar — por exemplo widgets que dependem do <script defer> do parceiro."}
+            placeholder="Use se o widget precisar de <script> próprio do parceiro."
           />
         </Field>
-        <Field label="Link de afiliado (fallback, opcional)">
+        <Field label="Link externo de reserva (opcional — abre em nova aba)">
           <input
             name="affiliate_url"
             defaultValue={tour?.affiliate_url ?? ""}
             className={fieldClass}
-            placeholder="https://parceiro.com/?ref=youguidealgarve"
+            placeholder="https://www.viator.com/tours/... ou https://parceiro.com/?ref=youguidealgarve"
           />
         </Field>
         <p className="text-[11.5px] text-text-muted">
-          Pelo menos um dos três (URL, HTML ou link de afiliado) é obrigatório.
-          A página do passeio mostra o widget grande, ocupando o conteúdo principal.
+          Se nenhum widget for informado, o site mostra um botão de contato genérico.
         </p>
       </Section>
 
@@ -302,7 +301,7 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
         </p>
       ) : null}
 
-      <div className="flex items-center gap-3 pt-2">
+      <div className="flex items-center gap-3 pt-2 flex-wrap">
         <button
           type="submit"
           disabled={pending}
@@ -311,6 +310,16 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
           {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           {tour ? "Salvar alterações" : "Cadastrar passeio"}
         </button>
+        {tour?.slug ? (
+          <Link
+            href={`/atividades/${tour.slug}`}
+            target="_blank"
+            className="flex items-center gap-1.5 bg-white border border-border-subtle text-text-strong font-semibold px-4 py-2.5 rounded-lg text-[13.5px] hover:bg-surface-alt"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Pré-visualizar
+          </Link>
+        ) : null}
         <Link
           href="/admin/passeios"
           className="text-[13.5px] text-text-muted hover:text-text-strong"

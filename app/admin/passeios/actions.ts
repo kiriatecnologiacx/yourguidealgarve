@@ -68,12 +68,7 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
     const affiliateUrl = String(formData.get("affiliate_url") ?? "").trim();
     const coverImage = String(formData.get("cover_image") ?? "").trim();
 
-    if (!widgetUrl && !widgetHtml && !affiliateUrl) {
-      return {
-        error:
-          "Adicione o widget do parceiro (URL ou snippet) ou um link de afiliado de fallback.",
-      };
-    }
+
 
     const payload = {
       title,
