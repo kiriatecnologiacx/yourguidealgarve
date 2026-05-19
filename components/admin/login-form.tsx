@@ -70,9 +70,12 @@ export function LoginForm({ next, error }: { next?: string; error?: string }) {
         ) : null}
         Entrar
       </button>
-      <p className="text-[12px] text-text-muted text-center">
-        Acesso restrito a administradores autorizados.
-      </p>
+      <div className="flex justify-between items-center text-[12px]">
+        <p className="text-text-muted">Acesso restrito a administradores.</p>
+        <a href="/admin/login/recuperar" className="text-navy-700 hover:underline font-medium">
+          Esqueceu a senha?
+        </a>
+      </div>
     </form>
   );
 }
