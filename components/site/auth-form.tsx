@@ -100,6 +100,13 @@ export function AuthForm({ mode, redirectTo }: { mode: Mode; redirectTo?: string
           placeholder="Mínimo 6 caracteres"
         />
       </label>
+      {mode === "signin" ? (
+        <div className="text-right -mt-2">
+          <Link href="/esqueci-senha" className="text-[12.5px] text-navy-700 hover:underline">
+            Esqueci minha senha
+          </Link>
+        </div>
+      ) : null}
 
       {errorMsg ? <p className="text-[12.5px] text-red-600">{errorMsg}</p> : null}
       {info ? <p className="text-[12.5px] text-success">{info}</p> : null}

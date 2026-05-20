@@ -25,6 +25,7 @@ const NAV = [
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/avaliacoes", label: "Avaliações", icon: Star },
   { href: "/admin/parceiros", label: "Parceiros", icon: Users },
+  { href: "/admin/usuarios", label: "Usuários", icon: Users },
   { href: "/admin/equipe", label: "Equipe & Acessos", icon: UserCog },
   { href: "/admin/categorias", label: "Categorias", icon: Tags },
   { href: "/admin/ajuda", label: "Ajuda — Widgets", icon: BookOpen },
