@@ -15,7 +15,7 @@ import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { TourGallery } from "@/components/site/tour-gallery";
 import { BookingWidget } from "@/components/site/booking-widget";
 import { PartnerBookingButton } from "@/components/site/partner-booking-button";
-import { PartnerCalendarWidget } from "@/components/site/partner-calendar-widget";
+import { PartnerEmbeddedWidget } from "@/components/site/partner-embedded-widget";
 import { TourCard } from "@/components/site/tour-card";
 import { FavoriteButton } from "@/components/site/favorite-button";
 import { ReviewsSection } from "@/components/site/reviews-section";
@@ -41,22 +41,16 @@ export default async function TourDetailPage({
   const isAuthed = !!user;
   const isFavorite = favIds.has(tour.id);
 
-  // Extract a partner widget URL: either set directly, or parsed from a pasted
-  // <iframe src="..."> snippet. Returns null if neither is available.
   const widgetUrl: string | null =
     tour.booking_widget_url ??
     (tour.booking_widget_html
       ? (tour.booking_widget_html.match(/<iframe[^>]*\ssrc=["']([^"']+)["']/i)?.[1] ?? null)
       : null);
-  const hasPartnerWidget = !!widgetUrl;
-  // Rezdy calendarWidget URLs render inline (narrow date/time picker). Full
-  // product URLs (with productCode in the path) need the modal-button mode.
-  const isCalendarWidget = !!widgetUrl && /\/calendarWidget\//i.test(widgetUrl);
 
-  // Whether we have enough custom content (gallery / description / highlights)
-  // to show our editorial sections in addition to the partner widget.
-  const hasGallery =
-    !!tour.cover_image || (tour.gallery && tour.gallery.length > 0);
+  const isWidgetMode = tour.tour_mode === "widget";
+  const hasPartnerWidget = !!widgetUrl;
+
+  const hasGallery = !!tour.cover_image || (tour.gallery && tour.gallery.length > 0);
   const hasDescription = !!(tour.description || tour.short_description);
   const hasHighlights = tour.highlights && tour.highlights.length > 0;
   const hasIncluded = tour.included && tour.included.length > 0;
@@ -64,6 +58,7 @@ export default async function TourDetailPage({
 
   return (
     <>
+      {/* ─── Header comum ─── */}
       <section className="bg-white border-b border-border-subtle">
         <div className="mx-auto max-w-[1240px] px-5 pt-6 pb-2 text-[12.5px] text-text-muted flex items-center gap-1.5 flex-wrap">
           <Link href="/" className="hover:text-text-strong">Home</Link>
@@ -72,10 +67,7 @@ export default async function TourDetailPage({
           {tour.destination ? (
             <>
               <span>›</span>
-              <Link
-                href={`/atividades?destino=${tour.destination.slug}`}
-                className="hover:text-text-strong"
-              >
+              <Link href={`/atividades?destino=${tour.destination.slug}`} className="hover:text-text-strong">
                 {tour.destination.name}
               </Link>
             </>
@@ -86,11 +78,7 @@ export default async function TourDetailPage({
 
         {hasGallery ? (
           <div className="mx-auto max-w-[1240px] px-5 pb-5">
-            <TourGallery
-              cover={tour.cover_image}
-              gallery={tour.gallery}
-              title={tour.title}
-            />
+            <TourGallery cover={tour.cover_image} gallery={tour.gallery} title={tour.title} />
           </div>
         ) : null}
 
@@ -108,9 +96,7 @@ export default async function TourDetailPage({
             {tour.rating ? (
               <span className="flex items-center gap-1">
                 <Star className="w-4 h-4 fill-brand-yellow text-brand-yellow" />
-                <span className="text-text-strong font-semibold">
-                  {formatRating(tour.rating)}
-                </span>
+                <span className="text-text-strong font-semibold">{formatRating(tour.rating)}</span>
                 <span>({tour.reviews_count} reviews)</span>
               </span>
             ) : null}
@@ -135,11 +121,7 @@ export default async function TourDetailPage({
           </div>
 
           <div className="mt-4 flex items-center gap-3 text-[13px] text-text-muted">
-            <FavoriteButton
-              tourId={tour.id}
-              initial={isFavorite}
-              isAuthed={isAuthed}
-            />
+            <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} />
             <button className="flex items-center gap-1 hover:text-text-strong">
               <Share2 className="w-4 h-4" /> Share
             </button>
@@ -147,126 +129,117 @@ export default async function TourDetailPage({
         </div>
       </section>
 
-      {/* ─────────── Body: editorial + sticky booking card ─────────── */}
-      <section className="bg-white">
-        <div className="mx-auto max-w-[1240px] px-5 py-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
-          <div>
-            {hasDescription ? (
-              <div>
-                <h2 className="font-display text-[20px] font-bold text-text-strong">
-                  About this experience
-                </h2>
-                <p className="mt-2 text-[14px] text-text-strong/85 leading-relaxed whitespace-pre-line">
-                  {tour.description ?? tour.short_description}
-                </p>
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-dashed border-border-subtle bg-surface-alt p-6">
-                <p className="text-[14px] text-text-strong font-semibold">
-                  Ready to explore the Algarve?
-                </p>
-                <p className="text-[13px] text-text-muted mt-1">
-                  Click "Check availability & book" to see live dates, prices
-                  and details from our trusted local partner — and secure your
-                  spot in a few clicks.
-                </p>
-              </div>
-            )}
-
-            {hasHighlights ? (
-              <div className="mt-8">
-                <h2 className="font-display text-[20px] font-bold text-text-strong">
-                  Highlights
-                </h2>
-                <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
-                  {tour.highlights.map((h) => (
-                    <li key={h} className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-success mt-0.5 shrink-0" />
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-
-            {hasIncluded ? (
-              <div className="mt-8">
-                <h2 className="font-display text-[20px] font-bold text-text-strong">
-                  What's included
-                </h2>
-                <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
-                  {tour.included.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-success mt-0.5 shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-
-            {hasMeetingPoint ? (
-              <div className="mt-8">
-                <h2 className="font-display text-[20px] font-bold text-text-strong">
-                  Meeting point
-                </h2>
-                <p className="mt-3 text-[13.5px] text-text-strong/90 flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-navy-700 mt-0.5 shrink-0" />
-                  {tour.meeting_point}
-                </p>
-              </div>
-            ) : null}
-
-            <ReviewsSection
-              tourId={tour.id}
-              reviews={reviews}
+      {/* ─── Widget mode: iframe full-width ─── */}
+      {isWidgetMode && hasPartnerWidget ? (
+        <section className="bg-white">
+          <div className="mx-auto max-w-[1240px] px-4 md:px-5 py-6">
+            <PartnerEmbeddedWidget
+              src={widgetUrl!}
+              title={`Reservas — ${tour.title}`}
             />
           </div>
+        </section>
+      ) : null}
 
-          {/* Sticky booking card */}
-          <aside className="lg:sticky lg:top-6 self-start">
-            {hasPartnerWidget ? (
-              <div className="bg-white rounded-2xl border border-border-subtle p-4 shadow-sm space-y-3">
+      {/* ─── Widget mode sem widget: botão de reserva ─── */}
+      {isWidgetMode && !hasPartnerWidget ? (
+        <section className="bg-white">
+          <div className="mx-auto max-w-[1240px] px-5 py-8">
+            <BookingWidget tour={tour} />
+          </div>
+        </section>
+      ) : null}
+
+      {/* ─── Complete mode: editorial + sidebar ─── */}
+      {!isWidgetMode ? (
+        <section className="bg-white">
+          <div className="mx-auto max-w-[1240px] px-5 py-8 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
+            <div>
+              {hasDescription ? (
                 <div>
-                  <p className="text-[12.5px] uppercase tracking-wide text-text-muted font-semibold">
-                    Book this experience
-                  </p>
-                  <p className="mt-1 text-[13.5px] text-text-strong">
-                    Live availability — instant confirmation.
+                  <h2 className="font-display text-[20px] font-bold text-text-strong">About this experience</h2>
+                  <p className="mt-2 text-[14px] text-text-strong/85 leading-relaxed whitespace-pre-line">
+                    {tour.description ?? tour.short_description}
                   </p>
                 </div>
-                {isCalendarWidget ? (
-                  <PartnerCalendarWidget
-                    src={widgetUrl!}
-                    title={`Booking — ${tour.title}`}
-                  />
-                ) : (
-                  <PartnerBookingButton
-                    src={widgetUrl!}
-                    label="Check availability & book"
-                  />
-                )}
-                <ul className="text-[12px] text-text-muted space-y-1.5 pt-1">
-                  <li className="flex items-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-success" /> Free
-                    cancellation up to 24h
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-success" /> Reserve now,
-                    pay later
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="w-3.5 h-3.5 text-success" /> Secure
-                    partner checkout
-                  </li>
-                </ul>
-              </div>
-            ) : (
-              <BookingWidget tour={tour} />
-            )}
-          </aside>
-        </div>
-      </section>
+              ) : (
+                <div className="rounded-2xl border border-dashed border-border-subtle bg-surface-alt p-6">
+                  <p className="text-[14px] text-text-strong font-semibold">Ready to explore the Algarve?</p>
+                  <p className="text-[13px] text-text-muted mt-1">
+                    Click "Check availability & book" to see live dates, prices and details from our trusted local partner.
+                  </p>
+                </div>
+              )}
+
+              {hasHighlights ? (
+                <div className="mt-8">
+                  <h2 className="font-display text-[20px] font-bold text-text-strong">Highlights</h2>
+                  <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
+                    {tour.highlights.map((h) => (
+                      <li key={h} className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-success mt-0.5 shrink-0" /> {h}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {hasIncluded ? (
+                <div className="mt-8">
+                  <h2 className="font-display text-[20px] font-bold text-text-strong">What's included</h2>
+                  <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
+                    {tour.included.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-success mt-0.5 shrink-0" /> {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {hasMeetingPoint ? (
+                <div className="mt-8">
+                  <h2 className="font-display text-[20px] font-bold text-text-strong">Meeting point</h2>
+                  <p className="mt-3 text-[13.5px] text-text-strong/90 flex items-start gap-2">
+                    <MapPin className="w-4 h-4 text-navy-700 mt-0.5 shrink-0" />
+                    {tour.meeting_point}
+                  </p>
+                </div>
+              ) : null}
+
+              <ReviewsSection tourId={tour.id} reviews={reviews} />
+            </div>
+
+            <aside className="lg:sticky lg:top-6 self-start">
+              {hasPartnerWidget ? (
+                <div className="bg-white rounded-2xl border border-border-subtle p-4 shadow-sm space-y-3">
+                  <div>
+                    <p className="text-[12.5px] uppercase tracking-wide text-text-muted font-semibold">Book this experience</p>
+                    <p className="mt-1 text-[13.5px] text-text-strong">Live availability — instant confirmation.</p>
+                  </div>
+                  <PartnerBookingButton src={widgetUrl!} label="Check availability & book" />
+                  <ul className="text-[12px] text-text-muted space-y-1.5 pt-1">
+                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> Free cancellation up to 24h</li>
+                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> Reserve now, pay later</li>
+                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> Secure partner checkout</li>
+                  </ul>
+                </div>
+              ) : (
+                <BookingWidget tour={tour} />
+              )}
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {/* Reviews in widget mode */}
+      {isWidgetMode && reviews.length > 0 ? (
+        <section className="bg-white">
+          <div className="mx-auto max-w-[1240px] px-5 pb-8">
+            <ReviewsSection tourId={tour.id} reviews={reviews} />
+          </div>
+        </section>
+      ) : null}
 
       {others.length > 0 ? (
         <section className="bg-surface-alt">
@@ -275,22 +248,13 @@ export default async function TourDetailPage({
               <h2 className="font-display text-2xl md:text-3xl font-extrabold text-text-strong">
                 Other experiences you may like
               </h2>
-              <Link
-                href="/atividades"
-                className="text-[13.5px] font-semibold text-navy-700 hover:underline"
-              >
+              <Link href="/atividades" className="text-[13.5px] font-semibold text-navy-700 hover:underline">
                 See all
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {others.map((t) => (
-                <TourCard
-                  key={t.id}
-                  tour={t}
-                  compact
-                  isAuthed={isAuthed}
-                  isFavorite={favIds.has(t.id)}
-                />
+                <TourCard key={t.id} tour={t} compact isAuthed={isAuthed} isFavorite={favIds.has(t.id)} />
               ))}
             </div>
           </div>

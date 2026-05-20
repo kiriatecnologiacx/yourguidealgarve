@@ -24,6 +24,7 @@ export type Tour = {
   is_featured: boolean;
   is_published: boolean;
   badge: string | null;
+  tour_mode: "widget" | "complete";
   created_at: string;
 };
 

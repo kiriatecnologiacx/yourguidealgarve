@@ -70,9 +70,12 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
 
 
 
+    const tourMode = formData.get("tour_mode") === "complete" ? "complete" : "widget";
+
     const payload = {
       title,
       slug,
+      tour_mode: tourMode,
       short_description: String(formData.get("short_description") ?? "") || null,
       description: String(formData.get("description") ?? "") || null,
       cover_image: coverImage || null,

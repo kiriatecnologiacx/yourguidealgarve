@@ -21,15 +21,17 @@ function uniqueFilename(file: File) {
 export function ImageManager({
   initialCover,
   initialGallery,
+  hideGallery = false,
 }: {
   initialCover: string | null | undefined;
   initialGallery: string[] | null | undefined;
+  hideGallery?: boolean;
 }) {
   const initial: ImageEntry[] = [
     ...(initialCover ? [{ url: initialCover }] : []),
-    ...(initialGallery ?? [])
+    ...(!hideGallery ? (initialGallery ?? [])
       .filter((u) => u && u !== initialCover)
-      .map((url) => ({ url })),
+      .map((url) => ({ url })) : []),
   ];
   const [items, setItems] = useState<ImageEntry[]>(initial);
   const [urlInput, setUrlInput] = useState("");
@@ -42,6 +44,7 @@ export function ImageManager({
   async function uploadFiles(files: File[]) {
     const valid = files.filter((f) => f.type.startsWith("image/"));
     if (valid.length === 0) return;
+    if (hideGallery && items.filter((i) => !i.uploading && !i.error).length >= 1) return;
 
     // Insert placeholders first so the user sees progress.
     const placeholders: ImageEntry[] = valid.map(() => ({
@@ -84,6 +87,7 @@ export function ImageManager({
   function addUrl() {
     const trimmed = urlInput.trim();
     if (!trimmed) return;
+    if (hideGallery && items.filter((i) => !i.uploading && !i.error).length >= 1) return;
     setItems((prev) => [...prev, { url: trimmed }]);
     setUrlInput("");
   }
