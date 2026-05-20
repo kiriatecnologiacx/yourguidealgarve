@@ -1,5 +1,3 @@
-"use server";
-
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { Crown, Shield, Trash2 } from "lucide-react";
 import { removeAdmin, updateAdminRole } from "./actions";
