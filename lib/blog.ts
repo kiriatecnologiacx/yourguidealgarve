@@ -1,11 +1,12 @@
 import { createSupabaseServer } from "@/lib/supabase/server";
+import type { Block } from "./blog-blocks";
 
 export type BlogPost = {
   id: string;
   slug: string;
   title: string;
   excerpt: string | null;
-  content: string;
+  content: Block[];
   cover_image: string;
   author: string;
   is_published: boolean;

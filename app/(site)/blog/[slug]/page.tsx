@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getBlogPost, listBlogPosts } from "@/lib/blog";
+import { BlogBlockRenderer } from "@/components/site/blog-block-renderer";
 
 export const dynamic = "force-dynamic";
 
@@ -63,34 +64,8 @@ export default async function BlogPostPage({
             {post.excerpt}
           </p>
         ) : null}
-        <div className="mt-6 prose-blog text-[15px] leading-[1.7] text-text-strong/90 whitespace-pre-wrap">
-          {post.content.split(/\n\n+/).map((para, i) => {
-            if (para.startsWith("## ")) {
-              return (
-                <h2
-                  key={i}
-                  className="font-display mt-6 mb-2 text-2xl font-extrabold text-text-strong"
-                >
-                  {para.replace(/^##\s+/, "")}
-                </h2>
-              );
-            }
-            if (para.startsWith("### ")) {
-              return (
-                <h3
-                  key={i}
-                  className="font-display mt-5 mb-2 text-xl font-bold text-text-strong"
-                >
-                  {para.replace(/^###\s+/, "")}
-                </h3>
-              );
-            }
-            return (
-              <p key={i} className="mb-4">
-                {renderInline(para)}
-              </p>
-            );
-          })}
+        <div className="mt-6">
+          <BlogBlockRenderer blocks={post.content} />
         </div>
       </div>
 
@@ -133,18 +108,5 @@ export default async function BlogPostPage({
         </div>
       ) : null}
     </article>
-  );
-}
-
-function renderInline(text: string) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) =>
-    part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={i} className="font-bold text-text-strong">
-        {part.slice(2, -2)}
-      </strong>
-    ) : (
-      <span key={i}>{part}</span>
-    ),
   );
 }

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { slugify } from "@/lib/utils";
+import type { Block } from "@/lib/blog-blocks";
 
 async function requireAdmin() {
   const supabase = await createSupabaseServer();
@@ -12,23 +13,30 @@ async function requireAdmin() {
   return { supabase, user };
 }
 
-export type BlogFormState = { error?: string; ok?: boolean };
+export type BlogFormState = { error?: string; ok?: boolean } | undefined;
 
-export async function upsertPost(_prev: BlogFormState, formData: FormData): Promise<BlogFormState> {
+export async function upsertPost(formData: FormData): Promise<BlogFormState> {
   try {
     const { supabase } = await requireAdmin();
     const id = formData.get("id") ? String(formData.get("id")) : null;
     const title = String(formData.get("title") ?? "").trim();
-    const content = String(formData.get("content") ?? "").trim();
+    const blocksRaw = String(formData.get("blocks") ?? "[]");
+
     if (!title) return { error: "Título obrigatório" };
-    if (!content) return { error: "Conteúdo obrigatório" };
+
+    let blocks: Block[];
+    try {
+      blocks = JSON.parse(blocksRaw);
+    } catch {
+      return { error: "Conteúdo inválido" };
+    }
 
     const isPublished = formData.get("is_published") === "on";
     const payload = {
       title,
       slug: String(formData.get("slug") ?? "").trim() || slugify(title),
       excerpt: String(formData.get("excerpt") ?? "") || null,
-      content,
+      content: blocks,
       cover_image: String(formData.get("cover_image") ?? "").trim(),
       author: String(formData.get("author") ?? "") || "Your Guide Algarve",
       is_published: isPublished,
