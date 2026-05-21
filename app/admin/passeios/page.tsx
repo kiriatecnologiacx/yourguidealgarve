@@ -126,15 +126,15 @@ export default async function AdminPasseiosPage() {
                     </td>
                     <td className="px-5 py-3">
                       <div className="flex items-center justify-end gap-1.5">
-                        <a
-                          href={t.affiliate_url}
+                        <Link
+                          href={`/atividades/${t.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="grid place-items-center w-8 h-8 rounded-md text-text-muted hover:text-text-strong hover:bg-surface-alt"
-                          title="Abrir link de afiliado"
+                          title="Ver página do passeio"
                         >
                           <ExternalLink className="w-4 h-4" />
-                        </a>
+                        </Link>
                         <Link
                           href={`/admin/passeios/${t.id}`}
                           className="grid place-items-center w-8 h-8 rounded-md text-text-muted hover:text-text-strong hover:bg-surface-alt"
