@@ -36,7 +36,7 @@ const ABOUT: Record<Locale, LegalPage> = {
     ],
     sections: [],
   },
-  "pt-BR": {
+  "fr": {
     title: "Sobre nós",
     intro: [
       "Temos uma paixão verdadeira pelo Algarve, o lugar que chamamos de casa, e queremos que as pessoas vivam a região da maneira certa. O Algarve tem muito a oferecer — de paisagens costeiras inesquecíveis a dias tranquilos na água e experiências locais únicas — e estamos aqui para ajudar você a aproveitar ao máximo.",
@@ -188,7 +188,7 @@ const PRIVACY: Record<Locale, LegalPage> = {
       },
     ],
   },
-  "pt-BR": {
+  "fr": {
     title: "Política de Privacidade",
     updated: "Última atualização: 7 de maio de 2026",
     intro: [
@@ -741,7 +741,7 @@ const TERMS: Record<Locale, LegalPage> = {
       },
     ],
   },
-  "pt-BR": {
+  "fr": {
     title: "Termos e Condições de Uso",
     updated: "Última atualização: 7 de maio de 2026",
     sections: [
@@ -934,7 +934,7 @@ const PARTNERS: Record<Locale, LegalPage> = {
       },
     ],
   },
-  "pt-BR": {
+  "fr": {
     title: "Seja um parceiro",
     intro: [
       "Você opera passeios, experiências ou atividades no Algarve? Vamos adorar te ter no Your Guide Algarve.",
