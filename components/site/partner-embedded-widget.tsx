@@ -54,18 +54,18 @@ export function PartnerEmbeddedWidget({
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-x-hidden" style={{ maxWidth: "100vw" }}>
       <iframe
         ref={iframeRef}
         title={title}
         src={src}
         className="rezdy w-full block"
-        style={{ height, border: 0, background: "transparent", display: "block" }}
+        style={{ height, border: 0, background: "transparent", display: "block", maxWidth: "100%" }}
         seamless
         allow="payment *; clipboard-write"
         referrerPolicy="origin"
         loading="lazy"
-        scrolling="no"
+        scrolling="auto"
       />
     </div>
   );

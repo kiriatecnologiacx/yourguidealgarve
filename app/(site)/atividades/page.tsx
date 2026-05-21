@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { TourCard } from "@/components/site/tour-card";
+import { FiltersBar } from "@/components/site/filters-bar";
 import { listCategories, listDestinations, listTours } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
-import { Filter, Map } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -52,28 +52,12 @@ export default async function AtividadesPage({
       </section>
 
       <section className="bg-white border-b border-border-subtle">
-        <div className="mx-auto max-w-[1240px] px-5 py-3 flex items-center gap-2 overflow-x-auto scrollbar-hide">
-          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border-subtle text-[13px] font-medium text-text-strong hover:bg-surface-alt">
-            <Filter className="w-3.5 h-3.5" /> Filtros
-          </button>
-          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border-subtle text-[13px] font-medium text-text-strong hover:bg-surface-alt">
-            <Map className="w-3.5 h-3.5" /> Mapa
-          </button>
-          <span className="w-px h-5 bg-border-subtle mx-1" />
-          {categories.slice(0, 8).map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/atividades?categoria=${cat.slug}`}
-              className={`px-3 py-1.5 rounded-full border text-[13px] font-medium whitespace-nowrap ${
-                cat.slug === categoria
-                  ? "bg-navy-800 border-navy-800 text-white"
-                  : "border-border-subtle text-text-strong hover:bg-surface-alt"
-              }`}
-            >
-              {cat.name}
-            </Link>
-          ))}
-        </div>
+        <FiltersBar
+          categories={categories}
+          destinations={destinations}
+          currentCategory={categoria}
+          currentDestination={destino}
+        />
       </section>
 
       <section className="bg-surface-alt">

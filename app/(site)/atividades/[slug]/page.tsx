@@ -5,13 +5,15 @@ import {
   Clock,
   Users,
   ShieldCheck,
-  Tag,
   MapPin,
   Share2,
   Check,
+  X,
 } from "lucide-react";
 import { getTourBySlug, listTours, getReviewsByTourId } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 import { TourGallery } from "@/components/site/tour-gallery";
 import { BookingWidget } from "@/components/site/booking-widget";
 import { PartnerBookingButton } from "@/components/site/partner-booking-button";
@@ -32,11 +34,12 @@ export default async function TourDetailPage({
   const tour = await getTourBySlug(slug);
   if (!tour) notFound();
 
-  const [others, user, favIds, reviews] = await Promise.all([
-    listTours({ limit: 6 }).then((rows) => rows.filter((t) => t.id !== tour.id).slice(0, 5)),
+  const [others, user, favIds, reviews, locale] = await Promise.all([
+    listTours({ limit: 6 }).then((rows) => rows.filter((r) => r.id !== tour.id).slice(0, 5)),
     getCurrentUser(),
     getFavoriteIds(),
     getReviewsByTourId(tour.id),
+    getLocale(),
   ]);
   const isAuthed = !!user;
   const isFavorite = favIds.has(tour.id);
@@ -54,6 +57,7 @@ export default async function TourDetailPage({
   const hasDescription = !!(tour.description || tour.short_description);
   const hasHighlights = tour.highlights && tour.highlights.length > 0;
   const hasIncluded = tour.included && tour.included.length > 0;
+  const hasNotIncluded = tour.not_included && tour.not_included.length > 0;
   const hasMeetingPoint = !!tour.meeting_point;
 
   return (
@@ -114,16 +118,15 @@ export default async function TourDetailPage({
           </div>
 
           <div className="mt-4 flex flex-wrap gap-3">
-            <Chip icon={<ShieldCheck className="w-4 h-4" />} label="Free cancellation" />
-            <Chip icon={<Tag className="w-4 h-4" />} label="Book now, pay later" />
-            <Chip icon={<Users className="w-4 h-4" />} label="Local expert guide" />
-            <Chip icon={<Star className="w-4 h-4" />} label="Best price guaranteed" />
+            <Chip icon={<ShieldCheck className="w-4 h-4" />} label={t(locale, "tour.chip.freeCancellation")} />
+            <Chip icon={<Users className="w-4 h-4" />} label={t(locale, "tour.chip.localGuide")} />
+            <Chip icon={<Star className="w-4 h-4" />} label={t(locale, "tour.chip.bestPrice")} />
           </div>
 
           <div className="mt-4 flex items-center gap-3 text-[13px] text-text-muted">
             <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} />
             <button className="flex items-center gap-1 hover:text-text-strong">
-              <Share2 className="w-4 h-4" /> Share
+              <Share2 className="w-4 h-4" /> {t(locale, "tour.share")}
             </button>
           </div>
         </div>
@@ -132,7 +135,7 @@ export default async function TourDetailPage({
       {/* ─── Widget mode: iframe full-width ─── */}
       {isWidgetMode && hasPartnerWidget ? (
         <section className="bg-white">
-          <div className="mx-auto max-w-[1240px] px-4 md:px-5 py-6">
+          <div className="mx-auto max-w-[1240px] px-0 md:px-5 py-0 md:py-6 overflow-x-hidden">
             <PartnerEmbeddedWidget
               src={widgetUrl!}
               title={`Reservas — ${tour.title}`}
@@ -157,23 +160,16 @@ export default async function TourDetailPage({
             <div>
               {hasDescription ? (
                 <div>
-                  <h2 className="font-display text-[20px] font-bold text-text-strong">About this experience</h2>
+                  <h2 className="font-display text-[20px] font-bold text-text-strong">{t(locale, "tour.about")}</h2>
                   <p className="mt-2 text-[14px] text-text-strong/85 leading-relaxed whitespace-pre-line">
                     {tour.description ?? tour.short_description}
                   </p>
                 </div>
-              ) : (
-                <div className="rounded-2xl border border-dashed border-border-subtle bg-surface-alt p-6">
-                  <p className="text-[14px] text-text-strong font-semibold">Ready to explore the Algarve?</p>
-                  <p className="text-[13px] text-text-muted mt-1">
-                    Click "Check availability & book" to see live dates, prices and details from our trusted local partner.
-                  </p>
-                </div>
-              )}
+              ) : null}
 
               {hasHighlights ? (
                 <div className="mt-8">
-                  <h2 className="font-display text-[20px] font-bold text-text-strong">Highlights</h2>
+                  <h2 className="font-display text-[20px] font-bold text-text-strong">{t(locale, "tour.highlights")}</h2>
                   <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
                     {tour.highlights.map((h) => (
                       <li key={h} className="flex items-start gap-2">
@@ -186,7 +182,7 @@ export default async function TourDetailPage({
 
               {hasIncluded ? (
                 <div className="mt-8">
-                  <h2 className="font-display text-[20px] font-bold text-text-strong">What's included</h2>
+                  <h2 className="font-display text-[20px] font-bold text-text-strong">{t(locale, "tour.included")}</h2>
                   <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
                     {tour.included.map((item) => (
                       <li key={item} className="flex items-start gap-2">
@@ -197,9 +193,22 @@ export default async function TourDetailPage({
                 </div>
               ) : null}
 
+              {hasNotIncluded ? (
+                <div className="mt-8">
+                  <h2 className="font-display text-[20px] font-bold text-text-strong">{t(locale, "tour.notIncluded")}</h2>
+                  <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
+                    {tour.not_included.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <X className="w-4 h-4 text-red-400 mt-0.5 shrink-0" /> {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
               {hasMeetingPoint ? (
                 <div className="mt-8">
-                  <h2 className="font-display text-[20px] font-bold text-text-strong">Meeting point</h2>
+                  <h2 className="font-display text-[20px] font-bold text-text-strong">{t(locale, "tour.meetingPoint")}</h2>
                   <p className="mt-3 text-[13.5px] text-text-strong/90 flex items-start gap-2">
                     <MapPin className="w-4 h-4 text-navy-700 mt-0.5 shrink-0" />
                     {tour.meeting_point}
@@ -214,14 +223,13 @@ export default async function TourDetailPage({
               {hasPartnerWidget ? (
                 <div className="bg-white rounded-2xl border border-border-subtle p-4 shadow-sm space-y-3">
                   <div>
-                    <p className="text-[12.5px] uppercase tracking-wide text-text-muted font-semibold">Book this experience</p>
-                    <p className="mt-1 text-[13.5px] text-text-strong">Live availability — instant confirmation.</p>
+                    <p className="text-[12.5px] uppercase tracking-wide text-text-muted font-semibold">{t(locale, "tour.bookExperience")}</p>
+                    <p className="mt-1 text-[13.5px] text-text-strong">{t(locale, "tour.liveAvailability")}</p>
                   </div>
-                  <PartnerBookingButton src={widgetUrl!} label="Check availability & book" />
+                  <PartnerBookingButton src={widgetUrl!} label={t(locale, "tour.checkAvailability")} />
                   <ul className="text-[12px] text-text-muted space-y-1.5 pt-1">
-                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> Free cancellation up to 24h</li>
-                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> Reserve now, pay later</li>
-                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> Secure partner checkout</li>
+                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> {t(locale, "tour.chip.freeCancellationUp24")}</li>
+                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> {t(locale, "tour.chip.secureCheckout")}</li>
                   </ul>
                 </div>
               ) : (

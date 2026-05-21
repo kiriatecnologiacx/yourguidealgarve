@@ -251,6 +251,9 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
                 <Field label="O que está incluído (um por linha)">
                   <textarea name="included" defaultValue={tour?.included?.join("\n") ?? ""} rows={4} className={fieldClass} />
                 </Field>
+                <Field label="O que não está incluído (um por linha)">
+                  <textarea name="not_included" defaultValue={tour?.not_included?.join("\n") ?? ""} rows={4} className={fieldClass} />
+                </Field>
               </Section>
             </>
           ) : null}

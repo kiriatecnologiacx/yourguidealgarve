@@ -19,6 +19,7 @@ export type Tour = {
   booking_widget_html: string | null;
   meeting_point: string | null;
   included: string[];
+  not_included: string[];
   highlights: string[];
   free_cancellation: boolean;
   is_featured: boolean;

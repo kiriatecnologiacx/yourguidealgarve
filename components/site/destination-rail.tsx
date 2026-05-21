@@ -32,6 +32,24 @@ export async function DestinationRail({
         <WaveDivider />
       </span>
 
+      {/* Decorative sun */}
+      <span aria-hidden className="absolute top-8 right-10 pointer-events-none opacity-30">
+        <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+          <circle cx="60" cy="60" r="28" fill="#ffcc00" />
+          {[0,30,60,90,120,150,180,210,240,270,300,330].map((deg) => (
+            <line
+              key={deg}
+              x1="60" y1="60"
+              x2={60 + 50 * Math.cos((deg * Math.PI) / 180)}
+              y2={60 + 50 * Math.sin((deg * Math.PI) / 180)}
+              stroke="#ffcc00"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          ))}
+        </svg>
+      </span>
+
       <div className="relative mx-auto max-w-[1240px] px-5 pt-24 pb-20">
         <div className="flex items-end justify-between mb-8 flex-wrap gap-3">
           <div>

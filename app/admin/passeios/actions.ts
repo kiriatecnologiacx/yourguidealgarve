@@ -99,6 +99,7 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
       booking_widget_html: widgetHtml || null,
       meeting_point: String(formData.get("meeting_point") ?? "") || null,
       included: parseList(formData.get("included")),
+      not_included: parseList(formData.get("not_included")),
       highlights: parseList(formData.get("highlights")),
       free_cancellation: formData.get("free_cancellation") === "on",
       is_featured: formData.get("is_featured") === "on",

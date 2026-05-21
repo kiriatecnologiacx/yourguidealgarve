@@ -7,7 +7,7 @@ export function Newsletter({ locale }: { locale: Locale }) {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1240px] px-5 py-8">
-        <div className="relative overflow-hidden rounded-2xl bg-navy-800 text-white px-6 md:px-8 py-6 grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-center gap-5">
+        <div className="relative overflow-hidden rounded-2xl bg-navy-800 text-white px-6 md:px-8 py-6 grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-5">
           <div className="flex items-center gap-3 md:max-w-sm">
             <span className="grid place-items-center w-11 h-11 rounded-full bg-brand-yellow text-navy-900">
               <Mail className="w-5 h-5" />
@@ -18,7 +18,7 @@ export function Newsletter({ locale }: { locale: Locale }) {
           </div>
 
           <form
-            className="flex items-stretch bg-white rounded-xl overflow-hidden md:max-w-md w-full"
+            className="flex items-stretch bg-white rounded-xl overflow-hidden w-full md:max-w-lg"
             onSubmit={(e) => e.preventDefault()}
           >
             <input
@@ -27,11 +27,13 @@ export function Newsletter({ locale }: { locale: Locale }) {
               placeholder={t(locale, "newsletter.placeholder")}
               className="flex-1 px-4 py-3 text-[13.5px] text-text-strong outline-none placeholder:text-text-muted"
             />
+            <button
+              type="submit"
+              className="bg-brand-yellow hover:bg-brand-yellow-hover text-navy-900 font-semibold px-5 py-3 text-[14px] shrink-0"
+            >
+              {t(locale, "newsletter.cta")}
+            </button>
           </form>
-
-          <button className="bg-brand-yellow hover:bg-brand-yellow-hover text-navy-900 font-semibold px-5 py-3 rounded-xl text-[14px]">
-            {t(locale, "newsletter.cta")}
-          </button>
 
           <span
             aria-hidden
