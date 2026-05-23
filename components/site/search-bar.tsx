@@ -17,6 +17,7 @@ export function SearchBar({ locale }: { locale: Locale }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [date, setDate] = useState("");
+  const [people, setPeople] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -75,7 +76,7 @@ export function SearchBar({ locale }: { locale: Locale }) {
       <form
         ref={containerRef}
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-[0_20px_50px_-20px_rgba(10,37,64,0.45)] p-2.5 grid grid-cols-1 md:grid-cols-[1.4fr_1fr_auto] gap-2"
+        className="bg-white rounded-2xl shadow-[0_20px_50px_-20px_rgba(10,37,64,0.45)] p-2.5 grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_auto] gap-2"
       >
         {/* Where */}
         <label className="flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-surface-alt cursor-text relative md:border-r md:border-border-subtle">
@@ -117,6 +118,24 @@ export function SearchBar({ locale }: { locale: Locale }) {
               min={new Date().toISOString().split("T")[0]}
               className="bg-transparent text-[13.5px] text-text-strong outline-none w-full mt-0.5 cursor-pointer"
               style={{ colorScheme: "light" }}
+            />
+          </span>
+        </label>
+
+        {/* People */}
+        <label className="flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-surface-alt cursor-text">
+          <Users className="w-4 h-4 text-navy-600 shrink-0" />
+          <span className="flex flex-col min-w-0 flex-1">
+            <span className="text-[11px] font-semibold text-text-strong uppercase tracking-wide">
+              {t(locale, "search.people.label")}
+            </span>
+            <input
+              type="number"
+              min={1}
+              value={people}
+              onChange={(e) => setPeople(e.target.value)}
+              placeholder={t(locale, "search.people.placeholder")}
+              className="bg-transparent text-[13.5px] text-text-strong placeholder:text-text-muted outline-none w-full mt-0.5"
             />
           </span>
         </label>
