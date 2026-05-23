@@ -32,21 +32,24 @@ export async function DestinationRail({
         <WaveDivider />
       </span>
 
-      {/* Decorative sun */}
-      <span aria-hidden className="absolute top-8 right-10 pointer-events-none opacity-30">
-        <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-          <circle cx="60" cy="60" r="28" fill="#ffcc00" />
-          {[0,30,60,90,120,150,180,210,240,270,300,330].map((deg) => (
-            <line
-              key={deg}
-              x1="60" y1="60"
-              x2={60 + 50 * Math.cos((deg * Math.PI) / 180)}
-              y2={60 + 50 * Math.sin((deg * Math.PI) / 180)}
-              stroke="#ffcc00"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-          ))}
+      {/* Decorative sun — same style as logo (pill rays, orange) */}
+      <span aria-hidden className="absolute top-6 right-8 pointer-events-none opacity-25 hidden md:block">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="200" height="200">
+          <g fill="#ff8a3d">
+            <rect x="29" y="2" width="6" height="9" rx="3" />
+            <rect x="29" y="53" width="6" height="9" rx="3" />
+            <rect x="2" y="29" width="9" height="6" rx="3" />
+            <rect x="53" y="29" width="9" height="6" rx="3" />
+            <rect x="29" y="2" width="6" height="9" rx="3" transform="rotate(30 32 32)" />
+            <rect x="29" y="2" width="6" height="9" rx="3" transform="rotate(60 32 32)" />
+            <rect x="29" y="2" width="6" height="9" rx="3" transform="rotate(120 32 32)" />
+            <rect x="29" y="2" width="6" height="9" rx="3" transform="rotate(150 32 32)" />
+            <rect x="29" y="2" width="6" height="9" rx="3" transform="rotate(210 32 32)" />
+            <rect x="29" y="2" width="6" height="9" rx="3" transform="rotate(240 32 32)" />
+            <rect x="29" y="2" width="6" height="9" rx="3" transform="rotate(300 32 32)" />
+            <rect x="29" y="2" width="6" height="9" rx="3" transform="rotate(330 32 32)" />
+          </g>
+          <circle cx="32" cy="32" r="18" fill="#ff8a3d" />
         </svg>
       </span>
 
