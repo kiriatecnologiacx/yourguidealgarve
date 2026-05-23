@@ -6,13 +6,12 @@ import { getLocale } from "@/lib/locale-server";
 import { t } from "@/lib/i18n";
 
 const POPULAR = [
-  { label: "Benagil", href: "/atividades?destino=benagil" },
-  { label: "Lagos", href: "/atividades?destino=lagos" },
-  { label: "Faro", href: "/atividades?destino=faro" },
   { label: "Albufeira", href: "/atividades?destino=albufeira" },
-  { label: "Portimão", href: "/atividades?destino=portimao" },
+  { label: "Lagos", href: "/atividades?destino=lagos" },
   { label: "Vilamoura", href: "/atividades?destino=vilamoura" },
-  { label: "Tavira", href: "/atividades?destino=tavira" },
+  { label: "Loulé", href: "/atividades?destino=loule" },
+  { label: "Portimão", href: "/atividades?destino=portimao" },
+  { label: "Faro", href: "/atividades?destino=faro" },
 ];
 
 const HERO_IMAGES = [
