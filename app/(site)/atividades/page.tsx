@@ -1,10 +1,14 @@
+import Image from "next/image";
 import Link from "next/link";
+import { MapPin } from "lucide-react";
 import { TourCard } from "@/components/site/tour-card";
 import { FiltersBar } from "@/components/site/filters-bar";
 import { listCategories, listDestinations, listTours } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
+
+type Modo = "destinos" | "atividades" | "experiencias";
 
 export default async function AtividadesPage({
   searchParams,
@@ -14,24 +18,36 @@ export default async function AtividadesPage({
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q : undefined;
   const destino = typeof sp.destino === "string" ? sp.destino : undefined;
-  const categoria = typeof sp.categoria === "string" ? sp.categoria : undefined;
+  const modo = (typeof sp.modo === "string" ? sp.modo : undefined) as Modo | undefined;
 
-  const [tours, categories, destinations, user, favIds] = await Promise.all([
-    listTours({ q, destination: destino, category: categoria }),
-    listCategories(),
+  const categoryGroup =
+    modo === "atividades" ? "atividades" : modo === "experiencias" ? "experiencias" : undefined;
+
+  const [tours, destinations, user, favIds] = await Promise.all([
+    modo !== "destinos"
+      ? listTours({ q, destination: destino, categoryGroup })
+      : Promise.resolve([]),
     listDestinations(false),
     getCurrentUser(),
     getFavoriteIds(),
   ]);
-  const isAuthed = !!user;
 
+  const isAuthed = !!user;
   const destinationName = destinations.find((d) => d.slug === destino)?.name;
-  const categoryName = categories.find((c) => c.slug === categoria)?.name;
-  const headingParts = [
-    destinationName ?? "Atividades no Algarve",
-    categoryName,
-    q ? `“${q}”` : null,
-  ].filter(Boolean);
+
+  const heading =
+    modo === "destinos"
+      ? "Destinos no Algarve"
+      : modo === "atividades"
+        ? destinationName ? `Atividades em ${destinationName}` : "Atividades no Algarve"
+        : modo === "experiencias"
+          ? destinationName ? `Experiências em ${destinationName}` : "Experiências no Algarve"
+          : destinationName ?? "Atividades no Algarve";
+
+  const subheading =
+    modo === "destinos"
+      ? `${destinations.length} destinos disponíveis`
+      : `${tours.length} ${modo === "experiencias" ? "experiências" : "atividades"} disponíveis`;
 
   return (
     <>
@@ -41,47 +57,113 @@ export default async function AtividadesPage({
             <Link href="/" className="hover:text-white">Início</Link>{" "}
             <span className="mx-1">›</span> Atividades
           </p>
-          <h1 className="mt-2 text-3xl md:text-4xl font-extrabold">
-            {headingParts[0]}
-          </h1>
-          <p className="mt-1 text-white/80 text-[14px]">
-            {tours.length} atividades disponíveis
-            {categoryName ? ` — ${categoryName}` : ""}
-          </p>
+          <h1 className="mt-2 text-3xl md:text-4xl font-extrabold">{heading}</h1>
+          <p className="mt-1 text-white/80 text-[14px]">{subheading}</p>
         </div>
       </section>
 
       <section className="bg-white border-b border-border-subtle">
         <FiltersBar
-          categories={categories}
           destinations={destinations}
-          currentCategory={categoria}
+          currentModo={modo}
           currentDestination={destino}
         />
       </section>
 
       <section className="bg-surface-alt">
         <div className="mx-auto max-w-[1240px] px-5 py-8">
-          {tours.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-border-subtle p-10 text-center">
-              <p className="text-[15px] font-semibold text-text-strong">
-                Nenhuma atividade encontrada
-              </p>
-              <p className="text-[13.5px] text-text-muted mt-1">
-                Tente ajustar os filtros ou voltar para a página inicial.
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {tours.map((tour) => (
-                <TourCard
-                  key={tour.id}
-                  tour={tour}
-                  isAuthed={isAuthed}
-                  isFavorite={favIds.has(tour.id)}
-                />
+
+          {/* DESTINOS MODE — show destination cards */}
+          {modo === "destinos" ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {destinations.map((d) => (
+                <Link
+                  key={d.id}
+                  href={`/atividades?modo=atividades&destino=${d.slug}`}
+                  className="group relative h-[200px] rounded-2xl overflow-hidden ring-1 ring-white/20 hover:ring-brand-yellow hover:shadow-[0_20px_45px_-15px_rgba(0,0,0,0.35)] transition"
+                >
+                  {d.image ? (
+                    <Image
+                      src={d.image}
+                      alt={d.name}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width: 768px) 50vw, 280px"
+                      unoptimized={!d.image.startsWith("/")}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-navy-200" />
+                  )}
+                  <div
+                    className="absolute inset-0"
+                    style={{ background: "linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(10,37,64,0.85) 100%)" }}
+                  />
+                  <div className="absolute left-4 bottom-4 right-4">
+                    <p className="font-display text-white text-[18px] font-extrabold leading-tight drop-shadow">
+                      {d.name}
+                    </p>
+                    <p className="text-white/85 text-[12px] mt-0.5 flex items-center gap-1">
+                      <MapPin className="w-3 h-3" />
+                      {d.activities_count} atividades
+                    </p>
+                  </div>
+                </Link>
               ))}
             </div>
+          ) : (
+            /* ATIVIDADES / EXPERIÊNCIAS / ALL MODE — show tour cards */
+            <>
+              {/* Destination sub-filter chips when in atividades/experiencias mode */}
+              {(modo === "atividades" || modo === "experiencias") && (
+                <div className="flex flex-wrap gap-2 mb-6">
+                  <Link
+                    href={`/atividades?modo=${modo}`}
+                    className={`px-3 py-1.5 rounded-full border text-[13px] font-medium transition-colors ${
+                      !destino
+                        ? "bg-navy-800 border-navy-800 text-white"
+                        : "border-border-subtle text-text-strong hover:bg-white bg-white"
+                    }`}
+                  >
+                    Todos os destinos
+                  </Link>
+                  {destinations.map((d) => (
+                    <Link
+                      key={d.id}
+                      href={`/atividades?modo=${modo}&destino=${d.slug}`}
+                      className={`px-3 py-1.5 rounded-full border text-[13px] font-medium transition-colors ${
+                        d.slug === destino
+                          ? "bg-navy-800 border-navy-800 text-white"
+                          : "border-border-subtle text-text-strong hover:bg-white bg-white"
+                      }`}
+                    >
+                      {d.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {tours.length === 0 ? (
+                <div className="bg-white rounded-2xl border border-border-subtle p-10 text-center">
+                  <p className="text-[15px] font-semibold text-text-strong">
+                    Nenhuma atividade encontrada
+                  </p>
+                  <p className="text-[13.5px] text-text-muted mt-1">
+                    Tente ajustar os filtros ou voltar para a página inicial.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                  {tours.map((tour) => (
+                    <TourCard
+                      key={tour.id}
+                      tour={tour}
+                      isAuthed={isAuthed}
+                      isFavorite={favIds.has(tour.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>

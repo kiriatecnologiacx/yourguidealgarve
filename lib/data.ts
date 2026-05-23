@@ -13,8 +13,12 @@ export async function getFeaturedTours(limit = 8): Promise<Tour[]> {
   return (data ?? []) as Tour[];
 }
 
+export const ACTIVITY_SLUGS = ["aventura-natureza", "passeios-de-barco", "praias-relaxamento", "transfers"];
+export const EXPERIENCE_SLUGS = ["cultura-historia", "gastronomia"];
+
 export async function listTours(filters: {
   category?: string;
+  categoryGroup?: "atividades" | "experiencias";
   destination?: string;
   q?: string;
   limit?: number;
@@ -36,6 +40,10 @@ export async function listTours(filters: {
     rows = rows.filter((t) => t.destination?.slug === filters.destination);
   if (filters.category)
     rows = rows.filter((t) => t.category?.slug === filters.category);
+  if (filters.categoryGroup === "atividades")
+    rows = rows.filter((t) => ACTIVITY_SLUGS.includes(t.category?.slug ?? ""));
+  if (filters.categoryGroup === "experiencias")
+    rows = rows.filter((t) => EXPERIENCE_SLUGS.includes(t.category?.slug ?? ""));
 
   return rows as Tour[];
 }
