@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Globe } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { LOCALES, type Locale } from "@/lib/i18n";
 import { useRouter } from "next/navigation";
 
@@ -43,9 +43,9 @@ export function LangSwitch({
             : "text-text-strong hover:bg-surface-alt"
         }`}
       >
-        <Globe className="w-4 h-4" />
-        <span className="hidden sm:inline">{item.flag} {item.label}</span>
-        <span className="sm:hidden">{item.flag}</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={item.flagUrl} alt={item.label} className="w-5 h-3.5 object-cover rounded-[2px] shrink-0" />
+        <span className="hidden sm:inline">{item.label}</span>
         <ChevronDown className="w-3.5 h-3.5 opacity-70" />
       </button>
       {open ? (
@@ -58,7 +58,9 @@ export function LangSwitch({
                 l.code === current ? "text-navy-800 font-semibold" : "text-text-strong"
               }`}
             >
-              <span>{l.flag}</span> {l.label}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={l.flagUrl} alt={l.label} className="w-5 h-3.5 object-cover rounded-[2px] shrink-0" />
+              {l.label}
             </button>
           ))}
         </div>

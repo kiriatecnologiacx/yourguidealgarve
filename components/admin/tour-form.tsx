@@ -217,6 +217,9 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
             placeholder={"Português\nEnglish\nFrançais\nEspañol"}
           />
         </Field>
+        <p className="mt-2 text-[12px] text-text-muted leading-snug bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+          💡 <strong>Dica:</strong> Os textos do passeio (nome, descrição, highlights) devem ser preenchidos em <strong>inglês</strong> para alcançar o público internacional. O inglês é o idioma mais procurado por turistas estrangeiros no Algarve.
+        </p>
       </Section>
 
       {/* Extra content — only in complete mode */}

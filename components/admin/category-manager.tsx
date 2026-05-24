@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Plus, Pencil, X } from "lucide-react";
 import { upsertCategory, deleteCategory } from "@/app/admin/categorias/actions";
 import { DeleteRowButton } from "./delete-row-button";
+import { SingleImageUpload } from "./single-image-upload";
 
 type Category = {
   id: string;
@@ -73,14 +74,14 @@ export function CategoryManager({ categories }: { categories: Category[] }) {
             placeholder="slug (opcional)"
             className={fieldClass}
           />
-          <input
-            key={editing?.id ?? "new-image"}
-            name="image"
-            required
-            defaultValue={editing?.image ?? ""}
-            placeholder="URL da imagem"
-            className={fieldClass + " md:col-span-2"}
-          />
+          <div className="md:col-span-2">
+            <SingleImageUpload
+              key={editing?.id ?? "new"}
+              fieldName="image"
+              folder="categories"
+              initialUrl={editing?.image}
+            />
+          </div>
           <input
             key={editing?.id ?? "new-icon"}
             name="icon"

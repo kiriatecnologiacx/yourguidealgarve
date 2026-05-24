@@ -1,9 +1,9 @@
 export type Locale = "en" | "pt-PT" | "fr";
 
-export const LOCALES: { code: Locale; label: string; flag: string }[] = [
-  { code: "en",    label: "English",        flag: "🇬🇧" },
-  { code: "pt-PT", label: "Português (PT)", flag: "🇵🇹" },
-  { code: "fr",    label: "Français",       flag: "🇫🇷" },
+export const LOCALES: { code: Locale; label: string; flag: string; flagUrl: string }[] = [
+  { code: "en",    label: "English",        flag: "🇬🇧", flagUrl: "https://flagcdn.com/gb.svg" },
+  { code: "pt-PT", label: "Português (PT)", flag: "🇵🇹", flagUrl: "https://flagcdn.com/pt.svg" },
+  { code: "fr",    label: "Français",       flag: "🇫🇷", flagUrl: "https://flagcdn.com/fr.svg" },
 ];
 
 export const DEFAULT_LOCALE: Locale = "en";

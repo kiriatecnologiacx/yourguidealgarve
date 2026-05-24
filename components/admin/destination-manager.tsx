@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Plus, Star, Pencil, X } from "lucide-react";
 import { upsertDestination, deleteDestination } from "@/app/admin/destinos/actions";
 import { DeleteRowButton } from "./delete-row-button";
+import { SingleImageUpload } from "./single-image-upload";
 import type { Destination } from "@/lib/types";
 
 export function DestinationManager({
@@ -69,14 +70,14 @@ export function DestinationManager({
             placeholder="slug (opcional)"
             className={fieldClass}
           />
-          <input
-            key={editing?.id ?? "new-image"}
-            name="image"
-            required
-            defaultValue={editing?.image ?? ""}
-            placeholder="URL da imagem"
-            className={fieldClass + " md:col-span-2"}
-          />
+          <div className="md:col-span-2">
+            <SingleImageUpload
+              key={editing?.id ?? "new"}
+              fieldName="image"
+              folder="destinations"
+              initialUrl={editing?.image}
+            />
+          </div>
           <input
             key={editing?.id ?? "new-count"}
             name="activities_count"

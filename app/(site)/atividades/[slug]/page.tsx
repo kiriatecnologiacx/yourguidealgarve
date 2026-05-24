@@ -276,7 +276,7 @@ export default async function TourDetailPage({
                     <p className="text-[12.5px] uppercase tracking-wide text-text-muted font-semibold">{t(locale, "tour.bookExperience")}</p>
                     <p className="mt-1 text-[13.5px] text-text-strong">{t(locale, "tour.liveAvailability")}</p>
                   </div>
-                  <PartnerBookingButton src={widgetUrl!} label={t(locale, "tour.checkAvailability")} />
+                  <PartnerBookingButton src={widgetUrl!} label={t(locale, "tour.checkAvailability")} modalTitle={tour.title} />
                   <ul className="text-[12px] text-text-muted space-y-1.5 pt-1">
                     <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> {t(locale, "tour.chip.freeCancellationUp24")}</li>
                     <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> {t(locale, "tour.chip.secureCheckout")}</li>

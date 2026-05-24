@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import { Camera, X, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -25,6 +25,7 @@ export function TourGallery({
   ];
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
 
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
   const prev = useCallback(() => setLightboxIndex((i) => (i !== null ? (i - 1 + allImages.length) % allImages.length : null)), [allImages.length]);
@@ -40,6 +41,19 @@ export function TourGallery({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [lightboxIndex, closeLightbox, prev, next]);
+
+  function onTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  function onTouchEnd(e: React.TouchEvent) {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 50) return;
+    if (delta < 0) next();
+    else prev();
+  }
 
   if (!effectiveCover) return null;
 
@@ -87,11 +101,13 @@ export function TourGallery({
 
       {lightboxIndex !== null ? (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center select-none"
           onClick={closeLightbox}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
           <button
-            className="absolute top-4 right-4 grid place-items-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white"
+            className="absolute top-4 right-4 z-10 grid place-items-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white"
             onClick={closeLightbox}
             aria-label="Fechar"
           >
@@ -101,14 +117,14 @@ export function TourGallery({
           {allImages.length > 1 ? (
             <>
               <button
-                className="absolute left-4 top-1/2 -translate-y-1/2 grid place-items-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 grid place-items-center w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 text-white"
                 onClick={(e) => { e.stopPropagation(); prev(); }}
                 aria-label="Anterior"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
-                className="absolute right-4 top-1/2 -translate-y-1/2 grid place-items-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 grid place-items-center w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 text-white"
                 onClick={(e) => { e.stopPropagation(); next(); }}
                 aria-label="Próxima"
               >
@@ -118,7 +134,7 @@ export function TourGallery({
           ) : null}
 
           <div
-            className="relative w-full h-full max-w-5xl max-h-[85vh] mx-8"
+            className="relative w-full h-full max-w-5xl max-h-[85vh] mx-14 sm:mx-16"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
