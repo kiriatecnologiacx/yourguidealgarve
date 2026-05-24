@@ -15,7 +15,7 @@ function BlockNode({ block }: { block: Block }) {
   switch (block.type) {
     case "text":
       return (
-        <p className="text-[15px] leading-[1.75] text-text-strong/90">
+        <p className="text-[15px] leading-[1.75] text-text-strong/90 whitespace-pre-line">
           {block.content}
         </p>
       );

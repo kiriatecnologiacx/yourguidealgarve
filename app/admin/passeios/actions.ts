@@ -104,7 +104,12 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
       free_cancellation: formData.get("free_cancellation") === "on",
       is_featured: formData.get("is_featured") === "on",
       is_published: formData.get("is_published") === "on",
+      hide_price: formData.get("hide_price") === "on",
       badge: String(formData.get("badge") ?? "") || null,
+      important_info: String(formData.get("important_info") ?? "") || null,
+      what_to_bring: String(formData.get("what_to_bring") ?? "") || null,
+      tips: String(formData.get("tips") ?? "") || null,
+      languages: parseList(formData.get("languages")),
     };
 
     if (id) {

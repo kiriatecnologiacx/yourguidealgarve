@@ -1,4 +1,4 @@
-import { Wallet, ShieldCheck, Tag, Headphones } from "lucide-react";
+import { Wallet, ShieldCheck, Users, Headphones } from "lucide-react";
 import { getLocale } from "@/lib/locale-server";
 import { t } from "@/lib/i18n";
 
@@ -7,7 +7,7 @@ export async function FeatureStrip() {
   const items = [
     { icon: <Wallet className="w-5 h-5" />,       title: t(locale, "feat.cancel.title"),  subtitle: t(locale, "feat.cancel.subtitle") },
     { icon: <ShieldCheck className="w-5 h-5" />,  title: t(locale, "feat.secure.title"),  subtitle: t(locale, "feat.secure.subtitle") },
-    { icon: <Tag className="w-5 h-5" />,          title: t(locale, "feat.price.title"),   subtitle: t(locale, "feat.price.subtitle") },
+    { icon: <Users className="w-5 h-5" />,         title: t(locale, "feat.price.title"),   subtitle: t(locale, "feat.price.subtitle") },
     { icon: <Headphones className="w-5 h-5" />,   title: t(locale, "feat.support.title"), subtitle: t(locale, "feat.support.subtitle") },
   ];
   return (

@@ -4,17 +4,20 @@ import type { Tour } from "@/lib/types";
 import { formatPriceBRL, formatRating } from "@/lib/utils";
 import { FavoriteButton } from "./favorite-button";
 import { TourImage } from "./tour-image";
+import { t, type Locale } from "@/lib/i18n";
 
 export function TourCard({
   tour,
   compact = false,
   isFavorite = false,
   isAuthed = false,
+  locale = "pt-PT",
 }: {
   tour: Tour;
   compact?: boolean;
   isFavorite?: boolean;
   isAuthed?: boolean;
+  locale?: Locale;
 }) {
   return (
     <Link
@@ -50,15 +53,17 @@ export function TourCard({
         </p>
         {tour.free_cancellation ? (
           <p className="mt-1.5 text-[11.5px] text-success font-medium">
-            Cancelamento gratuito
+            {t(locale, "tour.chip.freeCancellation")}
           </p>
         ) : null}
-        <div className="mt-3 flex items-end justify-between">
-          <span className="text-[11px] text-text-muted">A partir de</span>
-          <span className="text-[16px] font-extrabold text-text-strong">
-            {formatPriceBRL(tour.price_from_brl ?? tour.price_brl)}
-          </span>
-        </div>
+        {!tour.hide_price && (tour.price_from_brl ?? tour.price_brl) ? (
+          <div className="mt-3 flex items-end justify-between">
+            <span className="text-[11px] text-text-muted">A partir de</span>
+            <span className="text-[16px] font-extrabold text-text-strong">
+              {formatPriceBRL(tour.price_from_brl ?? tour.price_brl)}
+            </span>
+          </div>
+        ) : null}
       </div>
     </Link>
   );

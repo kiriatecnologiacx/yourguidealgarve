@@ -5,6 +5,7 @@ import { TourCard } from "@/components/site/tour-card";
 import { FiltersBar } from "@/components/site/filters-bar";
 import { listCategories, listDestinations, listTours } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
+import { getLocale } from "@/lib/locale-server";
 
 export const dynamic = "force-dynamic";
 
@@ -23,13 +24,14 @@ export default async function AtividadesPage({
   const categoryGroup =
     modo === "atividades" ? "atividades" : modo === "experiencias" ? "experiencias" : undefined;
 
-  const [tours, destinations, user, favIds] = await Promise.all([
+  const [tours, destinations, user, favIds, locale] = await Promise.all([
     modo !== "destinos"
       ? listTours({ q, destination: destino, categoryGroup })
       : Promise.resolve([]),
     listDestinations(false),
     getCurrentUser(),
     getFavoriteIds(),
+    getLocale(),
   ]);
 
   const isAuthed = !!user;
@@ -157,6 +159,7 @@ export default async function AtividadesPage({
                     <TourCard
                       key={tour.id}
                       tour={tour}
+                      locale={locale}
                       isAuthed={isAuthed}
                       isFavorite={favIds.has(tour.id)}
                     />

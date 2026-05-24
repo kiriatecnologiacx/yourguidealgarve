@@ -6,9 +6,11 @@ import {
   Users,
   ShieldCheck,
   MapPin,
-  Share2,
   Check,
   X,
+  AlertTriangle,
+  Backpack,
+  Lightbulb,
 } from "lucide-react";
 import { getTourBySlug, listTours, getReviewsByTourId } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
@@ -21,6 +23,7 @@ import { PartnerEmbeddedWidget } from "@/components/site/partner-embedded-widget
 import { TourCard } from "@/components/site/tour-card";
 import { FavoriteButton } from "@/components/site/favorite-button";
 import { ReviewsSection } from "@/components/site/reviews-section";
+import { ShareButton } from "@/components/site/share-button";
 import { formatRating } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -59,15 +62,19 @@ export default async function TourDetailPage({
   const hasIncluded = tour.included && tour.included.length > 0;
   const hasNotIncluded = tour.not_included && tour.not_included.length > 0;
   const hasMeetingPoint = !!tour.meeting_point;
+  const hasLanguages = tour.languages && tour.languages.length > 0;
+  const hasImportantInfo = !!tour.important_info;
+  const hasWhatToBring = !!tour.what_to_bring;
+  const hasTips = !!tour.tips;
 
   return (
     <>
       {/* ─── Header comum ─── */}
       <section className="bg-white border-b border-border-subtle">
         <div className="mx-auto max-w-[1240px] px-5 pt-6 pb-2 text-[12.5px] text-text-muted flex items-center gap-1.5 flex-wrap">
-          <Link href="/" className="hover:text-text-strong">Home</Link>
+          <Link href="/" className="hover:text-text-strong">{t(locale, "nav.destinations") === "Destinos" ? "Início" : "Home"}</Link>
           <span>›</span>
-          <Link href="/atividades" className="hover:text-text-strong">Activities</Link>
+          <Link href="/atividades" className="hover:text-text-strong">{t(locale, "nav.activities")}</Link>
           {tour.destination ? (
             <>
               <span>›</span>
@@ -117,17 +124,27 @@ export default async function TourDetailPage({
             ) : null}
           </div>
 
+          {hasLanguages ? (
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <span className="text-[12.5px] font-semibold text-text-muted uppercase tracking-wide">Idiomas:</span>
+              {tour.languages!.map((lang) => (
+                <span key={lang} className="flex items-center gap-1.5 bg-surface-alt border border-border-subtle px-3 py-1.5 rounded-full text-[12.5px] text-text-strong font-medium">
+                  🏳️ {lang}
+                </span>
+              ))}
+            </div>
+          ) : null}
+
           <div className="mt-4 flex flex-wrap gap-3">
-            <Chip icon={<ShieldCheck className="w-4 h-4" />} label={t(locale, "tour.chip.freeCancellation")} />
+            {tour.free_cancellation ? (
+              <Chip icon={<ShieldCheck className="w-4 h-4" />} label={t(locale, "tour.chip.freeCancellation")} />
+            ) : null}
             <Chip icon={<Users className="w-4 h-4" />} label={t(locale, "tour.chip.localGuide")} />
-            <Chip icon={<Star className="w-4 h-4" />} label={t(locale, "tour.chip.bestPrice")} />
           </div>
 
           <div className="mt-4 flex items-center gap-3 text-[13px] text-text-muted">
             <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} />
-            <button className="flex items-center gap-1 hover:text-text-strong">
-              <Share2 className="w-4 h-4" /> {t(locale, "tour.share")}
-            </button>
+            <ShareButton title={tour.title} label={t(locale, "tour.share")} />
           </div>
         </div>
       </section>
@@ -173,7 +190,7 @@ export default async function TourDetailPage({
                   <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
                     {tour.highlights.map((h) => (
                       <li key={h} className="flex items-start gap-2">
-                        <Check className="w-4 h-4 text-success mt-0.5 shrink-0" /> {h}
+                        <span className="text-navy-700 mt-0.5 shrink-0 text-[16px] leading-none">•</span> {h}
                       </li>
                     ))}
                   </ul>
@@ -216,6 +233,39 @@ export default async function TourDetailPage({
                 </div>
               ) : null}
 
+              {hasImportantInfo ? (
+                <div className="mt-8 bg-amber-50 border border-amber-200 rounded-2xl p-5">
+                  <h2 className="font-display text-[18px] font-bold text-amber-900 flex items-center gap-2">
+                    <AlertTriangle className="w-5 h-5" /> Informação Importante
+                  </h2>
+                  <p className="mt-2 text-[13.5px] text-amber-900/85 leading-relaxed whitespace-pre-line">
+                    {tour.important_info}
+                  </p>
+                </div>
+              ) : null}
+
+              {hasWhatToBring ? (
+                <div className="mt-8">
+                  <h2 className="font-display text-[20px] font-bold text-text-strong flex items-center gap-2">
+                    <Backpack className="w-5 h-5 text-navy-700" /> O que trazer
+                  </h2>
+                  <p className="mt-2 text-[13.5px] text-text-strong/90 leading-relaxed whitespace-pre-line">
+                    {tour.what_to_bring}
+                  </p>
+                </div>
+              ) : null}
+
+              {hasTips ? (
+                <div className="mt-8 bg-navy-50 border border-navy-200 rounded-2xl p-5">
+                  <h2 className="font-display text-[18px] font-bold text-navy-900 flex items-center gap-2">
+                    <Lightbulb className="w-5 h-5" /> Dicas
+                  </h2>
+                  <p className="mt-2 text-[13.5px] text-navy-900/85 leading-relaxed whitespace-pre-line">
+                    {tour.tips}
+                  </p>
+                </div>
+              ) : null}
+
               <ReviewsSection tourId={tour.id} reviews={reviews} />
             </div>
 
@@ -254,15 +304,15 @@ export default async function TourDetailPage({
           <div className="mx-auto max-w-[1240px] px-5 py-10">
             <div className="flex items-center justify-between mb-5">
               <h2 className="font-display text-2xl md:text-3xl font-extrabold text-text-strong">
-                Other experiences you may like
+                {locale === "pt-PT" ? "Outras experiências que podem interessar" : locale === "fr" ? "Autres expériences qui pourraient vous plaire" : "Other experiences you may like"}
               </h2>
               <Link href="/atividades" className="text-[13.5px] font-semibold text-navy-700 hover:underline">
-                See all
+                {locale === "pt-PT" ? "Ver todos" : locale === "fr" ? "Voir tout" : "See all"}
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {others.map((t) => (
-                <TourCard key={t.id} tour={t} compact isAuthed={isAuthed} isFavorite={favIds.has(t.id)} />
+                <TourCard key={t.id} tour={t} compact locale={locale} isAuthed={isAuthed} isFavorite={favIds.has(t.id)} />
               ))}
             </div>
           </div>

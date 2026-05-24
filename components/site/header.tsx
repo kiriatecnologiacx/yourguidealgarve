@@ -2,18 +2,19 @@ import Link from "next/link";
 import { Heart } from "lucide-react";
 import { Logo } from "./logo";
 import { LangSwitch } from "./lang-switch";
+import { MobileMenu } from "./mobile-menu";
 import { getLocale } from "@/lib/locale-server";
 import { t } from "@/lib/i18n";
+
 export async function SiteHeader() {
   const locale = await getLocale();
 
   const NAV = [
-    { label: t(locale, "nav.destinations"), href: "/atividades?tab=destinos" },
-    { label: t(locale, "nav.activities"),   href: "/atividades" },
-    { label: t(locale, "nav.experiences"),  href: "/atividades?tab=experiencias" },
-    { label: t(locale, "nav.tickets"),      href: "/atividades?tab=ingressos" },
-    { label: t(locale, "nav.transfers"),    href: "/atividades?tab=transfers" },
+    { label: t(locale, "nav.destinations"), href: "/atividades?modo=destinos" },
+    { label: t(locale, "nav.activities"),   href: "/atividades?modo=atividades" },
     { label: t(locale, "nav.blog"),         href: "/blog" },
+    { label: t(locale, "nav.contact"),      href: "/contacto" },
+    { label: t(locale, "nav.faq"),          href: "/faq" },
   ];
 
   return (
@@ -39,6 +40,7 @@ export async function SiteHeader() {
             <Heart className="w-4 h-4" /> {t(locale, "header.favorites")}
           </Link>
           <LangSwitch current={locale} />
+          <MobileMenu nav={NAV} favoritesLabel={t(locale, "header.favorites")} />
         </div>
       </div>
     </header>

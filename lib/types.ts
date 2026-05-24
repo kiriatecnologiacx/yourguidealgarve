@@ -24,8 +24,13 @@ export type Tour = {
   free_cancellation: boolean;
   is_featured: boolean;
   is_published: boolean;
+  hide_price: boolean;
   badge: string | null;
   tour_mode: "widget" | "complete";
+  important_info: string | null;
+  what_to_bring: string | null;
+  tips: string | null;
+  languages: string[];
   created_at: string;
 };
 

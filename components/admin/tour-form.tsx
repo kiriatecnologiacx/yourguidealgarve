@@ -179,12 +179,44 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
         ) : null}
       </Section>
 
+      <Section title="Preço">
+        <p className="text-[12.5px] text-text-muted -mt-2">
+          Preencha para exibir preço nos cards. Deixe em branco para ocultar.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Field label="Preço base (EUR)">
+            <input name="price_brl" type="number" step="0.01" defaultValue={tour?.price_brl ?? ""} className={fieldClass} placeholder="Ex: 145" />
+          </Field>
+          <Field label="A partir de (EUR)">
+            <input name="price_from_brl" type="number" step="0.01" defaultValue={tour?.price_from_brl ?? ""} className={fieldClass} placeholder="Ex: 89" />
+          </Field>
+          <Field label=" ">
+            <div className="flex items-center gap-2 mt-2">
+              <Toggle name="hide_price" label="Ocultar preço nos cards" defaultChecked={tour?.hide_price ?? false} />
+            </div>
+          </Field>
+        </div>
+      </Section>
+
       <Section title="Publicação">
         <div className="flex flex-wrap gap-5">
           <Toggle name="free_cancellation" label="Cancelamento gratuito" defaultChecked={tour?.free_cancellation ?? true} />
           <Toggle name="is_featured" label="Destacar na home" defaultChecked={tour?.is_featured ?? false} />
           <Toggle name="is_published" label="Publicar no site" defaultChecked={tour?.is_published ?? true} />
         </div>
+      </Section>
+
+      {/* Languages — always visible */}
+      <Section title="Idiomas do passeio">
+        <Field label="Idiomas disponíveis (um por linha)">
+          <textarea
+            name="languages"
+            defaultValue={tour?.languages?.join("\n") ?? ""}
+            rows={3}
+            className={fieldClass}
+            placeholder={"Português\nEnglish\nFrançais\nEspañol"}
+          />
+        </Field>
       </Section>
 
       {/* Extra content — only in complete mode */}
@@ -204,14 +236,8 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
 
           {showAdvanced ? (
             <>
-              <Section title="Preço e avaliações (opcional)">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <Field label="Preço (BRL)">
-                    <input name="price_brl" type="number" step="1" defaultValue={tour?.price_brl ?? ""} className={fieldClass} />
-                  </Field>
-                  <Field label="Preço a partir de (BRL)">
-                    <input name="price_from_brl" type="number" step="1" defaultValue={tour?.price_from_brl ?? ""} className={fieldClass} />
-                  </Field>
+              <Section title="Avaliações (opcional)">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Field label="Avaliação (0-5)">
                     <input name="rating" type="number" step="0.1" min="0" max="5" defaultValue={tour?.rating ?? ""} className={fieldClass} />
                   </Field>
@@ -253,6 +279,36 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
                 </Field>
                 <Field label="O que não está incluído (um por linha)">
                   <textarea name="not_included" defaultValue={tour?.not_included?.join("\n") ?? ""} rows={4} className={fieldClass} />
+                </Field>
+              </Section>
+
+              <Section title="Informações adicionais (opcional)">
+                <Field label="Informação Importante">
+                  <textarea
+                    name="important_info"
+                    defaultValue={tour?.important_info ?? ""}
+                    rows={4}
+                    className={fieldClass}
+                    placeholder="Ex: Este passeio não é adequado para grávidas ou pessoas com problemas cardíacos..."
+                  />
+                </Field>
+                <Field label="O que trazer">
+                  <textarea
+                    name="what_to_bring"
+                    defaultValue={tour?.what_to_bring ?? ""}
+                    rows={4}
+                    className={fieldClass}
+                    placeholder={"Ex:\nProtetor solar\nÁgua\nCalçado confortável"}
+                  />
+                </Field>
+                <Field label="Dicas">
+                  <textarea
+                    name="tips"
+                    defaultValue={tour?.tips ?? ""}
+                    rows={4}
+                    className={fieldClass}
+                    placeholder="Ex: Reserve com antecedência nos meses de verão..."
+                  />
                 </Field>
               </Section>
             </>

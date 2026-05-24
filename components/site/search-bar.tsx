@@ -21,7 +21,7 @@ export function SearchBar({ locale }: { locale: Locale }) {
   const [suggestions, setSuggestions] = useState<Suggestion | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
-  const containerRef = useRef<HTMLFormElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -72,9 +72,8 @@ export function SearchBar({ locale }: { locale: Locale }) {
     (suggestions.tours.length > 0 || suggestions.destinations.length > 0);
 
   return (
-    <div className="relative max-w-[920px]">
+    <div ref={containerRef} className="relative max-w-[920px]">
       <form
-        ref={containerRef}
         onSubmit={handleSubmit}
         className="bg-white rounded-2xl shadow-[0_20px_50px_-20px_rgba(10,37,64,0.45)] p-2.5 grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_auto] gap-2"
       >
