@@ -42,7 +42,9 @@ export function TourCard({
       </div>
       <div className="p-4">
         <p className="text-[14.5px] font-semibold text-text-strong leading-tight line-clamp-2">
-          {tour.title}
+          {locale === "pt-PT" ? (tour.title_pt || tour.title) :
+           locale === "fr"    ? (tour.title_fr || tour.title) :
+           tour.title}
         </p>
         <p className="mt-2 text-[12.5px] text-text-muted flex items-center gap-1">
           <Star className="w-3.5 h-3.5 fill-brand-yellow text-brand-yellow" />

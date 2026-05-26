@@ -110,6 +110,14 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
       what_to_bring: String(formData.get("what_to_bring") ?? "") || null,
       tips: String(formData.get("tips") ?? "") || null,
       languages: parseList(formData.get("languages")),
+      title_pt: String(formData.get("title_pt") ?? "") || null,
+      title_fr: String(formData.get("title_fr") ?? "") || null,
+      short_description_pt: String(formData.get("short_description_pt") ?? "") || null,
+      short_description_fr: String(formData.get("short_description_fr") ?? "") || null,
+      description_pt: String(formData.get("description_pt") ?? "") || null,
+      description_fr: String(formData.get("description_fr") ?? "") || null,
+      highlights_pt: parseList(formData.get("highlights_pt")),
+      highlights_fr: parseList(formData.get("highlights_fr")),
     };
 
     if (id) {

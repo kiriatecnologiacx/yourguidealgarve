@@ -56,9 +56,27 @@ export default async function TourDetailPage({
   const isWidgetMode = tour.tour_mode === "widget";
   const hasPartnerWidget = !!widgetUrl;
 
+  // Locale-aware text fallback: use translated field if available, else English
+  const localTitle =
+    locale === "pt-PT" ? (tour.title_pt || tour.title) :
+    locale === "fr"    ? (tour.title_fr || tour.title) :
+    tour.title;
+  const localShortDesc =
+    locale === "pt-PT" ? (tour.short_description_pt || tour.short_description) :
+    locale === "fr"    ? (tour.short_description_fr || tour.short_description) :
+    tour.short_description;
+  const localDescription =
+    locale === "pt-PT" ? (tour.description_pt || tour.description) :
+    locale === "fr"    ? (tour.description_fr || tour.description) :
+    tour.description;
+  const localHighlights =
+    locale === "pt-PT" ? (tour.highlights_pt?.length ? tour.highlights_pt : tour.highlights) :
+    locale === "fr"    ? (tour.highlights_fr?.length ? tour.highlights_fr : tour.highlights) :
+    tour.highlights;
+
   const hasGallery = !!tour.cover_image || (tour.gallery && tour.gallery.length > 0);
-  const hasDescription = !!(tour.description || tour.short_description);
-  const hasHighlights = tour.highlights && tour.highlights.length > 0;
+  const hasDescription = !!(localDescription || localShortDesc);
+  const hasHighlights = localHighlights && localHighlights.length > 0;
   const hasIncluded = tour.included && tour.included.length > 0;
   const hasNotIncluded = tour.not_included && tour.not_included.length > 0;
   const hasMeetingPoint = !!tour.meeting_point;
@@ -84,12 +102,12 @@ export default async function TourDetailPage({
             </>
           ) : null}
           <span>›</span>
-          <span className="text-text-strong line-clamp-1">{tour.title}</span>
+          <span className="text-text-strong line-clamp-1">{localTitle}</span>
         </div>
 
         {hasGallery ? (
           <div className="mx-auto max-w-[1240px] px-5 pb-5">
-            <TourGallery cover={tour.cover_image} gallery={tour.gallery} title={tour.title} />
+            <TourGallery cover={tour.cover_image} gallery={tour.gallery} title={localTitle} />
           </div>
         ) : null}
 
@@ -100,7 +118,7 @@ export default async function TourDetailPage({
             </span>
           ) : null}
           <h1 className="font-display text-[28px] md:text-[36px] font-extrabold text-text-strong leading-tight">
-            {tour.title}
+            {localTitle}
           </h1>
 
           <div className="mt-2 flex items-center gap-3 flex-wrap text-[13px] text-text-muted">
@@ -144,7 +162,7 @@ export default async function TourDetailPage({
 
           <div className="mt-4 flex items-center gap-3 text-[13px] text-text-muted">
             <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} />
-            <ShareButton title={tour.title} label={t(locale, "tour.share")} />
+            <ShareButton title={localTitle} label={t(locale, "tour.share")} />
           </div>
         </div>
       </section>
@@ -155,7 +173,7 @@ export default async function TourDetailPage({
           <div className="mx-auto max-w-[1240px] px-0 md:px-5 py-0 md:py-6 overflow-x-hidden">
             <PartnerEmbeddedWidget
               src={widgetUrl!}
-              title={`Reservas — ${tour.title}`}
+              title={`Reservas — ${localTitle}`}
             />
           </div>
         </section>
@@ -179,7 +197,7 @@ export default async function TourDetailPage({
                 <div>
                   <h2 className="font-display text-[20px] font-bold text-text-strong">{t(locale, "tour.about")}</h2>
                   <p className="mt-2 text-[14px] text-text-strong/85 leading-relaxed whitespace-pre-line">
-                    {tour.description ?? tour.short_description}
+                    {localDescription ?? localShortDesc}
                   </p>
                 </div>
               ) : null}
@@ -188,7 +206,7 @@ export default async function TourDetailPage({
                 <div className="mt-8">
                   <h2 className="font-display text-[20px] font-bold text-text-strong">{t(locale, "tour.highlights")}</h2>
                   <ul className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-[13.5px] text-text-strong/90">
-                    {tour.highlights.map((h) => (
+                    {localHighlights.map((h) => (
                       <li key={h} className="flex items-start gap-2">
                         <span className="text-navy-700 mt-0.5 shrink-0 text-[16px] leading-none">•</span> {h}
                       </li>
@@ -276,7 +294,7 @@ export default async function TourDetailPage({
                     <p className="text-[12.5px] uppercase tracking-wide text-text-muted font-semibold">{t(locale, "tour.bookExperience")}</p>
                     <p className="mt-1 text-[13.5px] text-text-strong">{t(locale, "tour.liveAvailability")}</p>
                   </div>
-                  <PartnerBookingButton src={widgetUrl!} label={t(locale, "tour.checkAvailability")} modalTitle={tour.title} />
+                  <PartnerBookingButton src={widgetUrl!} label={t(locale, "tour.checkAvailability")} modalTitle={localTitle} />
                   <ul className="text-[12px] text-text-muted space-y-1.5 pt-1">
                     <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> {t(locale, "tour.chip.freeCancellationUp24")}</li>
                     <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-success" /> {t(locale, "tour.chip.secureCheckout")}</li>

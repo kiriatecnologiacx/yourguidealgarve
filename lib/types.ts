@@ -31,6 +31,14 @@ export type Tour = {
   what_to_bring: string | null;
   tips: string | null;
   languages: string[];
+  title_pt: string | null;
+  title_fr: string | null;
+  short_description_pt: string | null;
+  short_description_fr: string | null;
+  description_pt: string | null;
+  description_fr: string | null;
+  highlights_pt: string[];
+  highlights_fr: string[];
   created_at: string;
 };
 

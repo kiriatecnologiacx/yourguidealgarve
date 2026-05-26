@@ -24,6 +24,7 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
   const [showAdvanced, setShowAdvanced] = useState(
     !!(tour?.description || tour?.gallery?.length || tour?.highlights?.length || tour?.meeting_point),
   );
+  const [transLang, setTransLang] = useState<"pt" | "fr">("pt");
 
   return (
     <form action={action} className="space-y-6">
@@ -218,8 +219,109 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
           />
         </Field>
         <p className="mt-2 text-[12px] text-text-muted leading-snug bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-          💡 <strong>Dica:</strong> Os textos do passeio (nome, descrição, highlights) devem ser preenchidos em <strong>inglês</strong> para alcançar o público internacional. O inglês é o idioma mais procurado por turistas estrangeiros no Algarve.
+          💡 <strong>Dica:</strong> O inglês é o idioma principal — preencha o título, descrição e destaques em inglês nos campos acima. Use a secção abaixo para traduzir para Português e Francês.
         </p>
+      </Section>
+
+      {/* Translations — always visible */}
+      <Section title="Traduções dos textos (PT / FR)">
+        <p className="text-[12.5px] text-text-muted -mt-2">
+          Se deixar em branco, o site usa o texto em inglês como fallback. Preencha apenas os idiomas que quiser.
+        </p>
+
+        {/* Tab switcher */}
+        <div className="flex gap-2 mt-1">
+          {(["pt", "fr"] as const).map((lang) => (
+            <button
+              key={lang}
+              type="button"
+              onClick={() => setTransLang(lang)}
+              className={`px-4 py-1.5 rounded-lg text-[13px] font-semibold border transition-colors ${
+                transLang === lang
+                  ? "bg-navy-800 text-white border-navy-800"
+                  : "bg-white text-text-strong border-border-subtle hover:bg-surface-alt"
+              }`}
+            >
+              {lang === "pt" ? "🇵🇹 Português" : "🇫🇷 Français"}
+            </button>
+          ))}
+        </div>
+
+        {/* PT fields */}
+        <div className={transLang === "pt" ? "space-y-4 mt-3" : "hidden"}>
+          <Field label="Título (PT)">
+            <input
+              name="title_pt"
+              defaultValue={tour?.title_pt ?? ""}
+              className={fieldClass}
+              placeholder="Título em português"
+            />
+          </Field>
+          <Field label="Descrição curta (PT)">
+            <input
+              name="short_description_pt"
+              defaultValue={tour?.short_description_pt ?? ""}
+              className={fieldClass}
+              placeholder="Resumo de uma frase em português"
+            />
+          </Field>
+          <Field label="Descrição completa (PT)">
+            <textarea
+              name="description_pt"
+              defaultValue={tour?.description_pt ?? ""}
+              rows={5}
+              className={fieldClass}
+              placeholder="Descrição detalhada em português..."
+            />
+          </Field>
+          <Field label="Destaques (PT) — um por linha">
+            <textarea
+              name="highlights_pt"
+              defaultValue={tour?.highlights_pt?.join("\n") ?? ""}
+              rows={4}
+              className={fieldClass}
+              placeholder={"Inclui equipamento de segurança\nGuia especializado incluído\nAdequado para todas as idades"}
+            />
+          </Field>
+        </div>
+
+        {/* FR fields */}
+        <div className={transLang === "fr" ? "space-y-4 mt-3" : "hidden"}>
+          <Field label="Titre (FR)">
+            <input
+              name="title_fr"
+              defaultValue={tour?.title_fr ?? ""}
+              className={fieldClass}
+              placeholder="Titre en français"
+            />
+          </Field>
+          <Field label="Description courte (FR)">
+            <input
+              name="short_description_fr"
+              defaultValue={tour?.short_description_fr ?? ""}
+              className={fieldClass}
+              placeholder="Résumé en une phrase en français"
+            />
+          </Field>
+          <Field label="Description complète (FR)">
+            <textarea
+              name="description_fr"
+              defaultValue={tour?.description_fr ?? ""}
+              rows={5}
+              className={fieldClass}
+              placeholder="Description détaillée en français..."
+            />
+          </Field>
+          <Field label="Points forts (FR) — un par ligne">
+            <textarea
+              name="highlights_fr"
+              defaultValue={tour?.highlights_fr?.join("\n") ?? ""}
+              rows={4}
+              className={fieldClass}
+              placeholder={"Équipement de sécurité inclus\nGuide expert inclus\nConvient à tous les âges"}
+            />
+          </Field>
+        </div>
       </Section>
 
       {/* Extra content — only in complete mode */}
