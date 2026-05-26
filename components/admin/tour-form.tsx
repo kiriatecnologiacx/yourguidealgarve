@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronDown, ExternalLink, Loader2, Save, Sparkles, LayoutTemplate, Layers } from "lucide-react";
+import { ChevronDown, ExternalLink, Languages, Loader2, Save, Sparkles, LayoutTemplate, Layers } from "lucide-react";
 import { upsertTour, type TourFormState } from "@/app/admin/passeios/actions";
+import { autoTranslateTour } from "@/app/admin/passeios/translate-action";
 import type { Category, Destination, Partner, Tour } from "@/lib/types";
 import { ImageManager } from "./image-manager";
 
@@ -25,9 +26,51 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
     !!(tour?.description || tour?.gallery?.length || tour?.highlights?.length || tour?.meeting_point),
   );
   const [transLang, setTransLang] = useState<"pt" | "fr">("pt");
+  const [translating, setTranslating] = useState(false);
+  const [transError, setTransError] = useState("");
+
+  // Refs to read EN source fields and write into translated fields
+  const formRef = useRef<HTMLFormElement>(null);
+
+  async function handleAutoTranslate() {
+    if (!formRef.current) return;
+    const fd = new FormData(formRef.current);
+    const title = String(fd.get("title") ?? "").trim();
+    const shortDesc = String(fd.get("short_description") ?? "").trim();
+    const desc = String(fd.get("description") ?? "").trim();
+    const highlights = String(fd.get("highlights") ?? "").split("\n").map(s => s.trim()).filter(Boolean);
+
+    if (!title) { setTransError("Preencha o título em inglês antes de traduzir."); return; }
+
+    setTranslating(true);
+    setTransError("");
+    const deepLLang = transLang === "pt" ? "PT" : "FR";
+    const result = await autoTranslateTour(deepLLang, title, shortDesc, desc, highlights);
+    setTranslating(false);
+
+    if (!result.ok) { setTransError(result.error ?? "Erro ao traduzir."); return; }
+
+    // Write results into the hidden inputs / textareas via DOM
+    const form = formRef.current;
+    const set = (name: string, value: string) => {
+      const el = form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement | null;
+      if (el) { el.value = value; el.dispatchEvent(new Event("input", { bubbles: true })); }
+    };
+    if (transLang === "pt") {
+      set("title_pt", result.title ?? "");
+      set("short_description_pt", result.short_description ?? "");
+      set("description_pt", result.description ?? "");
+      set("highlights_pt", result.highlights?.join("\n") ?? "");
+    } else {
+      set("title_fr", result.title ?? "");
+      set("short_description_fr", result.short_description ?? "");
+      set("description_fr", result.description ?? "");
+      set("highlights_fr", result.highlights?.join("\n") ?? "");
+    }
+  }
 
   return (
-    <form action={action} className="space-y-6">
+    <form ref={formRef} action={action} className="space-y-6">
       {tour ? <input type="hidden" name="id" value={tour.id} /> : null}
       <input type="hidden" name="tour_mode" value={mode} />
 
@@ -229,8 +272,8 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
           Se deixar em branco, o site usa o texto em inglês como fallback. Preencha apenas os idiomas que quiser.
         </p>
 
-        {/* Tab switcher */}
-        <div className="flex gap-2 mt-1">
+        {/* Tab switcher + auto-translate */}
+        <div className="flex flex-wrap items-center gap-2 mt-1">
           {(["pt", "fr"] as const).map((lang) => (
             <button
               key={lang}
@@ -245,7 +288,19 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
               {lang === "pt" ? "🇵🇹 Português" : "🇫🇷 Français"}
             </button>
           ))}
+          <button
+            type="button"
+            onClick={handleAutoTranslate}
+            disabled={translating}
+            className="ml-auto flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-[13px] font-semibold border border-navy-300 bg-navy-50 text-navy-800 hover:bg-navy-100 disabled:opacity-50 transition-colors"
+          >
+            {translating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Languages className="w-3.5 h-3.5" />}
+            {translating ? "A traduzir..." : `Auto-traduzir para ${transLang === "pt" ? "PT" : "FR"}`}
+          </button>
         </div>
+        {transError ? (
+          <p className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{transError}</p>
+        ) : null}
 
         {/* PT fields */}
         <div className={transLang === "pt" ? "space-y-4 mt-3" : "hidden"}>
