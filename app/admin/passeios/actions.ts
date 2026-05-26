@@ -10,6 +10,7 @@ import {
   listAllRezdyProducts,
   type RezdyProduct,
 } from "@/lib/rezdy";
+import { translateText, translateLines } from "@/lib/translate";
 
 export type TourFormState = { error?: string; ok?: boolean };
 
@@ -72,7 +73,13 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
 
     const tourMode = formData.get("tour_mode") === "complete" ? "complete" : "widget";
 
-    const payload = {
+    const payload: Record<string, unknown> & {
+      title_pt: string | null; title_fr: string | null;
+      short_description_pt: string | null; short_description_fr: string | null;
+      description_pt: string | null; description_fr: string | null;
+      highlights_pt: string[]; highlights_fr: string[];
+      highlights: string[]; description: string | null; short_description: string | null;
+    } = {
       title,
       slug,
       tour_mode: tourMode,
@@ -119,6 +126,50 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
       highlights_pt: parseList(formData.get("highlights_pt")),
       highlights_fr: parseList(formData.get("highlights_fr")),
     };
+
+    // Auto-translate empty language fields if DeepL is configured
+    if (process.env.DEEPL_API_KEY) {
+      const shortDesc = payload.short_description ?? "";
+      const desc = payload.description ?? "";
+      const highlights = payload.highlights;
+
+      const needsPT = !payload.title_pt && title;
+      const needsFR = !payload.title_fr && title;
+
+      const [ptResult, frResult] = await Promise.allSettled([
+        needsPT
+          ? Promise.all([
+              translateText(title, "PT"),
+              shortDesc ? translateText(shortDesc, "PT") : Promise.resolve(""),
+              desc ? translateText(desc, "PT") : Promise.resolve(""),
+              highlights.length ? translateLines(highlights, "PT") : Promise.resolve([]),
+            ])
+          : Promise.resolve(null),
+        needsFR
+          ? Promise.all([
+              translateText(title, "FR"),
+              shortDesc ? translateText(shortDesc, "FR") : Promise.resolve(""),
+              desc ? translateText(desc, "FR") : Promise.resolve(""),
+              highlights.length ? translateLines(highlights, "FR") : Promise.resolve([]),
+            ])
+          : Promise.resolve(null),
+      ]);
+
+      if (ptResult.status === "fulfilled" && ptResult.value) {
+        const [t, sd, d, h] = ptResult.value;
+        payload.title_pt = t || null;
+        payload.short_description_pt = sd || null;
+        payload.description_pt = d || null;
+        payload.highlights_pt = h;
+      }
+      if (frResult.status === "fulfilled" && frResult.value) {
+        const [t, sd, d, h] = frResult.value;
+        payload.title_fr = t || null;
+        payload.short_description_fr = sd || null;
+        payload.description_fr = d || null;
+        payload.highlights_fr = h;
+      }
+    }
 
     if (id) {
       const { error } = await supabase.from("tours").update(payload).eq("id", id);

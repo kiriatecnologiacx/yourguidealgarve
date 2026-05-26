@@ -269,7 +269,7 @@ export function TourForm({ tour, categories, destinations, partners }: Props) {
       {/* Translations — always visible */}
       <Section title="Traduções dos textos (PT / FR)">
         <p className="text-[12.5px] text-text-muted -mt-2">
-          Se deixar em branco, o site usa o texto em inglês como fallback. Preencha apenas os idiomas que quiser.
+          ✨ <strong>Automático:</strong> ao guardar o passeio, os campos em branco são preenchidos automaticamente via DeepL. Use o botão abaixo para re-traduzir após editar o texto em inglês.
         </p>
 
         {/* Tab switcher + auto-translate */}
