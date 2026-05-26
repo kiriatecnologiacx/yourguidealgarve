@@ -18,9 +18,9 @@ export async function SiteFooter() {
               just for you.
             </p>
             <div className="mt-4 flex items-center gap-3">
-              <SocialIcon icon={<Instagram className="w-4 h-4" />} />
-              <SocialIcon icon={<Facebook className="w-4 h-4" />} />
-              <SocialIcon icon={<Youtube className="w-4 h-4" />} />
+              <SocialIcon href="https://instagram.com/yourguidealgarve" icon={<Instagram className="w-4 h-4" />} label="Instagram" />
+              <SocialIcon href="https://facebook.com/yourguidealgarve" icon={<Facebook className="w-4 h-4" />} label="Facebook" />
+              <SocialIcon href="https://youtube.com/@yourguidealgarve" icon={<Youtube className="w-4 h-4" />} label="YouTube" />
             </div>
           </div>
 
@@ -86,10 +86,16 @@ export async function SiteFooter() {
   );
 }
 
-function SocialIcon({ icon }: { icon: React.ReactNode }) {
+function SocialIcon({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
   return (
-    <span className="grid place-items-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 cursor-pointer text-white">
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="grid place-items-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+    >
       {icon}
-    </span>
+    </a>
   );
 }

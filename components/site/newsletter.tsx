@@ -1,15 +1,21 @@
 "use client";
 
-import { Mail } from "lucide-react";
+import { useActionState } from "react";
+import { CheckCircle, Loader2, Mail } from "lucide-react";
+import { subscribeNewsletter } from "@/app/(site)/newsletter/actions";
 import { t, type Locale } from "@/lib/i18n";
 
+const initial = {};
+
 export function Newsletter({ locale }: { locale: Locale }) {
+  const [state, action, pending] = useActionState(subscribeNewsletter, initial);
+
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1240px] px-5 py-8">
         <div className="relative overflow-hidden rounded-2xl bg-navy-800 text-white px-6 md:px-8 py-6 grid grid-cols-1 md:grid-cols-[auto_1fr] items-center gap-5">
           <div className="flex items-center gap-3 md:max-w-sm">
-            <span className="grid place-items-center w-11 h-11 rounded-full bg-brand-yellow text-navy-900">
+            <span className="grid place-items-center w-11 h-11 rounded-full bg-brand-yellow text-navy-900 shrink-0">
               <Mail className="w-5 h-5" />
             </span>
             <p className="text-[14.5px] leading-snug">
@@ -17,23 +23,35 @@ export function Newsletter({ locale }: { locale: Locale }) {
             </p>
           </div>
 
-          <form
-            className="flex items-stretch bg-white rounded-xl overflow-hidden w-full md:max-w-lg"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="email"
-              required
-              placeholder={t(locale, "newsletter.placeholder")}
-              className="flex-1 px-4 py-3 text-[13.5px] text-text-strong outline-none placeholder:text-text-muted"
-            />
-            <button
-              type="submit"
-              className="bg-brand-yellow hover:bg-brand-yellow-hover text-navy-900 font-semibold px-5 py-3 text-[14px] shrink-0"
-            >
-              {t(locale, "newsletter.cta")}
-            </button>
-          </form>
+          {state.ok ? (
+            <div className="flex items-center gap-2 text-[14px] font-semibold text-brand-yellow">
+              <CheckCircle className="w-5 h-5 shrink-0" />
+              {locale === "fr" ? "Merci ! Vous êtes abonné." : locale === "pt-PT" ? "Obrigado! Está subscrito." : "Thank you! You're subscribed."}
+            </div>
+          ) : (
+            <form action={action} className="flex flex-col gap-2 w-full md:max-w-lg">
+              <div className="flex items-stretch bg-white rounded-xl overflow-hidden">
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  placeholder={t(locale, "newsletter.placeholder")}
+                  className="flex-1 px-4 py-3 text-[13.5px] text-text-strong outline-none placeholder:text-text-muted"
+                />
+                <button
+                  type="submit"
+                  disabled={pending}
+                  className="bg-brand-yellow hover:bg-brand-yellow-hover text-navy-900 font-semibold px-5 py-3 text-[14px] shrink-0 flex items-center gap-2 disabled:opacity-70"
+                >
+                  {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                  {t(locale, "newsletter.cta")}
+                </button>
+              </div>
+              {state.error ? (
+                <p className="text-[12px] text-red-300">{state.error}</p>
+              ) : null}
+            </form>
+          )}
 
           <span
             aria-hidden

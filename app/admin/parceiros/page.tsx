@@ -31,7 +31,7 @@ export default async function AdminPartnersPage() {
         </Link>
       </div>
 
-      <section className="mt-6 bg-white border border-border-subtle rounded-2xl overflow-hidden">
+      <section className="mt-6 bg-white border border-border-subtle rounded-2xl overflow-x-auto">
         {partners.length === 0 ? (
           <p className="p-6 text-[13.5px] text-text-muted">Nenhum parceiro cadastrado.</p>
         ) : (

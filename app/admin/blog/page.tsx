@@ -32,7 +32,7 @@ export default async function AdminBlogIndex() {
         </Link>
       </div>
 
-      <div className="mt-6 bg-white border border-border-subtle rounded-2xl overflow-hidden">
+      <div className="mt-6 bg-white border border-border-subtle rounded-2xl overflow-x-auto">
         {posts.length === 0 ? (
           <div className="p-10 text-center">
             <p className="text-[15px] font-semibold text-text-strong">
