@@ -26,6 +26,12 @@ export async function DestinationRail({
       {/* Warm wash + grain texture stack */}
       <div className="absolute inset-0 warm-wash" aria-hidden />
       <div className="absolute inset-0 grain pointer-events-none" aria-hidden />
+      {/* Left-to-right gradient: dark navy on the left fades to transparent — makes yellow "Algarve" label readable against the sun */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(90deg, rgba(10,37,64,0.55) 0%, rgba(10,37,64,0.18) 50%, transparent 100%)" }}
+        aria-hidden
+      />
 
       {/* Top wave divider blends into the previous white section */}
       <span aria-hidden className="absolute top-0 left-0 right-0 -translate-y-px">
