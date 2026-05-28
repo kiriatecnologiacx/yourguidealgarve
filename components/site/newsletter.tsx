@@ -5,7 +5,7 @@ import { CheckCircle, Loader2, Mail } from "lucide-react";
 import { subscribeNewsletter } from "@/app/(site)/newsletter/actions";
 import { t, type Locale } from "@/lib/i18n";
 
-const initial = {};
+const initial: { ok?: boolean; error?: string } = {};
 
 export function Newsletter({ locale }: { locale: Locale }) {
   const [state, action, pending] = useActionState(subscribeNewsletter, initial);

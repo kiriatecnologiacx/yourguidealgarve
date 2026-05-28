@@ -1,3 +1,5 @@
 {
-  "toolbar": false
+  "toolbar": {
+    "enabled": false
+  }
 }
