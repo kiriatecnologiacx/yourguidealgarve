@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { TourCard } from "@/components/site/tour-card";
 import { FiltersBar } from "@/components/site/filters-bar";
-import { listCategories, listDestinations, listTours } from "@/lib/data";
+import { listDestinations, listTours } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { getLocale } from "@/lib/locale-server";
 
@@ -20,13 +20,14 @@ export default async function AtividadesPage({
   const q = typeof sp.q === "string" ? sp.q : undefined;
   const destino = typeof sp.destino === "string" ? sp.destino : undefined;
   const modo = (typeof sp.modo === "string" ? sp.modo : undefined) as Modo | undefined;
+  const categoria = typeof sp.categoria === "string" ? sp.categoria : undefined;
 
   const categoryGroup =
     modo === "atividades" ? "atividades" : modo === "experiencias" ? "experiencias" : undefined;
 
   const [tours, destinations, user, favIds, locale] = await Promise.all([
     modo !== "destinos"
-      ? listTours({ q, destination: destino, categoryGroup })
+      ? listTours({ q, destination: destino, categoryGroup, category: categoria })
       : Promise.resolve([]),
     listDestinations(false),
     getCurrentUser(),
