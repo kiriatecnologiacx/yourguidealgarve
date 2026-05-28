@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   description:
     "Tours, tickets and unforgettable experiences across the Algarve coast. Book with free cancellation.",
   icons: { icon: "/favicon.svg" },
+  verification: { google: "G5e1V4a3z2T1-z6P9W71dFceEGNlKG7VvNOPdkZSHtI" },
 };
 
 export default function RootLayout({
