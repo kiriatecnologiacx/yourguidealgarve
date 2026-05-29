@@ -62,7 +62,6 @@ export function SearchBar({ locale }: { locale: Locale }) {
     setShowSuggestions(false);
     const params = new URLSearchParams();
     if (query) params.set("q", query);
-    if (date) params.set("data", date);
     router.push(`/atividades${params.size > 0 ? `?${params}` : ""}`);
   }
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { TourCard } from "@/components/site/tour-card";
 import { FiltersBar } from "@/components/site/filters-bar";
-import { listDestinations, listTours } from "@/lib/data";
+import { listCategories, listDestinations, listTours } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { getLocale } from "@/lib/locale-server";
 
@@ -25,11 +25,12 @@ export default async function AtividadesPage({
   const categoryGroup =
     modo === "atividades" ? "atividades" : modo === "experiencias" ? "experiencias" : undefined;
 
-  const [tours, destinations, user, favIds, locale] = await Promise.all([
+  const [tours, destinations, categories, user, favIds, locale] = await Promise.all([
     modo !== "destinos"
       ? listTours({ q, destination: destino, categoryGroup, category: categoria })
       : Promise.resolve([]),
     listDestinations(false),
+    listCategories(),
     getCurrentUser(),
     getFavoriteIds(),
     getLocale(),
@@ -37,6 +38,7 @@ export default async function AtividadesPage({
 
   const isAuthed = !!user;
   const destinationName = destinations.find((d) => d.slug === destino)?.name;
+  const categoryName = categoria ? (categories.find((c) => c.slug === categoria)?.name) : undefined;
 
   const heading =
     modo === "destinos"
@@ -45,7 +47,9 @@ export default async function AtividadesPage({
         ? destinationName ? `Atividades em ${destinationName}` : "Atividades no Algarve"
         : modo === "experiencias"
           ? destinationName ? `Experiências em ${destinationName}` : "Experiências no Algarve"
-          : destinationName ?? "Atividades no Algarve";
+          : categoryName
+            ? destinationName ? `${categoryName} em ${destinationName}` : categoryName
+            : destinationName ?? "Atividades no Algarve";
 
   const subheading =
     modo === "destinos"
@@ -70,6 +74,8 @@ export default async function AtividadesPage({
           destinations={destinations}
           currentModo={modo}
           currentDestination={destino}
+          currentCategoria={categoria}
+          categoryName={categoryName}
         />
       </section>
 
