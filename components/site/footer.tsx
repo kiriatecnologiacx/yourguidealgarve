@@ -14,8 +14,7 @@ export async function SiteFooter() {
           <div>
             <Logo />
             <p className="mt-3 text-[13px] leading-relaxed text-white/65 max-w-md">
-              Discover the best of the Algarve with experiences carefully picked
-              just for you.
+              {t(locale, "footer.tagline")}
             </p>
             <div className="mt-4 flex items-center gap-3">
               <SocialIcon href="https://instagram.com/yourguidealgarve" icon={<Instagram className="w-4 h-4" />} label="Instagram" />
@@ -68,7 +67,7 @@ export async function SiteFooter() {
 
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-[1240px] px-5 py-4 flex flex-wrap items-center justify-between gap-2 text-[12px] text-white/60">
-          <span>© 2026 Your Guide Algarve. All rights reserved.</span>
+          <span>© 2026 Your Guide Algarve. {t(locale, "footer.rights")}</span>
           <span>
             {t(locale, "footer.copy")} ·{" "}
             <a

@@ -29,6 +29,8 @@ const dict: Record<Locale, Record<string, string>> = {
     "footer.privacy":   "Privacy policy",
     "footer.terms":     "Terms & conditions",
     "footer.copy":      "Built by Kíria Tecnologia",
+    "footer.tagline":   "Discover the best of the Algarve with experiences carefully picked just for you.",
+    "footer.rights":    "All rights reserved.",
 
     "hero.eyebrow.0":   "Discover the best of the Algarve",
     "hero.eyebrow.1":   "Live unforgettable experiences",
@@ -245,6 +247,8 @@ const dict: Record<Locale, Record<string, string>> = {
     "footer.privacy":   "Política de privacidade",
     "footer.terms":     "Termos e condições",
     "footer.copy":      "Desenvolvido por Kíria Tecnologia",
+    "footer.tagline":   "Descubra o melhor do Algarve com experiências cuidadosamente selecionadas para si.",
+    "footer.rights":    "Todos os direitos reservados.",
 
     "hero.eyebrow.0":   "Descubra o melhor do Algarve",
     "hero.eyebrow.1":   "Viva experiências inesquecíveis",
@@ -461,6 +465,8 @@ const dict: Record<Locale, Record<string, string>> = {
     "footer.privacy":   "Politique de confidentialité",
     "footer.terms":     "Conditions générales",
     "footer.copy":      "Développé par Kíria Tecnologia",
+    "footer.tagline":   "Découvrez le meilleur de l'Algarve avec des expériences soigneusement sélectionnées pour vous.",
+    "footer.rights":    "Tous droits réservés.",
 
     "hero.eyebrow.0":   "Découvrez le meilleur de l'Algarve",
     "hero.eyebrow.1":   "Vivez des expériences inoubliables",
