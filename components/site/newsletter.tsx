@@ -26,7 +26,7 @@ export function Newsletter({ locale }: { locale: Locale }) {
           {state.ok ? (
             <div className="flex items-center gap-2 text-[14px] font-semibold text-brand-yellow">
               <CheckCircle className="w-5 h-5 shrink-0" />
-              {locale === "fr" ? "Merci ! Vous êtes abonné." : locale === "pt-PT" ? "Obrigado! Está subscrito." : "Thank you! You're subscribed."}
+              {t(locale, "newsletter.success")}
             </div>
           ) : (
             <form action={action} className="flex flex-col gap-2 w-full md:max-w-lg">

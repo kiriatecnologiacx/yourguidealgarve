@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Heart, MapPin } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import type { Destination } from "@/lib/types";
 import { getLocale } from "@/lib/locale-server";
 import { t } from "@/lib/i18n";
@@ -104,19 +104,13 @@ export async function DestinationRail({
                     "linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(10,37,64,0.88) 100%)",
                 }}
               />
-              <button
-                aria-label="Save to favorites"
-                className="absolute top-3 right-3 grid place-items-center w-8 h-8 rounded-full bg-white/90 hover:bg-white text-navy-700 backdrop-blur-sm shadow-md"
-              >
-                <Heart className="w-4 h-4" />
-              </button>
               <div className="absolute left-4 bottom-4 right-4">
                 <p className="font-display text-white text-[20px] font-extrabold leading-tight drop-shadow">
                   {d.name}
                 </p>
                 <p className="text-white/90 text-[12.5px] mt-0.5 flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-yellow" />
-                  {d.activities_count} activities
+                  {d.activities_count} {t(locale, "tour.activities")}
                 </p>
               </div>
             </Link>

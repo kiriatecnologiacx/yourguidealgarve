@@ -90,7 +90,7 @@ export default async function TourDetailPage({
       {/* ─── Header comum ─── */}
       <section className="bg-white border-b border-border-subtle">
         <div className="mx-auto max-w-[1240px] px-5 pt-6 pb-2 text-[12.5px] text-text-muted flex items-center gap-1.5 flex-wrap">
-          <Link href="/" className="hover:text-text-strong">{t(locale, "nav.destinations") === "Destinos" ? "Início" : "Home"}</Link>
+          <Link href="/" className="hover:text-text-strong">{t(locale, "common.home")}</Link>
           <span>›</span>
           <Link href="/atividades" className="hover:text-text-strong">{t(locale, "nav.activities")}</Link>
           {tour.destination ? (
@@ -126,7 +126,7 @@ export default async function TourDetailPage({
               <span className="flex items-center gap-1">
                 <Star className="w-4 h-4 fill-brand-yellow text-brand-yellow" />
                 <span className="text-text-strong font-semibold">{formatRating(tour.rating)}</span>
-                <span>({tour.reviews_count} reviews)</span>
+                <span>({tour.reviews_count} {t(locale, "tour.reviews")})</span>
               </span>
             ) : null}
             {tour.duration ? (
@@ -144,7 +144,7 @@ export default async function TourDetailPage({
 
           {hasLanguages ? (
             <div className="mt-4 flex flex-wrap items-center gap-3">
-              <span className="text-[12.5px] font-semibold text-text-muted uppercase tracking-wide">Idiomas:</span>
+              <span className="text-[12.5px] font-semibold text-text-muted uppercase tracking-wide">{t(locale, "tour.languages")}</span>
               {tour.languages!.map((lang) => (
                 <span key={lang} className="flex items-center gap-1.5 bg-surface-alt border border-border-subtle px-3 py-1.5 rounded-full text-[12.5px] text-text-strong font-medium">
                   🏳️ {lang}
@@ -162,7 +162,7 @@ export default async function TourDetailPage({
 
           <div className="mt-4 flex items-center gap-3 text-[13px] text-text-muted">
             <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} />
-            <ShareButton title={localTitle} label={t(locale, "tour.share")} />
+            <ShareButton title={localTitle} label={t(locale, "tour.share")} copiedLabel={t(locale, "share.copied")} />
           </div>
         </div>
       </section>
@@ -183,7 +183,7 @@ export default async function TourDetailPage({
       {isWidgetMode && !hasPartnerWidget ? (
         <section className="bg-white">
           <div className="mx-auto max-w-[1240px] px-5 py-8">
-            <BookingWidget tour={tour} />
+            <BookingWidget tour={tour} locale={locale} />
           </div>
         </section>
       ) : null}
@@ -254,7 +254,7 @@ export default async function TourDetailPage({
               {hasImportantInfo ? (
                 <div className="mt-8 bg-amber-50 border border-amber-200 rounded-2xl p-5">
                   <h2 className="font-display text-[18px] font-bold text-amber-900 flex items-center gap-2">
-                    <AlertTriangle className="w-5 h-5" /> Informação Importante
+                    <AlertTriangle className="w-5 h-5" /> {t(locale, "tour.importantInfo")}
                   </h2>
                   <p className="mt-2 text-[13.5px] text-amber-900/85 leading-relaxed whitespace-pre-line">
                     {tour.important_info}
@@ -265,7 +265,7 @@ export default async function TourDetailPage({
               {hasWhatToBring ? (
                 <div className="mt-8">
                   <h2 className="font-display text-[20px] font-bold text-text-strong flex items-center gap-2">
-                    <Backpack className="w-5 h-5 text-navy-700" /> O que trazer
+                    <Backpack className="w-5 h-5 text-navy-700" /> {t(locale, "tour.whatToBring")}
                   </h2>
                   <p className="mt-2 text-[13.5px] text-text-strong/90 leading-relaxed whitespace-pre-line">
                     {tour.what_to_bring}
@@ -276,7 +276,7 @@ export default async function TourDetailPage({
               {hasTips ? (
                 <div className="mt-8 bg-navy-50 border border-navy-200 rounded-2xl p-5">
                   <h2 className="font-display text-[18px] font-bold text-navy-900 flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5" /> Dicas
+                    <Lightbulb className="w-5 h-5" /> {t(locale, "tour.tips")}
                   </h2>
                   <p className="mt-2 text-[13.5px] text-navy-900/85 leading-relaxed whitespace-pre-line">
                     {tour.tips}
@@ -284,7 +284,7 @@ export default async function TourDetailPage({
                 </div>
               ) : null}
 
-              <ReviewsSection tourId={tour.id} reviews={reviews} />
+              <ReviewsSection tourId={tour.id} reviews={reviews} locale={locale} />
             </div>
 
             <aside className="lg:sticky lg:top-6 self-start">
@@ -301,7 +301,7 @@ export default async function TourDetailPage({
                   </ul>
                 </div>
               ) : (
-                <BookingWidget tour={tour} />
+                <BookingWidget tour={tour} locale={locale} />
               )}
             </aside>
           </div>
@@ -312,7 +312,7 @@ export default async function TourDetailPage({
       {isWidgetMode && reviews.length > 0 ? (
         <section className="bg-white">
           <div className="mx-auto max-w-[1240px] px-5 pb-8">
-            <ReviewsSection tourId={tour.id} reviews={reviews} />
+            <ReviewsSection tourId={tour.id} reviews={reviews} locale={locale} />
           </div>
         </section>
       ) : null}
@@ -322,10 +322,10 @@ export default async function TourDetailPage({
           <div className="mx-auto max-w-[1240px] px-5 py-10">
             <div className="flex items-center justify-between mb-5">
               <h2 className="font-display text-2xl md:text-3xl font-extrabold text-text-strong">
-                {locale === "pt-PT" ? "Outras experiências que podem interessar" : locale === "fr" ? "Autres expériences qui pourraient vous plaire" : "Other experiences you may like"}
+                {t(locale, "tour.related.title")}
               </h2>
               <Link href="/atividades" className="text-[13.5px] font-semibold text-navy-700 hover:underline">
-                {locale === "pt-PT" ? "Ver todos" : locale === "fr" ? "Voir tout" : "See all"}
+                {t(locale, "tour.related.viewAll")}
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">

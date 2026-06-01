@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { Star, Loader2, ChevronDown, ChevronUp } from "lucide-react";
 import { submitReview, type ReviewFormState } from "@/app/(site)/atividades/[slug]/actions";
 import type { Review } from "@/lib/types";
+import { t, type Locale } from "@/lib/i18n";
 
 const initial: ReviewFormState = {};
 
@@ -39,7 +40,7 @@ function StarRating({
   );
 }
 
-function WriteReviewForm({ tourId }: { tourId: string }) {
+function WriteReviewForm({ tourId, locale }: { tourId: string; locale: Locale }) {
   const [state, action, pending] = useActionState(submitReview, initial);
   const [rating, setRating] = useState(0);
 
@@ -47,10 +48,10 @@ function WriteReviewForm({ tourId }: { tourId: string }) {
     return (
       <div className="rounded-xl border border-border-subtle bg-surface-alt p-5 text-center">
         <p className="text-[14px] font-semibold text-text-strong">
-          Obrigado pela sua avaliação!
+          {t(locale, "review.success")}
         </p>
         <p className="text-[13px] text-text-muted mt-1">
-          Ela será publicada após revisão.
+          {t(locale, "review.successSub")}
         </p>
       </div>
     );
@@ -59,40 +60,40 @@ function WriteReviewForm({ tourId }: { tourId: string }) {
   return (
     <form action={action} className="rounded-xl border border-border-subtle bg-white p-5 space-y-4">
       <h3 className="text-[15px] font-bold text-text-strong">
-        Escrever avaliação
+        {t(locale, "review.writeReview")}
       </h3>
       <input type="hidden" name="tour_id" value={tourId} />
       <input type="hidden" name="rating" value={rating} />
 
       <div>
         <label className="block text-[12.5px] font-semibold text-text-strong mb-1">
-          Sua nota *
+          {t(locale, "review.form.rating")}
         </label>
         <StarRating value={rating} onChange={setRating} />
       </div>
 
       <div>
         <label className="block text-[12.5px] font-semibold text-text-strong mb-1">
-          Seu nome *
+          {t(locale, "review.form.name")}
         </label>
         <input
           name="author_name"
           required
           className="w-full rounded-lg border border-border-subtle px-3 py-2 text-[14px] outline-none focus:border-navy-700 focus:ring-1 focus:ring-navy-700"
-          placeholder="Ex. Maria S."
+          placeholder={t(locale, "review.form.namePlaceholder")}
         />
       </div>
 
       <div>
         <label className="block text-[12.5px] font-semibold text-text-strong mb-1">
-          Sua avaliação *
+          {t(locale, "review.form.body")}
         </label>
         <textarea
           name="body"
           required
           rows={4}
           className="w-full rounded-lg border border-border-subtle px-3 py-2 text-[14px] outline-none focus:border-navy-700 focus:ring-1 focus:ring-navy-700 resize-none"
-          placeholder="Conta como foi a experiência..."
+          placeholder={t(locale, "review.form.bodyPlaceholder")}
         />
       </div>
 
@@ -106,7 +107,7 @@ function WriteReviewForm({ tourId }: { tourId: string }) {
         className="bg-navy-800 hover:bg-navy-900 text-white font-semibold px-5 py-2.5 rounded-lg text-[14px] flex items-center gap-2 disabled:opacity-50"
       >
         {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-        Enviar avaliação
+        {t(locale, "review.form.submit")}
       </button>
     </form>
   );
@@ -126,16 +127,19 @@ function avgRating(reviews: Review[]) {
   return reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
 }
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("pt-BR", { month: "short", year: "numeric" });
+function formatDate(iso: string, locale: Locale) {
+  const langCode = locale === "pt-PT" ? "pt-BR" : locale === "fr" ? "fr-FR" : "en-GB";
+  return new Date(iso).toLocaleDateString(langCode, { month: "short", year: "numeric" });
 }
 
 export function ReviewsSection({
   tourId,
   reviews,
+  locale,
 }: {
   tourId: string;
   reviews: Review[];
+  locale: Locale;
 }) {
   const [showForm, setShowForm] = useState(false);
 
@@ -148,7 +152,7 @@ export function ReviewsSection({
       {hasReviews ? (
         <>
           <h2 className="text-[18px] font-bold text-text-strong">
-            Avaliações de quem já fez
+            {t(locale, "review.section.title")}
           </h2>
 
           <div className="mt-3 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-6 items-start">
@@ -169,13 +173,13 @@ export function ReviewsSection({
                 ))}
               </span>
               <p className="mt-1 text-[13px] text-text-muted">
-                {reviews.length.toLocaleString("pt-BR")} avaliações
+                {reviews.length.toLocaleString()} {t(locale, "review.count")}
               </p>
               <button
                 onClick={() => setShowForm((v) => !v)}
                 className="mt-3 inline-flex items-center gap-1.5 bg-white border border-navy-700 text-navy-800 font-semibold px-4 py-2 rounded-lg text-[13px] hover:bg-surface-alt"
               >
-                Escrever avaliação
+                {t(locale, "review.writeReview")}
                 {showForm ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
               </button>
             </div>
@@ -196,7 +200,7 @@ export function ReviewsSection({
 
           {showForm ? (
             <div className="mt-6">
-              <WriteReviewForm tourId={tourId} />
+              <WriteReviewForm tourId={tourId} locale={locale} />
             </div>
           ) : null}
 
@@ -211,7 +215,7 @@ export function ReviewsSection({
                   </div>
                   <div>
                     <p className="text-[13px] font-semibold text-text-strong">{r.author_name}</p>
-                    <p className="text-[11.5px] text-text-muted">{formatDate(r.created_at)}</p>
+                    <p className="text-[11.5px] text-text-muted">{formatDate(r.created_at, locale)}</p>
                   </div>
                 </div>
                 <span className="flex mt-2 mb-2">
@@ -235,12 +239,12 @@ export function ReviewsSection({
             onClick={() => setShowForm((v) => !v)}
             className="inline-flex items-center gap-1.5 bg-white border border-navy-700 text-navy-800 font-semibold px-4 py-2 rounded-lg text-[13px] hover:bg-surface-alt"
           >
-            Escrever avaliação
+            {t(locale, "review.writeReview")}
             {showForm ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
           </button>
           {showForm ? (
             <div className="mt-4">
-              <WriteReviewForm tourId={tourId} />
+              <WriteReviewForm tourId={tourId} locale={locale} />
             </div>
           ) : null}
         </div>

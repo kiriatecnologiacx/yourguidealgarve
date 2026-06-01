@@ -67,7 +67,7 @@ export async function BlogCTA() {
                   </p>
                 ) : null}
                 <span className="mt-3 inline-flex items-center gap-1 text-[12.5px] font-semibold text-navy-700 group-hover:text-brand-orange">
-                  Ler mais <ArrowRight className="w-3.5 h-3.5" />
+                  {t(locale, "section.blog.readMore")} <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
             </Link>

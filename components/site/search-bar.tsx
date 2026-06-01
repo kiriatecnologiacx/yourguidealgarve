@@ -154,7 +154,7 @@ export function SearchBar({ locale }: { locale: Locale }) {
           {suggestions!.destinations.length > 0 ? (
             <div className="px-3 pt-3 pb-1">
               <p className="text-[11px] font-semibold uppercase tracking-wider text-text-muted px-2 mb-2">
-                Destinos
+                {t(locale, "search.destinationsLabel")}
               </p>
               {suggestions!.destinations.map((d) => (
                 <Link
@@ -172,7 +172,7 @@ export function SearchBar({ locale }: { locale: Locale }) {
                   </div>
                   <div>
                     <p className="text-[13.5px] font-semibold text-text-strong">{d.name}</p>
-                    <p className="text-[12px] text-text-muted">{d.activities_count} atividades</p>
+                    <p className="text-[12px] text-text-muted">{d.activities_count} {t(locale, "search.activitiesLabel")}</p>
                   </div>
                 </Link>
               ))}
@@ -185,7 +185,7 @@ export function SearchBar({ locale }: { locale: Locale }) {
                 <div className="border-t border-border-subtle my-2" />
               ) : null}
               <p className="text-[11px] font-semibold uppercase tracking-wider text-text-muted px-2 mb-2">
-                Passeios
+                {t(locale, "search.toursLabel")}
               </p>
               {suggestions!.tours.map((tour) => (
                 <Link
@@ -210,7 +210,7 @@ export function SearchBar({ locale }: { locale: Locale }) {
                     <p className="text-[13.5px] font-semibold text-text-strong line-clamp-1">{tour.title}</p>
                     {(tour.price_from_brl ?? tour.price_brl) ? (
                       <p className="text-[12px] text-text-muted">
-                        A partir de {formatPriceBRL(tour.price_from_brl ?? tour.price_brl)}
+                        {t(locale, "booking.startingFrom")} {formatPriceBRL(tour.price_from_brl ?? tour.price_brl)}
                       </p>
                     ) : null}
                   </div>
@@ -221,14 +221,14 @@ export function SearchBar({ locale }: { locale: Locale }) {
 
           {suggestions!.tours.length === 0 && suggestions!.destinations.length === 0 ? (
             <p className="px-5 py-4 text-[13.5px] text-text-muted">
-              Nenhum resultado para "{query}"
+              {t(locale, "search.noResults")} &ldquo;{query}&rdquo;
             </p>
           ) : null}
         </div>
       ) : query.length >= 2 && !loading && suggestions && suggestions.tours.length === 0 && suggestions.destinations.length === 0 ? (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(10,37,64,0.3)] border border-border-subtle z-50">
           <p className="px-5 py-4 text-[13.5px] text-text-muted">
-            Nenhum resultado para &quot;{query}&quot;
+            {t(locale, "search.noResults")} &ldquo;{query}&rdquo;
           </p>
         </div>
       ) : null}

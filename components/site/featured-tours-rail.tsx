@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Tour } from "@/lib/types";
-import type { Locale } from "@/lib/i18n";
+import { t, type Locale } from "@/lib/i18n";
 import { TourCard } from "./tour-card";
 
 export function FeaturedToursRail({
@@ -22,17 +22,17 @@ export function FeaturedToursRail({
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="font-display text-2xl md:text-3xl font-extrabold text-text-strong">
-              Passeios em Destaque
+              {t(locale, "section.featured.title")}
             </h2>
             <p className="text-[13.5px] text-text-muted mt-1">
-              As experiências mais populares do Algarve
+              {t(locale, "section.featured.subtitle")}
             </p>
           </div>
           <Link
             href="/atividades"
             className="text-[13.5px] font-semibold text-navy-700 hover:underline shrink-0"
           >
-            Ver todos →
+            {t(locale, "section.featured.viewAll")}
           </Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">

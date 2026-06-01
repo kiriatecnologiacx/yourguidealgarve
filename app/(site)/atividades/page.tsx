@@ -6,6 +6,7 @@ import { FiltersBar } from "@/components/site/filters-bar";
 import { listCategories, listDestinations, listTours } from "@/lib/data";
 import { getCurrentUser, getFavoriteIds } from "@/lib/auth";
 import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
@@ -40,29 +41,36 @@ export default async function AtividadesPage({
   const destinationName = destinations.find((d) => d.slug === destino)?.name;
   const categoryName = categoria ? (categories.find((c) => c.slug === categoria)?.name) : undefined;
 
+  const inWord = t(locale, "common.in");
   const heading =
     modo === "destinos"
-      ? "Destinos no Algarve"
+      ? t(locale, "page.activities.destinations")
       : modo === "atividades"
-        ? destinationName ? `Atividades em ${destinationName}` : "Atividades no Algarve"
+        ? destinationName
+          ? `${t(locale, "page.activities.allActivities")} ${inWord} ${destinationName}`
+          : t(locale, "page.activities.allActivitiesAlgarve")
         : modo === "experiencias"
-          ? destinationName ? `Experiências em ${destinationName}` : "Experiências no Algarve"
+          ? destinationName
+            ? `${t(locale, "page.activities.allExperiences")} ${inWord} ${destinationName}`
+            : t(locale, "page.activities.allExperiencesAlgarve")
           : categoryName
-            ? destinationName ? `${categoryName} em ${destinationName}` : categoryName
-            : destinationName ?? "Atividades no Algarve";
+            ? destinationName ? `${categoryName} ${inWord} ${destinationName}` : categoryName
+            : destinationName ?? t(locale, "page.activities.all");
 
   const subheading =
     modo === "destinos"
-      ? `${destinations.length} destinos disponíveis`
-      : `${tours.length} ${modo === "experiencias" ? "experiências" : "atividades"} disponíveis`;
+      ? `${destinations.length} ${t(locale, "page.activities.countDestinations")}`
+      : modo === "experiencias"
+        ? `${tours.length} ${t(locale, "page.activities.countExperiences")}`
+        : `${tours.length} ${t(locale, "page.activities.countActivities")}`;
 
   return (
     <>
       <section className="bg-navy-800 text-white">
         <div className="mx-auto max-w-[1240px] px-5 py-10">
           <p className="text-[12.5px] text-white/70">
-            <Link href="/" className="hover:text-white">Início</Link>{" "}
-            <span className="mx-1">›</span> Atividades
+            <Link href="/" className="hover:text-white">{t(locale, "common.home")}</Link>{" "}
+            <span className="mx-1">›</span> {t(locale, "page.activities.breadcrumb")}
           </p>
           <h1 className="mt-2 text-3xl md:text-4xl font-extrabold">{heading}</h1>
           <p className="mt-1 text-white/80 text-[14px]">{subheading}</p>
@@ -76,6 +84,7 @@ export default async function AtividadesPage({
           currentDestination={destino}
           currentCategoria={categoria}
           categoryName={categoryName}
+          locale={locale}
         />
       </section>
 
@@ -113,7 +122,7 @@ export default async function AtividadesPage({
                     </p>
                     <p className="text-white/85 text-[12px] mt-0.5 flex items-center gap-1">
                       <MapPin className="w-3 h-3" />
-                      {d.activities_count} atividades
+                      {d.activities_count} {t(locale, "tour.activities")}
                     </p>
                   </div>
                 </Link>
