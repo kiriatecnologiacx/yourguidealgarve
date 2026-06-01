@@ -60,7 +60,7 @@ export function TourCard({
         ) : null}
         {!tour.hide_price && (tour.price_from_brl ?? tour.price_brl) ? (
           <div className="mt-3 flex items-end justify-between">
-            <span className="text-[11px] text-text-muted">A partir de</span>
+            <span className="text-[11px] text-text-muted">{t(locale, "booking.startingFrom")}</span>
             <span className="text-[16px] font-extrabold text-text-strong">
               {formatPriceBRL(tour.price_from_brl ?? tour.price_brl)}
             </span>

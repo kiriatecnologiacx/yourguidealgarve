@@ -142,7 +142,7 @@ export default async function AtividadesPage({
                         : "border-border-subtle text-text-strong hover:bg-white bg-white"
                     }`}
                   >
-                    Todos os destinos
+                    {t(locale, "page.activities.allDestinations")}
                   </Link>
                   {destinations.map((d) => (
                     <Link
@@ -163,10 +163,10 @@ export default async function AtividadesPage({
               {tours.length === 0 ? (
                 <div className="bg-white rounded-2xl border border-border-subtle p-10 text-center">
                   <p className="text-[15px] font-semibold text-text-strong">
-                    Nenhuma atividade encontrada
+                    {t(locale, "page.activities.notFound")}
                   </p>
                   <p className="text-[13.5px] text-text-muted mt-1">
-                    Tente ajustar os filtros ou voltar para a página inicial.
+                    {t(locale, "page.activities.notFoundHint")}
                   </p>
                 </div>
               ) : (

@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getBlogPost, listBlogPosts } from "@/lib/blog";
 import { BlogBlockRenderer } from "@/components/site/blog-block-renderer";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
@@ -13,10 +15,12 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getBlogPost(slug);
+  const [post, locale] = await Promise.all([getBlogPost(slug), getLocale()]);
   if (!post) notFound();
 
   const others = (await listBlogPosts(4)).filter((p) => p.slug !== post.slug).slice(0, 3);
+
+  const langCode = locale === "pt-PT" ? "pt-BR" : locale === "fr" ? "fr-FR" : "en-GB";
 
   return (
     <article className="bg-white">
@@ -42,11 +46,11 @@ export default async function BlogPostPage({
               href="/blog"
               className="inline-flex items-center gap-1 text-[12.5px] text-white/85 hover:text-white"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> Voltar ao blog
+              <ArrowLeft className="w-3.5 h-3.5" /> {t(locale, "blog.backToBlog")}
             </Link>
             <p className="text-[11.5px] uppercase tracking-wider text-brand-yellow font-semibold mt-3">
               {post.published_at
-                ? new Date(post.published_at).toLocaleDateString("pt-BR", {
+                ? new Date(post.published_at).toLocaleDateString(langCode, {
                     day: "2-digit", month: "long", year: "numeric",
                   })
                 : ""} · {post.author}
@@ -73,7 +77,7 @@ export default async function BlogPostPage({
         <div className="bg-surface-alt">
           <div className="mx-auto max-w-[1240px] px-5 py-10">
             <h2 className="font-display text-2xl font-extrabold text-text-strong mb-5">
-              Continue lendo
+              {t(locale, "blog.continueReading")}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {others.map((p) => (

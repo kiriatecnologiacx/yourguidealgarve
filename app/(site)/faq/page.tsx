@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
@@ -21,11 +22,11 @@ export default async function FaqPage() {
       <section className="bg-navy-800 text-white">
         <div className="mx-auto max-w-[1240px] px-5 py-10">
           <p className="text-[12.5px] text-white/70">
-            <Link href="/" className="hover:text-white">Início</Link>{" "}
-            <span className="mx-1">›</span> FAQ
+            <Link href="/" className="hover:text-white">{t(locale, "common.home")}</Link>{" "}
+            <span className="mx-1">›</span> {t(locale, "nav.faq")}
           </p>
-          <h1 className="mt-2 text-3xl md:text-4xl font-extrabold">Perguntas Frequentes</h1>
-          <p className="mt-1 text-white/80 text-[14px]">Respostas às dúvidas mais comuns</p>
+          <h1 className="mt-2 text-3xl md:text-4xl font-extrabold">{t(locale, "page.faq.title")}</h1>
+          <p className="mt-1 text-white/80 text-[14px]">{t(locale, "page.faq.subtitle")}</p>
         </div>
       </section>
 
@@ -33,7 +34,7 @@ export default async function FaqPage() {
         <div className="mx-auto max-w-[860px] px-5 py-12">
           {items.length === 0 ? (
             <p className="text-[14px] text-text-muted text-center py-12">
-              Em breve aqui encontrará as perguntas mais frequentes.
+              {t(locale, "page.faq.empty")}
             </p>
           ) : (
             <div className="space-y-4">

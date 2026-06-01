@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { ContactForm } from "@/components/site/contact-form";
 import { Mail, MessageCircle } from "lucide-react";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 
-export default function ContactPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ContactPage() {
+  const [locale] = await Promise.all([getLocale()]);
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
 
   return (
@@ -10,29 +15,27 @@ export default function ContactPage() {
       <section className="bg-navy-800 text-white">
         <div className="mx-auto max-w-[1240px] px-5 py-10">
           <p className="text-[12.5px] text-white/70">
-            <Link href="/" className="hover:text-white">Início</Link>{" "}
-            <span className="mx-1">›</span> Contacte-nos
+            <Link href="/" className="hover:text-white">{t(locale, "common.home")}</Link>{" "}
+            <span className="mx-1">›</span> {t(locale, "page.contact.breadcrumb")}
           </p>
-          <h1 className="mt-2 text-3xl md:text-4xl font-extrabold">Contacte-nos</h1>
-          <p className="mt-1 text-white/80 text-[14px]">Estamos aqui para ajudar</p>
+          <h1 className="mt-2 text-3xl md:text-4xl font-extrabold">{t(locale, "page.contact.title")}</h1>
+          <p className="mt-1 text-white/80 text-[14px]">{t(locale, "page.contact.subtitle")}</p>
         </div>
       </section>
 
       <section className="bg-surface-alt">
         <div className="mx-auto max-w-[1240px] px-5 py-12 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-10">
 
-          {/* Contact form */}
           <div>
             <h2 className="font-display text-[22px] font-bold text-text-strong mb-6">
-              Envie-nos uma mensagem
+              {t(locale, "page.contact.formTitle")}
             </h2>
-            <ContactForm />
+            <ContactForm locale={locale} />
           </div>
 
-          {/* Contact options */}
           <div className="space-y-4">
             <h2 className="font-display text-[22px] font-bold text-text-strong">
-              Outras formas de contacto
+              {t(locale, "page.contact.otherContact")}
             </h2>
 
             {whatsappNumber ? (
@@ -47,7 +50,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <p className="text-[14px] font-semibold text-text-strong">WhatsApp</p>
-                  <p className="text-[13px] text-text-muted mt-0.5">Resposta rápida — normalmente em menos de 1h</p>
+                  <p className="text-[13px] text-text-muted mt-0.5">{t(locale, "page.contact.whatsappSub")}</p>
                   <p className="text-[13.5px] font-semibold text-green-700 mt-1">{whatsappNumber}</p>
                 </div>
               </a>
@@ -62,7 +65,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <p className="text-[14px] font-semibold text-text-strong">Email</p>
-                <p className="text-[13px] text-text-muted mt-0.5">Respondemos em 24 horas úteis</p>
+                <p className="text-[13px] text-text-muted mt-0.5">{t(locale, "page.contact.emailSub")}</p>
                 <p className="text-[13.5px] font-semibold text-navy-700 mt-1">info@yourguidealgarve.com</p>
               </div>
             </a>

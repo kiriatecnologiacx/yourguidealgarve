@@ -2,26 +2,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { listBlogPosts } from "@/lib/blog";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
 export default async function BlogIndexPage() {
-  const posts = await listBlogPosts();
+  const [posts, locale] = await Promise.all([listBlogPosts(), getLocale()]);
   const [featured, ...rest] = posts;
+
+  const langCode = locale === "pt-PT" ? "pt-BR" : locale === "fr" ? "fr-FR" : "en-GB";
 
   return (
     <section className="bg-surface-alt min-h-[70vh]">
       <div className="mx-auto max-w-[1240px] px-5 py-10">
         <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wider text-brand-orange">
-          <BookOpen className="w-3.5 h-3.5" /> Blog
+          <BookOpen className="w-3.5 h-3.5" /> {t(locale, "nav.blog")}
         </span>
         <h1 className="font-display mt-1 text-3xl md:text-4xl font-extrabold text-text-strong">
-          Histórias, roteiros e dicas sobre o Algarve
+          {t(locale, "page.blog.title")}
         </h1>
 
         {posts.length === 0 ? (
           <p className="mt-8 text-[14px] text-text-muted">
-            Em breve novas postagens.
+            {t(locale, "page.blog.empty")}
           </p>
         ) : null}
 
@@ -42,7 +46,7 @@ export default async function BlogIndexPage() {
             <div className="p-6 md:p-8 flex flex-col justify-center">
               <p className="text-[11.5px] uppercase tracking-wider text-brand-orange font-semibold">
                 {featured.published_at
-                  ? new Date(featured.published_at).toLocaleDateString("pt-BR", {
+                  ? new Date(featured.published_at).toLocaleDateString(langCode, {
                       day: "2-digit", month: "long", year: "numeric",
                     })
                   : ""} · {featured.author}
@@ -54,7 +58,7 @@ export default async function BlogIndexPage() {
                 <p className="mt-2 text-[14px] text-text-muted">{featured.excerpt}</p>
               ) : null}
               <span className="mt-4 inline-flex items-center gap-1 text-[13.5px] font-semibold text-navy-700 group-hover:text-brand-orange">
-                Continuar lendo <ArrowRight className="w-4 h-4" />
+                {t(locale, "blog.continueReading")} <ArrowRight className="w-4 h-4" />
               </span>
             </div>
           </Link>
@@ -80,7 +84,7 @@ export default async function BlogIndexPage() {
                 <div className="p-4">
                   <p className="text-[11.5px] uppercase tracking-wider text-brand-orange font-semibold">
                     {p.published_at
-                      ? new Date(p.published_at).toLocaleDateString("pt-BR", {
+                      ? new Date(p.published_at).toLocaleDateString(langCode, {
                           day: "2-digit", month: "short", year: "numeric",
                         })
                       : ""}

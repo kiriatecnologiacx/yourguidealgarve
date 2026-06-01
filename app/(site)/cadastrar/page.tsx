@@ -1,24 +1,25 @@
 import Image from "next/image";
 import { AuthForm } from "@/components/site/auth-form";
+import { getLocale } from "@/lib/locale-server";
+import { t } from "@/lib/i18n";
+
+export const dynamic = "force-dynamic";
 
 export default async function SignupPage({
   searchParams,
 }: {
   searchParams: Promise<{ next?: string }>;
 }) {
-  const { next } = await searchParams;
+  const [{ next }, locale] = await Promise.all([searchParams, getLocale()]);
   return (
     <section className="bg-surface-alt">
       <div className="mx-auto max-w-[1100px] px-5 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
         <div className="bg-white rounded-2xl border border-border-subtle p-8">
           <h1 className="font-display text-3xl font-extrabold text-text-strong">
-            Crie sua conta
+            {t(locale, "auth.createAccount")}
           </h1>
-          <p className="mt-1 text-[13.5px] text-text-muted">
-            Em segundos. Para favoritar passeios e receber dicas exclusivas.
-          </p>
           <div className="mt-6">
-            <AuthForm mode="signup" redirectTo={next} />
+            <AuthForm mode="signup" redirectTo={next} locale={locale} />
           </div>
         </div>
         <div className="relative rounded-2xl overflow-hidden hidden md:block">
