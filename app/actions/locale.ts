@@ -6,6 +6,16 @@ import { LOCALES } from "@/lib/i18n";
 
 export async function switchLocale(code: string, returnPath: string) {
   if (!LOCALES.some((l) => l.code === code)) return;
+
+  // Guarantee same-origin redirect: must start with "/" but not "//" or "/\"
+  const safePath =
+    typeof returnPath === "string" &&
+    returnPath.startsWith("/") &&
+    !returnPath.startsWith("//") &&
+    !returnPath.startsWith("/\\")
+      ? returnPath
+      : "/";
+
   const store = await cookies();
   store.set("yga_lang", code, {
     path: "/",
@@ -13,5 +23,5 @@ export async function switchLocale(code: string, returnPath: string) {
     sameSite: "lax",
     httpOnly: false,
   });
-  redirect(returnPath);
+  redirect(safePath);
 }
