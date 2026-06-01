@@ -9,7 +9,7 @@ import { listCategories, listDestinations, getFeaturedTours } from "@/lib/data";
 import { getLocale } from "@/lib/locale-server";
 import { getFavoriteIds, getCurrentUser } from "@/lib/auth";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const [categories, destinations, featuredTours, locale, user, favIds] = await Promise.all([

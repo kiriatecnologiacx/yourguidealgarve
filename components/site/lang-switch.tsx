@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { LOCALES, type Locale } from "@/lib/i18n";
-import { useRouter } from "next/navigation";
+import { switchLocale } from "@/app/actions/locale";
 
 export function LangSwitch({
   current,
@@ -12,8 +12,8 @@ export function LangSwitch({
   current: Locale;
   variant?: "light" | "dark";
 }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [pending, setPending] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,10 +24,13 @@ export function LangSwitch({
     return () => window.removeEventListener("click", handler);
   }, []);
 
-  function pick(code: Locale) {
-    document.cookie = `yga_lang=${code}; path=/; max-age=${60 * 60 * 24 * 365}`;
+  async function pick(code: Locale) {
+    if (code === current || pending) return;
     setOpen(false);
-    router.refresh();
+    setPending(true);
+    const path = window.location.pathname + window.location.search;
+    await switchLocale(code, path);
+    setPending(false);
   }
 
   const item = LOCALES.find((l) => l.code === current) ?? LOCALES[0];
@@ -37,7 +40,8 @@ export function LangSwitch({
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-[13px] font-medium ${
+        disabled={pending}
+        className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-[13px] font-medium disabled:opacity-60 ${
           isLight
             ? "text-white/85 hover:text-white hover:bg-white/5"
             : "text-text-strong hover:bg-surface-alt"
