@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Compass, Users, Tags, MapPin, Newspaper, Plus } from "lucide-react";
 import { createSupabaseServer } from "@/lib/supabase/server";
+import { TranslateAllButton } from "@/components/admin/translate-all-button";
 
 export const dynamic = "force-dynamic";
 
@@ -97,16 +98,19 @@ export default async function AdminDashboardPage() {
             />
           </ul>
         </div>
-        <div className="bg-white rounded-2xl border border-border-subtle p-6">
-          <h2 className="text-[15px] font-bold text-text-strong">Atalhos</h2>
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <ActionLink href="/admin/passeios/novo" label="Adicionar passeio" />
-            <ActionLink href="/admin/ajuda" label="Guia de widgets" />
-            <ActionLink href="/admin/blog/novo" label="Nova postagem" />
-            <ActionLink href="/admin/destinos" label="Destinos" />
-            <ActionLink href="/admin/parceiros" label="Parceiros" />
-            <ActionLink href="/admin/categorias" label="Categorias" />
+        <div className="space-y-4">
+          <div className="bg-white rounded-2xl border border-border-subtle p-6">
+            <h2 className="text-[15px] font-bold text-text-strong">Atalhos</h2>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <ActionLink href="/admin/passeios/novo" label="Adicionar passeio" />
+              <ActionLink href="/admin/ajuda" label="Guia de widgets" />
+              <ActionLink href="/admin/blog/novo" label="Nova postagem" />
+              <ActionLink href="/admin/destinos" label="Destinos" />
+              <ActionLink href="/admin/parceiros" label="Parceiros" />
+              <ActionLink href="/admin/categorias" label="Categorias" />
+            </div>
           </div>
+          <TranslateAllButton />
         </div>
       </div>
     </div>
