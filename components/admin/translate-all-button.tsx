@@ -18,10 +18,11 @@ export function TranslateAllButton() {
         setInfo(json.error ?? "Erro desconhecido");
         return;
       }
-      const blogCount = (json.translated?.blog ?? []).length;
-      const faqCount  = (json.translated?.faqs ?? []).length;
+      const tourCount = (json.translated?.tours ?? []).length;
+      const blogCount = (json.translated?.blog  ?? []).length;
+      const faqCount  = (json.translated?.faqs  ?? []).length;
       setState("done");
-      setInfo(`${blogCount} post(s) + ${faqCount} FAQ(s) traduzidos.`);
+      setInfo(`${tourCount} passeio(s) + ${blogCount} post(s) + ${faqCount} FAQ(s) traduzidos.`);
     } catch {
       setState("error");
       setInfo("Falha na ligação. Tente novamente.");
@@ -36,7 +37,7 @@ export function TranslateAllButton() {
         </span>
         <div>
           <p className="text-[14px] font-bold text-text-strong">Tradução automática</p>
-          <p className="text-[12px] text-text-muted">Blog posts + FAQs → PT e FR via DeepL</p>
+          <p className="text-[12px] text-text-muted">Passeios + Blog + FAQs → PT e FR via DeepL</p>
         </div>
       </div>
 
