@@ -2,6 +2,7 @@
 
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { translateText } from "@/lib/translate";
 
 export async function upsertFaq(_prev: unknown, formData: FormData) {
   const supabase = await createSupabaseServer();
@@ -13,10 +14,29 @@ export async function upsertFaq(_prev: unknown, formData: FormData) {
 
   if (!question || !answer) return { error: "Pergunta e resposta são obrigatórias." };
 
+  const payload: Record<string, unknown> = { question, answer, position, is_published };
+
+  if (process.env.DEEPL_API_KEY) {
+    try {
+      const [qPt, qFr, aPt, aFr] = await Promise.all([
+        translateText(question, "PT").then((r) => r.text).catch(() => null),
+        translateText(question, "FR").then((r) => r.text).catch(() => null),
+        translateText(answer,   "PT").then((r) => r.text).catch(() => null),
+        translateText(answer,   "FR").then((r) => r.text).catch(() => null),
+      ]);
+      if (qPt) payload.question_pt = qPt;
+      if (qFr) payload.question_fr = qFr;
+      if (aPt) payload.answer_pt   = aPt;
+      if (aFr) payload.answer_fr   = aFr;
+    } catch {
+      // non-fatal
+    }
+  }
+
   if (id) {
-    await supabase.from("faqs").update({ question, answer, position, is_published }).eq("id", id);
+    await supabase.from("faqs").update(payload).eq("id", id);
   } else {
-    await supabase.from("faqs").insert({ question, answer, position, is_published });
+    await supabase.from("faqs").insert(payload);
   }
 
   revalidatePath("/admin/faq");

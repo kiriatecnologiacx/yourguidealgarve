@@ -1,9 +1,27 @@
 import Link from "next/link";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { getLocale } from "@/lib/locale-server";
-import { t } from "@/lib/i18n";
+import { t, type Locale } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
+
+type Faq = {
+  id: string;
+  question: string;
+  question_pt: string | null;
+  question_fr: string | null;
+  answer: string;
+  answer_pt: string | null;
+  answer_fr: string | null;
+};
+
+function localeFaq(faq: Faq, locale: Locale) {
+  return {
+    ...faq,
+    question: locale === "pt-PT" ? (faq.question_pt || faq.question) : locale === "fr" ? (faq.question_fr || faq.question) : faq.question,
+    answer:   locale === "pt-PT" ? (faq.answer_pt   || faq.answer)   : locale === "fr" ? (faq.answer_fr   || faq.answer)   : faq.answer,
+  };
+}
 
 export default async function FaqPage() {
   const supabase = await createSupabaseServer();
@@ -11,11 +29,11 @@ export default async function FaqPage() {
 
   const { data: faqs } = await supabase
     .from("faqs")
-    .select("*")
+    .select("id, question, question_pt, question_fr, answer, answer_pt, answer_fr")
     .eq("is_published", true)
     .order("position", { ascending: true });
 
-  const items = faqs ?? [];
+  const items = (faqs ?? []).map((f) => localeFaq(f as Faq, locale));
 
   return (
     <>
@@ -33,12 +51,10 @@ export default async function FaqPage() {
       <section className="bg-surface-alt">
         <div className="mx-auto max-w-[860px] px-5 py-12">
           {items.length === 0 ? (
-            <p className="text-[14px] text-text-muted text-center py-12">
-              {t(locale, "page.faq.empty")}
-            </p>
+            <p className="text-[14px] text-text-muted text-center py-12">{t(locale, "page.faq.empty")}</p>
           ) : (
             <div className="space-y-4">
-              {items.map((faq: any) => (
+              {items.map((faq) => (
                 <FaqItem key={faq.id} question={faq.question} answer={faq.answer} />
               ))}
             </div>

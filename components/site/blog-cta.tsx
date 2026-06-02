@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
-import { listBlogPosts } from "@/lib/blog";
+import { listBlogPosts, localeBlogPost } from "@/lib/blog";
 import { getLocale } from "@/lib/locale-server";
 import { t } from "@/lib/i18n";
 
 export async function BlogCTA() {
-  const [posts, locale] = await Promise.all([listBlogPosts(3), getLocale()]);
-  if (posts.length === 0) return null;
+  const [rawPosts, locale] = await Promise.all([listBlogPosts(3), getLocale()]);
+  if (rawPosts.length === 0) return null;
+  const posts = rawPosts.map((p) => localeBlogPost(p, locale));
 
   return (
     <section className="bg-white">

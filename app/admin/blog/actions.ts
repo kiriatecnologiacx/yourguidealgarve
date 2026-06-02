@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { slugify } from "@/lib/utils";
+import { translateText } from "@/lib/translate";
+import { translateBlocks } from "@/lib/translate-blocks";
 import type { Block } from "@/lib/blog-blocks";
 
 async function requireAdmin() {
@@ -32,10 +34,12 @@ export async function upsertPost(formData: FormData): Promise<BlogFormState> {
     }
 
     const isPublished = formData.get("is_published") === "on";
-    const payload = {
+    const excerpt = String(formData.get("excerpt") ?? "") || null;
+
+    const payload: Record<string, unknown> = {
       title,
       slug: String(formData.get("slug") ?? "").trim() || slugify(title),
-      excerpt: String(formData.get("excerpt") ?? "") || null,
+      excerpt,
       content: blocks,
       cover_image: String(formData.get("cover_image") ?? "").trim(),
       author: String(formData.get("author") ?? "") || "Your Guide Algarve",
@@ -43,6 +47,32 @@ export async function upsertPost(formData: FormData): Promise<BlogFormState> {
       published_at: isPublished ? new Date().toISOString() : null,
     };
     if (!payload.cover_image) return { error: "Imagem de capa obrigatória" };
+
+    // Auto-translate with DeepL if key is configured
+    if (process.env.DEEPL_API_KEY && title) {
+      try {
+        const [
+          titlePt, titleFr,
+          excerptPt, excerptFr,
+          blocksPt, blocksFr,
+        ] = await Promise.all([
+          translateText(title, "PT").then((r) => r.text).catch(() => null),
+          translateText(title, "FR").then((r) => r.text).catch(() => null),
+          excerpt ? translateText(excerpt, "PT").then((r) => r.text).catch(() => null) : Promise.resolve(null),
+          excerpt ? translateText(excerpt, "FR").then((r) => r.text).catch(() => null) : Promise.resolve(null),
+          blocks.length ? translateBlocks(blocks, "PT").catch(() => null) : Promise.resolve(null),
+          blocks.length ? translateBlocks(blocks, "FR").catch(() => null) : Promise.resolve(null),
+        ]);
+        if (titlePt)   payload.title_pt   = titlePt;
+        if (titleFr)   payload.title_fr   = titleFr;
+        if (excerptPt) payload.excerpt_pt = excerptPt;
+        if (excerptFr) payload.excerpt_fr = excerptFr;
+        if (blocksPt)  payload.content_pt = blocksPt;
+        if (blocksFr)  payload.content_fr = blocksFr;
+      } catch {
+        // translation failure is non-fatal
+      }
+    }
 
     if (id) {
       const { error } = await supabase.from("blog_posts").update(payload).eq("id", id);
