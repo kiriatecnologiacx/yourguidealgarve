@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Loader2 } from "lucide-react";
 import { LOCALES, type Locale } from "@/lib/i18n";
 import { switchLocale } from "@/app/actions/locale";
 
@@ -28,9 +28,13 @@ export function LangSwitch({
     if (code === current || pending) return;
     setOpen(false);
     setPending(true);
-    const path = window.location.pathname + window.location.search;
-    await switchLocale(code, path);
-    setPending(false);
+    try {
+      await switchLocale(code);
+      // Hard reload — garante que todo o conteúdo server-side relê o novo cookie
+      window.location.reload();
+    } catch {
+      setPending(false);
+    }
   }
 
   const item = LOCALES.find((l) => l.code === current) ?? LOCALES[0];
@@ -47,12 +51,16 @@ export function LangSwitch({
             : "text-text-strong hover:bg-surface-alt"
         }`}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={item.flagUrl} alt={item.label} className="w-5 h-3.5 object-cover rounded-[2px] shrink-0" />
+        {pending ? (
+          <Loader2 className="w-4 h-4 animate-spin opacity-70" />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.flagUrl} alt={item.label} className="w-5 h-3.5 object-cover rounded-[2px] shrink-0" />
+        )}
         <span className="hidden sm:inline">{item.label}</span>
         <ChevronDown className="w-3.5 h-3.5 opacity-70" />
       </button>
-      {open ? (
+      {open && !pending ? (
         <div className="absolute right-0 mt-1.5 w-48 bg-white rounded-lg shadow-lg border border-border-subtle z-50 py-1 overflow-hidden">
           {LOCALES.map((l) => (
             <button
