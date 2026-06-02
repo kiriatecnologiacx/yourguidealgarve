@@ -10,9 +10,16 @@ export const maxDuration = 300; // 5 min for large datasets
 export async function GET() {
   const supabase = await createSupabaseServer();
 
-  // Auth check
+  // Auth + admin role check
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { data: adminRow } = await supabase
+    .from("admins")
+    .select("user_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  if (!adminRow) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const results: Record<string, unknown> = { blog: [], faqs: [] };
 
