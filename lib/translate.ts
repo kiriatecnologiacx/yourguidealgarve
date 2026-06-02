@@ -19,7 +19,8 @@ export async function translateText(
   const apiKey = process.env.DEEPL_API_KEY;
   if (!apiKey) throw new Error("DEEPL_API_KEY não configurada.");
 
-  const host = apiKey.endsWith(":fx") ? "api-free.deepl.com" : "api.deepl.com";
+  // DEEPL_API_URL overrides auto-detection; free keys end in :fx
+  const host = process.env.DEEPL_API_URL ?? (apiKey.endsWith(":fx") ? "api-free.deepl.com" : "api.deepl.com");
 
   const body: Record<string, unknown> = {
     text: [text],
