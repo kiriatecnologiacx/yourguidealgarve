@@ -7,9 +7,11 @@ import { Menu, X, Heart } from "lucide-react";
 export function MobileMenu({
   nav,
   favoritesLabel,
+  menuLabel = "Menu",
 }: {
   nav: { label: string; href: string }[];
   favoritesLabel: string;
+  menuLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -18,7 +20,7 @@ export function MobileMenu({
       <button
         onClick={() => setOpen(true)}
         className="lg:hidden flex items-center justify-center w-9 h-9 rounded-md text-white/85 hover:text-white hover:bg-white/5"
-        aria-label="Abrir menu"
+        aria-label={menuLabel}
       >
         <Menu className="w-5 h-5" />
       </button>
@@ -33,7 +35,7 @@ export function MobileMenu({
           {/* Drawer */}
           <div className="absolute right-0 top-0 bottom-0 w-[280px] bg-navy-800 flex flex-col">
             <div className="flex items-center justify-between px-5 h-[68px] border-b border-white/10">
-              <span className="text-white font-semibold text-[15px]">Menu</span>
+              <span className="text-white font-semibold text-[15px]">{menuLabel}</span>
               <button
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center w-9 h-9 rounded-md text-white/85 hover:text-white hover:bg-white/5"

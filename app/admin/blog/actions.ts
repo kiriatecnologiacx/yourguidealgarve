@@ -48,8 +48,8 @@ export async function upsertPost(formData: FormData): Promise<BlogFormState> {
     };
     if (!payload.cover_image) return { error: "Imagem de capa obrigatória" };
 
-    // Auto-translate with DeepL if key is configured
-    if (process.env.DEEPL_API_KEY && title) {
+    // Auto-translate via MyMemory (sem chave necessária)
+    if (title) {
       try {
         const [
           titlePt, titleFr,

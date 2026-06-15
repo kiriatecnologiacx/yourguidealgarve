@@ -127,8 +127,8 @@ export async function upsertTour(_prev: TourFormState, formData: FormData): Prom
       highlights_fr: parseList(formData.get("highlights_fr")),
     };
 
-    // Auto-translate empty language fields if DeepL is configured
-    if (process.env.DEEPL_API_KEY && title) {
+    // Auto-translate empty language fields via MyMemory (sem chave necessária)
+    if (title) {
       const shortDesc = payload.short_description ?? "";
       const desc = payload.description ?? "";
       const highlights = payload.highlights;

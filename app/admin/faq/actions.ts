@@ -16,7 +16,8 @@ export async function upsertFaq(_prev: unknown, formData: FormData) {
 
   const payload: Record<string, unknown> = { question, answer, position, is_published };
 
-  if (process.env.DEEPL_API_KEY) {
+  // Auto-translate via MyMemory (sem chave necessária)
+  {
     try {
       const [qPt, qFr, aPt, aFr] = await Promise.all([
         translateText(question, "PT").then((r) => r.text).catch(() => null),
