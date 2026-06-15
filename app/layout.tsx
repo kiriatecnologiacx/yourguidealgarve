@@ -23,7 +23,14 @@ export const metadata: Metadata = {
   title: "Your Guide Algarve — Tours and experiences in the Algarve",
   description:
     "Tours, tickets and unforgettable experiences across the Algarve coast. Book with free cancellation.",
-  icons: { icon: "/favicon.svg" },
+  icons: {
+    icon: [
+      { url: "/logo.png", type: "image/png", sizes: "512x512" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/logo.png",
+    shortcut: "/logo.png",
+  },
   verification: { google: "G5e1V4a3z2T1-z6P9W71dFceEGNlKG7VvNOPdkZSHtI" },
 };
 
