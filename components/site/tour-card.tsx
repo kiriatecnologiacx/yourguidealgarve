@@ -37,7 +37,7 @@ export function TourCard({
           </span>
         ) : null}
         <div className="absolute top-3 right-3">
-          <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} />
+          <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} locale={locale} />
         </div>
       </div>
       <div className="p-4">

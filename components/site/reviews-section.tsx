@@ -128,7 +128,7 @@ function avgRating(reviews: Review[]) {
 }
 
 function formatDate(iso: string, locale: Locale) {
-  const langCode = locale === "pt-PT" ? "pt-BR" : locale === "fr" ? "fr-FR" : "en-GB";
+  const langCode = locale === "pt-PT" ? "pt-PT" : locale === "fr" ? "fr-FR" : "en-GB";
   return new Date(iso).toLocaleDateString(langCode, { month: "short", year: "numeric" });
 }
 

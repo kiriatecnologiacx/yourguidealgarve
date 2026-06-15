@@ -9,6 +9,7 @@ export async function BlogCTA() {
   const [rawPosts, locale] = await Promise.all([listBlogPosts(3), getLocale()]);
   if (rawPosts.length === 0) return null;
   const posts = rawPosts.map((p) => localeBlogPost(p, locale));
+  const langCode = locale === "pt-PT" ? "pt-PT" : locale === "fr" ? "fr-FR" : "en-GB";
 
   return (
     <section className="bg-white">
@@ -52,7 +53,7 @@ export async function BlogCTA() {
               <div className="p-4">
                 <p className="text-[11.5px] uppercase tracking-wider text-brand-orange font-semibold">
                   {p.published_at
-                    ? new Date(p.published_at).toLocaleDateString("pt-BR", {
+                    ? new Date(p.published_at).toLocaleDateString(langCode, {
                         day: "2-digit",
                         month: "short",
                         year: "numeric",

@@ -3,16 +3,19 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
+import { t, type Locale } from "@/lib/i18n";
 
 export function FavoriteButton({
   tourId,
   initial,
   isAuthed,
+  locale = "en",
   variant = "card",
 }: {
   tourId: string;
   initial: boolean;
   isAuthed: boolean;
+  locale?: Locale;
   variant?: "card" | "hero";
 }) {
   const router = useRouter();
@@ -46,13 +49,11 @@ export function FavoriteButton({
   return (
     <button
       type="button"
-      aria-label={active ? "Remover dos favoritos" : "Favoritar"}
+      aria-label={active ? t(locale, "aria.removeFavorite") : t(locale, "aria.addFavorite")}
       onClick={toggle}
       className={cls}
     >
-      <Heart
-        className={`w-4 h-4 ${active ? "fill-brand-orange text-brand-orange" : ""}`}
-      />
+      <Heart className={`w-4 h-4 ${active ? "fill-brand-orange text-brand-orange" : ""}`} />
     </button>
   );
 }

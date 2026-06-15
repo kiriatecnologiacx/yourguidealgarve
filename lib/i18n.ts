@@ -31,6 +31,21 @@ const dict: Record<Locale, Record<string, string>> = {
     "footer.copy":      "Built by Kíria Tecnologia",
     "footer.tagline":   "Discover the best of the Algarve with experiences carefully picked just for you.",
     "nav.menu":         "Menu",
+    "nav.closeMenu":    "Close menu",
+
+    "aria.addFavorite":    "Add to favourites",
+    "aria.removeFavorite": "Remove from favourites",
+
+    "review.error.fillAll":  "Please fill in all fields.",
+    "review.error.rating":   "Please select a rating from 1 to 5.",
+    "review.error.minChars": "Write at least 10 characters in your review.",
+    "review.error.save":     "Error saving review. Please try again.",
+
+    "newsletter.error.email":     "Invalid email address.",
+    "newsletter.error.subscribe": "Error subscribing. Please try again.",
+
+    "contact.error.fillAll": "Please fill in name, email and message.",
+    "contact.error.send":    "Error sending message. Please try again.",
 
     "password.pageTitle":    "New password",
     "password.pageSubtitle": "Choose a strong password for your account.",
@@ -264,6 +279,21 @@ const dict: Record<Locale, Record<string, string>> = {
     "footer.tagline":   "Descubra o melhor do Algarve com experiências cuidadosamente selecionadas para si.",
     "footer.rights":    "Todos os direitos reservados.",
     "nav.menu":         "Menu",
+    "nav.closeMenu":    "Fechar menu",
+
+    "aria.addFavorite":    "Adicionar aos favoritos",
+    "aria.removeFavorite": "Remover dos favoritos",
+
+    "review.error.fillAll":  "Preencha todos os campos.",
+    "review.error.rating":   "Selecione uma nota de 1 a 5.",
+    "review.error.minChars": "Escreva pelo menos 10 caracteres na avaliação.",
+    "review.error.save":     "Erro ao guardar avaliação. Tente novamente.",
+
+    "newsletter.error.email":     "Email inválido.",
+    "newsletter.error.subscribe": "Erro ao subscrever. Tente novamente.",
+
+    "contact.error.fillAll": "Preencha nome, email e mensagem.",
+    "contact.error.send":    "Erro ao enviar mensagem. Tente novamente.",
 
     "password.pageTitle":    "Nova senha",
     "password.pageSubtitle": "Escolha uma senha forte para a sua conta.",
@@ -496,6 +526,21 @@ const dict: Record<Locale, Record<string, string>> = {
     "footer.tagline":   "Découvrez le meilleur de l'Algarve avec des expériences soigneusement sélectionnées pour vous.",
     "footer.rights":    "Tous droits réservés.",
     "nav.menu":         "Menu",
+    "nav.closeMenu":    "Fermer le menu",
+
+    "aria.addFavorite":    "Ajouter aux favoris",
+    "aria.removeFavorite": "Retirer des favoris",
+
+    "review.error.fillAll":  "Veuillez remplir tous les champs.",
+    "review.error.rating":   "Veuillez sélectionner une note de 1 à 5.",
+    "review.error.minChars": "Écrivez au moins 10 caractères dans votre avis.",
+    "review.error.save":     "Erreur lors de l'enregistrement. Veuillez réessayer.",
+
+    "newsletter.error.email":     "Adresse e-mail invalide.",
+    "newsletter.error.subscribe": "Erreur lors de l'abonnement. Veuillez réessayer.",
+
+    "contact.error.fillAll": "Veuillez remplir le nom, l'e-mail et le message.",
+    "contact.error.send":    "Erreur lors de l'envoi. Veuillez réessayer.",
 
     "password.pageTitle":    "Nouveau mot de passe",
     "password.pageSubtitle": "Choisissez un mot de passe fort pour votre compte.",

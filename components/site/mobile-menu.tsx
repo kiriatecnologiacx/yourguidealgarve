@@ -8,10 +8,12 @@ export function MobileMenu({
   nav,
   favoritesLabel,
   menuLabel = "Menu",
+  closeLabel = "Close menu",
 }: {
   nav: { label: string; href: string }[];
   favoritesLabel: string;
   menuLabel?: string;
+  closeLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -39,7 +41,7 @@ export function MobileMenu({
               <button
                 onClick={() => setOpen(false)}
                 className="flex items-center justify-center w-9 h-9 rounded-md text-white/85 hover:text-white hover:bg-white/5"
-                aria-label="Fechar menu"
+                aria-label={closeLabel}
               >
                 <X className="w-5 h-5" />
               </button>

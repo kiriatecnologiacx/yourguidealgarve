@@ -59,7 +59,7 @@ export default async function FavoritosPage() {
         ) : (
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {tours.map((tour) => (
-              <TourCard key={tour.id} tour={tour} locale={locale} />
+              <TourCard key={tour.id} tour={tour} locale={locale} isAuthed={true} isFavorite={true} />
             ))}
           </div>
         )}

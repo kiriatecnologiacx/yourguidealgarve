@@ -40,7 +40,7 @@ export async function SiteHeader() {
             <Heart className="w-4 h-4" /> {t(locale, "header.favorites")}
           </Link>
           <LangSwitch current={locale} />
-          <MobileMenu nav={NAV} favoritesLabel={t(locale, "header.favorites")} menuLabel={t(locale, "nav.menu")} />
+          <MobileMenu nav={NAV} favoritesLabel={t(locale, "header.favorites")} menuLabel={t(locale, "nav.menu")} closeLabel={t(locale, "nav.closeMenu")} />
         </div>
       </div>
     </header>

@@ -161,7 +161,7 @@ export default async function TourDetailPage({
           </div>
 
           <div className="mt-4 flex items-center gap-3 text-[13px] text-text-muted">
-            <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} />
+            <FavoriteButton tourId={tour.id} initial={isFavorite} isAuthed={isAuthed} locale={locale} />
             <ShareButton title={localTitle} label={t(locale, "tour.share")} copiedLabel={t(locale, "share.copied")} />
           </div>
         </div>
