@@ -25,11 +25,11 @@ export const metadata: Metadata = {
     "Tours, tickets and unforgettable experiences across the Algarve coast. Book with free cancellation.",
   icons: {
     icon: [
-      { url: "/logo.png", type: "image/png", sizes: "512x512" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", type: "image/png", sizes: "500x500" },
     ],
-    apple: "/logo.png",
-    shortcut: "/logo.png",
+    apple: { url: "/logo.png", sizes: "500x500" },
+    shortcut: "/favicon.ico",
   },
   verification: { google: "G5e1V4a3z2T1-z6P9W71dFceEGNlKG7VvNOPdkZSHtI" },
 };
