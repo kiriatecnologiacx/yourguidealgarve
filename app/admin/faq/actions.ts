@@ -2,14 +2,15 @@
 
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { translateText } from "@/lib/translate";
 
 export async function upsertFaq(_prev: unknown, formData: FormData) {
   const supabase = await createSupabaseServer();
-  const id = formData.get("id") ? String(formData.get("id")) : null;
-  const question = String(formData.get("question") ?? "").trim();
-  const answer = String(formData.get("answer") ?? "").trim();
-  const position = Number(formData.get("position") ?? 0);
+  const id         = formData.get("id") ? String(formData.get("id")) : null;
+  const question   = String(formData.get("question") ?? "").trim();
+  const answer     = String(formData.get("answer")   ?? "").trim();
+  const position   = Number(formData.get("position") ?? 0);
   const is_published = formData.get("is_published") === "on";
 
   if (!question || !answer) return { error: "Pergunta e resposta são obrigatórias." };
@@ -17,21 +18,19 @@ export async function upsertFaq(_prev: unknown, formData: FormData) {
   const payload: Record<string, unknown> = { question, answer, position, is_published };
 
   // Auto-translate via MyMemory (sem chave necessária)
-  {
-    try {
-      const [qPt, qFr, aPt, aFr] = await Promise.all([
-        translateText(question, "PT").then((r) => r.text).catch(() => null),
-        translateText(question, "FR").then((r) => r.text).catch(() => null),
-        translateText(answer,   "PT").then((r) => r.text).catch(() => null),
-        translateText(answer,   "FR").then((r) => r.text).catch(() => null),
-      ]);
-      if (qPt) payload.question_pt = qPt;
-      if (qFr) payload.question_fr = qFr;
-      if (aPt) payload.answer_pt   = aPt;
-      if (aFr) payload.answer_fr   = aFr;
-    } catch {
-      // non-fatal
-    }
+  try {
+    const [qPt, qFr, aPt, aFr] = await Promise.all([
+      translateText(question, "PT").then((r) => r.text).catch(() => null),
+      translateText(question, "FR").then((r) => r.text).catch(() => null),
+      translateText(answer,   "PT").then((r) => r.text).catch(() => null),
+      translateText(answer,   "FR").then((r) => r.text).catch(() => null),
+    ]);
+    if (qPt) payload.question_pt = qPt;
+    if (qFr) payload.question_fr = qFr;
+    if (aPt) payload.answer_pt   = aPt;
+    if (aFr) payload.answer_fr   = aFr;
+  } catch {
+    // non-fatal — saves without translation
   }
 
   if (id) {
@@ -42,7 +41,7 @@ export async function upsertFaq(_prev: unknown, formData: FormData) {
 
   revalidatePath("/admin/faq");
   revalidatePath("/faq");
-  return { ok: true };
+  redirect("/admin/faq");
 }
 
 export async function deleteFaq(id: string) {
@@ -50,4 +49,5 @@ export async function deleteFaq(id: string) {
   await supabase.from("faqs").delete().eq("id", id);
   revalidatePath("/admin/faq");
   revalidatePath("/faq");
+  redirect("/admin/faq");
 }

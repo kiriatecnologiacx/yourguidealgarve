@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createSupabaseServer } from "@/lib/supabase/server";
 
 export type PartnerFormState = { error?: string; success?: boolean };
@@ -39,7 +40,7 @@ export async function upsertPartner(
   }
 
   revalidatePath("/admin/parceiros");
-  return { success: true };
+  redirect("/admin/parceiros");
 }
 
 export async function deletePartner(id: string) {
@@ -48,4 +49,5 @@ export async function deletePartner(id: string) {
   if (!user) return;
   await supabase.from("partners").delete().eq("id", id);
   revalidatePath("/admin/parceiros");
+  redirect("/admin/parceiros");
 }
