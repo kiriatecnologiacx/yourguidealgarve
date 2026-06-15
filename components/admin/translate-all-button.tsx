@@ -49,7 +49,7 @@ export function TranslateAllButton() {
         </span>
         <div>
           <p className="text-[14px] font-bold text-text-strong">Tradução automática</p>
-          <p className="text-[12px] text-text-muted">Passeios + Blog + FAQs → PT-PT e FR via DeepL</p>
+          <p className="text-[12px] text-text-muted">Passeios + Blog + FAQs → PT e FR automaticamente</p>
         </div>
       </div>
 

@@ -16,15 +16,11 @@ export async function GET() {
     .from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
   if (!adminRow) return NextResponse.json({ error: "Sem permissão" }, { status: 403 });
 
-  if (!process.env.DEEPL_API_KEY) {
-    return NextResponse.json({ error: "DEEPL_API_KEY não configurada no servidor. Adiciona a variável de ambiente no Vercel." }, { status: 500 });
-  }
-
-  // Quick connectivity test first
+  // Teste rápido de conectividade
   try {
     await translateText("test", "PT");
   } catch (e) {
-    return NextResponse.json({ error: `DeepL não está a responder: ${e instanceof Error ? e.message : String(e)}` }, { status: 500 });
+    return NextResponse.json({ error: `Tradução não disponível: ${e instanceof Error ? e.message : String(e)}` }, { status: 500 });
   }
 
   const errors: string[] = [];
