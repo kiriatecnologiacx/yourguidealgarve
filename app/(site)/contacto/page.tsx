@@ -57,7 +57,7 @@ export default async function ContactPage() {
             ) : null}
 
             <a
-              href="mailto:info@yourguidealgarve.com"
+              href="mailto:bookings@yourguidealgarve.com"
               className="flex items-start gap-4 bg-white border border-border-subtle rounded-2xl p-5 hover:bg-surface-alt transition-colors"
             >
               <div className="w-10 h-10 rounded-full bg-navy-800 flex items-center justify-center shrink-0">
@@ -66,7 +66,7 @@ export default async function ContactPage() {
               <div>
                 <p className="text-[14px] font-semibold text-text-strong">Email</p>
                 <p className="text-[13px] text-text-muted mt-0.5">{t(locale, "page.contact.emailSub")}</p>
-                <p className="text-[13.5px] font-semibold text-navy-700 mt-1">info@yourguidealgarve.com</p>
+                <p className="text-[13.5px] font-semibold text-navy-700 mt-1">bookings@yourguidealgarve.com</p>
               </div>
             </a>
           </div>

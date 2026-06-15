@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Bricolage_Grotesque } from "next/font/google";
+import Script from "next/script";
 import { getSiteUrl } from "@/lib/utils";
 import "./globals.css";
 
@@ -26,6 +27,8 @@ export const metadata: Metadata = {
   verification: { google: "G5e1V4a3z2T1-z6P9W71dFceEGNlKG7VvNOPdkZSHtI" },
 };
 
+const GA_ID = "G-N1DV7WW670";
+
 export default function RootLayout({
   children,
 }: {
@@ -33,7 +36,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${sans.variable} ${display.variable}`}>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        {children}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
+      </body>
     </html>
   );
 }
