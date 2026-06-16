@@ -23,14 +23,8 @@ export const metadata: Metadata = {
   title: "Your Guide Algarve — Tours and experiences in the Algarve",
   description:
     "Tours, tickets and unforgettable experiences across the Algarve coast. Book with free cancellation.",
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/logo.png", type: "image/png", sizes: "500x500" },
-    ],
-    apple: { url: "/logo.png", sizes: "500x500" },
-    shortcut: "/favicon.ico",
-  },
+  // icons gerados automaticamente via app/icon.png, app/apple-icon.png
+  // e public/favicon.ico — convenção do Next.js App Router
   verification: { google: "G5e1V4a3z2T1-z6P9W71dFceEGNlKG7VvNOPdkZSHtI" },
 };
 
