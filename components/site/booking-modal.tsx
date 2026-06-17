@@ -49,7 +49,7 @@ export function BookingModal({
           </button>
         </div>
 
-        {/* iframe — sandbox impede que o widget navegue a página principal */}
+        {/* iframe */}
         <iframe
           ref={iframeRef}
           src={src}
@@ -57,7 +57,6 @@ export function BookingModal({
           className="w-full flex-1 border-0"
           style={{ minHeight: "520px" }}
           allow="payment"
-          sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-modals"
         />
       </div>
     </div>
